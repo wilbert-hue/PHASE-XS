@@ -1,7 +1,7 @@
 "use client"
 
-import type { Trial } from "@/app/dashboard/page"
-import { normalizePhase } from "@/app/dashboard/page"
+import type { Trial } from "@/app/dashboard/trial-types"
+import { normalizePhase } from "@/app/dashboard/trial-types"
 import {
   BarChart,
   Bar,
@@ -99,11 +99,11 @@ export function ComparisonPanel({ groups }: { groups: ComparisonGroup[] }) {
       <div className="flex items-center justify-between px-5 py-3 border-b border-border">
         <div className="flex items-center gap-2">
           <GitCompare className="h-3.5 w-3.5 text-accent" />
-          <h3 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+          <h3 className="font-mono text-[12px] uppercase tracking-widest text-muted-foreground">
             Comparison Mode
           </h3>
         </div>
-        <span className="font-mono text-[10px] text-muted-foreground">
+        <span className="font-mono text-[12px] text-muted-foreground">
           {groups.length} terms · tip: separate terms with commas
         </span>
       </div>
@@ -133,7 +133,7 @@ export function ComparisonPanel({ groups }: { groups: ComparisonGroup[] }) {
                   style={{ background: accent }}
                 />
                 <span
-                  className="font-mono text-[10px] uppercase tracking-widest truncate"
+                  className="font-mono text-[12px] uppercase tracking-widest truncate"
                   style={{ color: accent }}
                   title={s.term}
                 >
@@ -179,7 +179,7 @@ export function ComparisonPanel({ groups }: { groups: ComparisonGroup[] }) {
       <div className="border-t border-border p-4">
         <div className="flex items-center gap-2 mb-3">
           <Activity className="h-3 w-3 text-accent" />
-          <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+          <span className="font-mono text-[12px] uppercase tracking-widest text-muted-foreground">
             Metric Comparison
           </span>
         </div>
@@ -189,20 +189,20 @@ export function ComparisonPanel({ groups }: { groups: ComparisonGroup[] }) {
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(127,127,127,0.15)" />
               <XAxis
                 dataKey="metric"
-                tick={{ fontSize: 10, fontFamily: "monospace" }}
+                tick={{ fontSize: 12, fontFamily: "monospace" }}
                 stroke="currentColor"
               />
-              <YAxis tick={{ fontSize: 10, fontFamily: "monospace" }} stroke="currentColor" />
+              <YAxis tick={{ fontSize: 12, fontFamily: "monospace" }} stroke="currentColor" />
               <Tooltip
                 contentStyle={{
                   background: "rgba(20,40,60,0.95)",
                   border: "1px solid rgba(42,143,156,0.4)",
                   fontFamily: "monospace",
-                  fontSize: 11,
+                  fontSize: 13,
                   color: "#fff",
                 }}
               />
-              <Legend wrapperStyle={{ fontFamily: "monospace", fontSize: 10 }} />
+              <Legend wrapperStyle={{ fontFamily: "monospace", fontSize: 12 }} />
               {summaries.map((s, idx) => (
                 <Bar
                   key={s.term}
@@ -233,10 +233,12 @@ function Stat({
   return (
     <div>
       <div className="flex items-center gap-1 text-muted-foreground mb-0.5">
-        <Icon className="h-2.5 w-2.5" style={{ color }} />
-        <span className="font-mono text-[8px] uppercase tracking-widest">{label}</span>
+        <span style={{ color }}>
+          <Icon className="h-2.5 w-2.5" />
+        </span>
+        <span className="font-mono text-[10px] uppercase tracking-widest">{label}</span>
       </div>
-      <div className="font-[var(--font-bebas)] text-lg tracking-wide leading-none" style={{ color }}>
+      <div className="font-[var(--font-bebas)] text-xl tracking-wide leading-none" style={{ color }}>
         {value}
       </div>
     </div>
@@ -246,10 +248,10 @@ function Stat({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start justify-between gap-3">
-      <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground flex-shrink-0">
+      <span className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground flex-shrink-0">
         {label}
       </span>
-      <span className="font-mono text-[10px] text-right text-foreground/80 truncate" title={value}>
+      <span className="font-mono text-[12px] text-right text-foreground/80 truncate" title={value}>
         {value}
       </span>
     </div>

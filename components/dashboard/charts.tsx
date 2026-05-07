@@ -1,8 +1,8 @@
 "use client"
 
 import { useMemo } from "react"
-import type { Trial } from "@/app/dashboard/page"
-import { normalizePhase } from "@/app/dashboard/page"
+import type { Trial } from "@/app/dashboard/trial-types"
+import { normalizePhase } from "@/app/dashboard/trial-types"
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -14,10 +14,26 @@ const COLORS = [
   "#266B80", "#34969E", "#48B5AD", "#1A5276", "#2E8B8B",
 ]
 
+/** Stable key for grouping free-text dosage strengths (collapses casing / spacing variants). */
+function dosageStrengthGroupingKey(raw: string): string | null {
+  const s = raw.trim()
+  if (!s || /^n\/?a$/i.test(s) || /^not\s*available$/i.test(s)) return null
+  return s
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .replace(/(\d+(?:\.\d+)?)\s*mg\/m2\b/gi, "$1 mg/m²")
+    .replace(/(\d+(?:\.\d+)?)\s*mg\/kg\b/gi, "$1 mg/kg")
+    .replace(/(\d+(?:\.\d+)?)\s*mg\b/gi, "$1 mg")
+}
+
+function formatDosageStrengthLabel(key: string): string {
+  return key.charAt(0).toUpperCase() + key.slice(1)
+}
+
 function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="border border-border bg-background/60 backdrop-blur-sm p-5">
-      <h3 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-4">
+      <h3 className="font-mono text-[12px] uppercase tracking-widest text-muted-foreground mb-4">
         {title}
       </h3>
       {children}
@@ -30,7 +46,7 @@ const customTooltipStyle = {
   border: "1px solid #e0e0e0",
   borderRadius: 0,
   fontFamily: "var(--font-mono, monospace)",
-  fontSize: "11px",
+  fontSize: "13px",
   padding: "8px 12px",
 }
 
@@ -57,15 +73,24 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
       .map(([name, value]) => ({ name: name.length > 25 ? name.slice(0, 22) + "..." : name, value, fullName: name }))
   }, [trials])
 
-  const enrollmentByPhase = useMemo(() => {
+  const doseFocusData = useMemo(() => {
     const map = new Map<string, number>()
     trials.forEach(t => {
-      const p = normalizePhase(t.phase)
-      map.set(p, (map.get(p) || 0) + (t.enrollment || 0))
+      const key = dosageStrengthGroupingKey(t.dosageStrength || "")
+      if (!key) return
+      map.set(key, (map.get(key) || 0) + 1)
     })
     return [...map.entries()]
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([key, value]) => {
+        const full = formatDosageStrengthLabel(key)
+        return {
+          fullName: full,
+          name: full.length > 28 ? `${full.slice(0, 25)}…` : full,
+          value,
+        }
+      })
   }, [trials])
 
   const timelineData = useMemo(() => {
@@ -115,7 +140,7 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
   if (trials.length === 0) {
     return (
       <div className="border border-border p-12 text-center">
-        <p className="font-mono text-sm text-muted-foreground">No trials match the current filters</p>
+        <p className="font-mono text-base text-muted-foreground">No trials match the current filters</p>
       </div>
     )
   }
@@ -143,8 +168,8 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
               </Pie>
               <Tooltip contentStyle={customTooltipStyle} />
               <Legend
-                wrapperStyle={{ fontFamily: "var(--font-mono, monospace)", fontSize: "10px" }}
-                iconSize={8}
+                wrapperStyle={{ fontFamily: "var(--font-mono, monospace)", fontSize: "12px" }}
+                iconSize={10}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -157,12 +182,12 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={techData} layout="vertical" margin={{ left: 10, right: 16, top: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 10, fontFamily: "var(--font-mono, monospace)" }} />
+              <XAxis type="number" tick={{ fontSize: 12, fontFamily: "var(--font-mono, monospace)" }} />
               <YAxis
                 type="category"
                 dataKey="name"
-                width={120}
-                tick={{ fontSize: 9, fontFamily: "var(--font-mono, monospace)" }}
+                width={132}
+                tick={{ fontSize: 11, fontFamily: "var(--font-mono, monospace)" }}
               />
               <Tooltip contentStyle={customTooltipStyle} />
               <Bar dataKey="value" fill="#1B4965" barSize={14} />
@@ -171,24 +196,40 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
         </div>
       </ChartCard>
 
-      {/* Enrollment by Phase */}
-      <ChartCard title="Enrollment by Phase">
-        <div className="h-[250px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={enrollmentByPhase} margin={{ left: 0, right: 16, top: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-              <XAxis
-                dataKey="name"
-                tick={{ fontSize: 9, fontFamily: "var(--font-mono, monospace)" }}
-                angle={-45}
-                textAnchor="end"
-                height={60}
-              />
-              <YAxis tick={{ fontSize: 10, fontFamily: "var(--font-mono, monospace)" }} />
-              <Tooltip contentStyle={customTooltipStyle} formatter={(v: number) => v.toLocaleString()} />
-              <Bar dataKey="value" fill="#2A8F9C" barSize={28} />
-            </BarChart>
-          </ResponsiveContainer>
+      {/* Dose focus — trials by grouped dosage strength */}
+      <ChartCard title="Dose focus">
+        <div className="h-[270px] min-h-[270px] flex items-center justify-center">
+          {doseFocusData.length === 0 ? (
+            <p className="font-mono text-sm text-muted-foreground px-6 text-center">
+              No dosage strength values in the current filter set (excludes N/A and “Not Available”).
+            </p>
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={doseFocusData}
+                layout="vertical"
+                margin={{ left: 4, right: 16, top: 4, bottom: 4 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={false} />
+                <XAxis type="number" tick={{ fontSize: 12, fontFamily: "var(--font-mono, monospace)" }} />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  width={148}
+                  tick={{ fontSize: 11, fontFamily: "var(--font-mono, monospace)" }}
+                />
+                <Tooltip
+                  contentStyle={customTooltipStyle}
+                  formatter={(v: number) => [`${v.toLocaleString()}`, "Trials"]}
+                  labelFormatter={(_, payload) => {
+                    const row = payload?.[0]?.payload as { fullName?: string }
+                    return row?.fullName ?? ""
+                  }}
+                />
+                <Bar dataKey="value" fill="#2A8F9C" barSize={16} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </ChartCard>
 
@@ -198,8 +239,8 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={timelineData} margin={{ left: 0, right: 16, top: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-              <XAxis dataKey="year" tick={{ fontSize: 9, fontFamily: "var(--font-mono, monospace)" }} />
-              <YAxis tick={{ fontSize: 10, fontFamily: "var(--font-mono, monospace)" }} />
+              <XAxis dataKey="year" tick={{ fontSize: 11, fontFamily: "var(--font-mono, monospace)" }} />
+              <YAxis tick={{ fontSize: 12, fontFamily: "var(--font-mono, monospace)" }} />
               <Tooltip contentStyle={customTooltipStyle} />
               <Area
                 type="monotone"
@@ -220,12 +261,12 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={topIndications} layout="vertical" margin={{ left: 10, right: 16, top: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 10, fontFamily: "var(--font-mono, monospace)" }} />
+              <XAxis type="number" tick={{ fontSize: 12, fontFamily: "var(--font-mono, monospace)" }} />
               <YAxis
                 type="category"
                 dataKey="name"
-                width={140}
-                tick={{ fontSize: 9, fontFamily: "var(--font-mono, monospace)" }}
+                width={154}
+                tick={{ fontSize: 11, fontFamily: "var(--font-mono, monospace)" }}
               />
               <Tooltip contentStyle={customTooltipStyle} />
               <Bar dataKey="value" fill="#3AAFA9" barSize={14} />
@@ -255,8 +296,8 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
               </Pie>
               <Tooltip contentStyle={customTooltipStyle} />
               <Legend
-                wrapperStyle={{ fontFamily: "var(--font-mono, monospace)", fontSize: "10px" }}
-                iconSize={8}
+                wrapperStyle={{ fontFamily: "var(--font-mono, monospace)", fontSize: "12px" }}
+                iconSize={10}
               />
             </PieChart>
           </ResponsiveContainer>

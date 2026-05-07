@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useState, useEffect } from "react"
+import { BarChart3, Globe2, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -12,29 +13,29 @@ const metrics = [
     date: "Phase 3",
     title: "707K+ Enrolled",
     note: "Total participants enrolled across all tracked trials — the largest segment in late-stage studies.",
-    accent: "#1B4965",
-    accentLight: "rgba(27, 73, 101, 0.08)",
+    accent: "#2563EB",
+    accentLight: "rgba(37, 99, 235, 0.1)",
   },
   {
     date: "Oncology",
     title: "Top Indication",
     note: "Leukemia, lymphoma, and solid tumors dominate the trial landscape with 40%+ of all studies.",
-    accent: "#1E6080",
-    accentLight: "rgba(30, 96, 128, 0.08)",
+    accent: "#BE123C",
+    accentLight: "rgba(190, 18, 60, 0.09)",
   },
   {
     date: "mAb",
     title: "Leading Tech",
     note: "Monoclonal antibodies represent the dominant technology platform across all phases.",
-    accent: "#2A8F9C",
-    accentLight: "rgba(42, 143, 156, 0.08)",
+    accent: "#6D28D9",
+    accentLight: "rgba(109, 40, 217, 0.1)",
   },
   {
     date: "92.3%",
     title: "Adherence Rate",
     note: "Average patient compliance across all tracked trials — a key indicator of protocol feasibility.",
-    accent: "#3AAFA9",
-    accentLight: "rgba(58, 175, 169, 0.08)",
+    accent: "#0D9488",
+    accentLight: "rgba(13, 148, 136, 0.1)",
   },
 ]
 
@@ -168,49 +169,177 @@ export function SignalsSection() {
         ))}
       </div>
 
-      {/* Stats grid — moved from Data Sources section */}
-      <div className="mt-24 pr-6 md:pr-12 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-        <div>
-          <h4 className="font-mono text-[9px] uppercase tracking-[0.3em] mb-4" style={{ color: "#1B4965" }}>
-            Coverage
-          </h4>
-          <ul className="space-y-2">
-            <li className="font-mono text-xs" style={{ color: "#3d6070" }}>3,049 Trials</li>
-            <li className="font-mono text-xs" style={{ color: "#3d6070" }}>1,246 Molecules</li>
-            <li className="font-mono text-xs" style={{ color: "#3d6070" }}>1,085 Indications</li>
-          </ul>
+      {/* Diagram-style scope block — hub + bracketed lists (see dataset breadth at a glance) */}
+      <DatasetScopeDiagram />
+    </section>
+  )
+}
+
+const scopeDiagramRows: {
+  hub: string
+  Icon: LucideIcon
+  left: { title: string; items: string[] }
+  right: { title: string; items: string[] }
+}[] = [
+  {
+    hub: "TRIAL\nLANDSCAPE",
+    Icon: BarChart3,
+    left: {
+      title: "Coverage",
+      items: ["3,049 Trials", "1,246 Molecules", "1,085 Indications"],
+    },
+    right: {
+      title: "Phases",
+      items: ["Early Phase 1", "Phase 1 – 4", "Combined Phases"],
+    },
+  },
+  {
+    hub: "MODALITY\n& REGION",
+    Icon: Globe2,
+    left: {
+      title: "Technologies",
+      items: ["Monoclonal Antibodies", "CAR-T / Cell Therapy", "ADCs & Biosimilars"],
+    },
+    right: {
+      title: "Region",
+      items: ["United States", "Global Collaborators"],
+    },
+  },
+]
+
+function DatasetScopeDiagram() {
+  return (
+    <div
+      className="mt-24 mr-6 md:mr-12 relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#0f2d3f] via-[#0a2230] to-[#051820] p-6 sm:p-8 md:p-10 shadow-[0_24px_60px_-16px_rgba(0,0,0,0.5)]"
+      aria-label="Dataset scope overview"
+    >
+      <div
+        className="absolute top-3 left-4 h-1.5 w-1.5 rounded-full bg-[#4FBDBA] shadow-[0_0_10px_#4FBDBA80]"
+        aria-hidden
+      />
+      <p className="text-center font-mono text-sm sm:text-base md:text-lg font-medium uppercase tracking-[0.28em] text-[#9ee5ed] mb-8 md:mb-10">
+        Dataset scope
+      </p>
+
+      {scopeDiagramRows.map((row, i) => (
+        <div key={row.hub}>
+          {i > 0 && (
+            <div className="my-8 md:my-10 border-t border-dashed border-white/18" role="separator" />
+          )}
+          <ScopeHubRow
+            hub={row.hub}
+            Icon={row.Icon}
+            left={row.left}
+            right={row.right}
+          />
         </div>
-        <div>
-          <h4 className="font-mono text-[9px] uppercase tracking-[0.3em] mb-4" style={{ color: "#1E6080" }}>
-            Phases
-          </h4>
-          <ul className="space-y-2">
-            <li className="font-mono text-xs" style={{ color: "#3d6070" }}>Early Phase 1</li>
-            <li className="font-mono text-xs" style={{ color: "#3d6070" }}>Phase 1 – 4</li>
-            <li className="font-mono text-xs" style={{ color: "#3d6070" }}>Combined Phases</li>
-          </ul>
+      ))}
+    </div>
+  )
+}
+
+function ScopeHubRow({
+  hub,
+  Icon,
+  left,
+  right,
+}: {
+  hub: string
+  Icon: LucideIcon
+  left: { title: string; items: string[] }
+  right: { title: string; items: string[] }
+}) {
+  return (
+    <div className="relative max-w-5xl mx-auto">
+      {/* horizontal spine + nodes (desktop) */}
+      <div
+        className="pointer-events-none hidden md:block absolute left-[8%] right-[8%] top-[calc(50%-0.5px)] h-px bg-white/10 z-0"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none hidden md:block absolute left-[8%] top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-white/50 ring-1 ring-white/20 z-[1]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none hidden md:block absolute right-[8%] top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-white/50 ring-1 ring-white/20 z-[1]"
+        aria-hidden
+      />
+
+      <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1fr_9.5rem_1fr] gap-8 md:gap-0 md:items-center">
+        <div className="order-2 md:order-1 min-w-0 md:pr-6">
+          <ScopeList
+            side="left"
+            title={left.title}
+            items={left.items}
+          />
         </div>
-        <div>
-          <h4 className="font-mono text-[9px] uppercase tracking-[0.3em] mb-4" style={{ color: "#2A8F9C" }}>
-            Technologies
-          </h4>
-          <ul className="space-y-2">
-            <li className="font-mono text-xs" style={{ color: "#3d6070" }}>Monoclonal Antibodies</li>
-            <li className="font-mono text-xs" style={{ color: "#3d6070" }}>CAR-T / Cell Therapy</li>
-            <li className="font-mono text-xs" style={{ color: "#3d6070" }}>ADCs & Biosimilars</li>
-          </ul>
+
+        <div className="order-1 md:order-2 flex justify-center md:px-1">
+          <div className="relative w-[8.25rem] h-[8.25rem] sm:w-[8.75rem] sm:h-[8.75rem] rounded-full border-2 border-white/32 bg-gradient-to-b from-white/[0.14] to-white/[0.04] flex flex-col items-center justify-center text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_0_0_1px_rgba(79,189,186,0.12)]">
+            <Icon className="h-7 w-7 sm:h-8 sm:w-8 text-[#a8e6ef] mb-1" strokeWidth={1.35} aria-hidden />
+            <span className="font-[var(--font-bebas)] text-xs sm:text-base leading-tight tracking-wide text-white/95 px-1 whitespace-pre-line max-w-[7rem]">
+              {hub}
+            </span>
+          </div>
         </div>
-        <div>
-          <h4 className="font-mono text-[9px] uppercase tracking-[0.3em] mb-4" style={{ color: "#3AAFA9" }}>
-            Region
-          </h4>
-          <ul className="space-y-2">
-            <li className="font-mono text-xs" style={{ color: "#3d6070" }}>United States</li>
-            <li className="font-mono text-xs" style={{ color: "#3d6070" }}>Global Collaborators</li>
-          </ul>
+
+        <div className="order-3 min-w-0 md:pl-6">
+          <ScopeList
+            side="right"
+            title={right.title}
+            items={right.items}
+          />
         </div>
       </div>
-    </section>
+    </div>
+  )
+}
+
+function ScopeList({
+  side,
+  title,
+  items,
+}: {
+  side: "left" | "right"
+  title: string
+  items: string[]
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-xl border border-white/10 bg-white/[0.04] p-4 sm:p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]",
+        side === "left" && "md:text-right md:rounded-r-md",
+        side === "right" && "md:rounded-l-md",
+      )}
+    >
+      <p
+        className={cn(
+          "font-mono text-sm sm:text-base font-semibold uppercase tracking-[0.22em] mb-3.5 text-[#7edeea]",
+          side === "left" && "md:text-right",
+        )}
+      >
+        {title}
+      </p>
+      <ul className="space-y-2.5 list-none p-0 m-0">
+        {items.map(item => (
+          <li
+            key={item}
+            className={cn(
+              "font-mono text-xs sm:text-sm text-white/86 leading-relaxed",
+              "flex items-start gap-2.5",
+              side === "left" && "md:flex-row-reverse md:justify-end",
+            )}
+          >
+            <span
+              className="mt-[0.4rem] h-1.5 w-1.5 shrink-0 bg-white/90"
+              style={{ transform: "rotate(45deg)" }}
+              aria-hidden
+            />
+            <span className="min-w-0">{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
@@ -229,7 +358,7 @@ function MetricCard({
         "hover:-translate-y-2",
       )}
     >
-      <div className="relative bg-card border border-border/50 md:border-t md:border-l md:border-r-0 md:border-b-0 p-8 overflow-hidden">
+      <div className="relative bg-card/90 border border-border/60 md:border-t md:border-l md:border-r-0 md:border-b-0 p-8 overflow-hidden shadow-md shadow-[rgba(15,30,50,0.08)]">
         {/* Top accent bar */}
         <div
           className="absolute top-0 left-0 right-0 h-[2px]"

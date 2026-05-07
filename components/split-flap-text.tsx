@@ -207,14 +207,23 @@ function NctLetterTile({ letter }: { letter: string }) {
   )
 }
 
-function DigitTickerTile({ speed = 140, tickKey = 0 }: { speed?: number; tickKey?: number }) {
+function DigitTickerTile({
+  speed = 140,
+  tickKey = 0,
+  playClick,
+}: {
+  speed?: number
+  tickKey?: number
+  playClick?: () => void
+}) {
   const [d, setD] = useState(() => DIGITS[Math.floor(Math.random() * DIGITS.length)])
   useEffect(() => {
     const id = setInterval(() => {
       setD(DIGITS[Math.floor(Math.random() * DIGITS.length)])
+      playClick?.()
     }, speed)
     return () => clearInterval(id)
-  }, [speed, tickKey])
+  }, [speed, tickKey, playClick])
   return (
     <div
       className="relative overflow-hidden flex items-center justify-center font-[family-name:var(--font-bebas)]"
@@ -281,6 +290,7 @@ export function SplitFlapPhaseXsNctBack({ speed = 72 }: { speed?: number }) {
               key={`${replayKey}-d-${index}`}
               speed={115 + (index - 3) * 18}
               tickKey={tickKey}
+              playClick={audio?.playClick}
             />
           ),
         )

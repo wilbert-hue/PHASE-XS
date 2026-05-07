@@ -11,6 +11,7 @@ import { Footer } from "@/components/footer"
 import { SideNav } from "@/components/side-nav"
 import { ContactTab } from "@/components/contact-tab"
 import { AnimatedBackground } from "@/components/animated-background"
+import { PageSection } from "@/components/page-section"
 
 export default function Page() {
   return (
@@ -21,14 +22,30 @@ export default function Page() {
 
       <div className="relative z-10">
         <HeroSection />
-        <SignalsSection />
-        <WorkSection />
-        <PrinciplesSection />
-        <CredibilitySection />
-        <ClienteleSection />
-        <WhyCmiSection />
-        <KeyStatsSection />
-        <ColophonSection />
+        <PageSection page="landing" variant="metrics">
+          <SignalsSection />
+        </PageSection>
+        <PageSection page="landing" variant="coverage">
+          <WorkSection />
+        </PageSection>
+        <PageSection page="landing" variant="principles">
+          <PrinciplesSection />
+        </PageSection>
+        <PageSection page="landing" variant="credibility">
+          <CredibilitySection />
+        </PageSection>
+        <PageSection page="landing" variant="clientele">
+          <ClienteleSection />
+        </PageSection>
+        <PageSection page="landing" variant="platform">
+          <WhyCmiSection />
+        </PageSection>
+        <PageSection page="landing" variant="keystats">
+          <KeyStatsSection />
+        </PageSection>
+        <PageSection page="landing" variant="colophon">
+          <ColophonSection />
+        </PageSection>
         <Footer />
       </div>
     </main>

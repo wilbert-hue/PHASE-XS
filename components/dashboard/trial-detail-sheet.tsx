@@ -1,7 +1,7 @@
 "use client"
 
-import type { Trial } from "@/app/dashboard/page"
-import { normalizePhase } from "@/app/dashboard/page"
+import type { Trial } from "@/app/dashboard/trial-types"
+import { normalizePhase, parseDrugPriceNumber } from "@/app/dashboard/trial-types"
 import {
   X,
   FlaskConical,
@@ -19,7 +19,16 @@ import {
   Building2,
   LineChart,
 } from "lucide-react"
-import { useEffect } from "react"
+import { createContext, useContext, useEffect } from "react"
+
+const SectionAccentContext = createContext<string | null>(null)
+
+function isFieldValueEmpty(value: React.ReactNode): boolean {
+  if (value == null) return true
+  if (value === "—") return true
+  if (typeof value === "string" && value.trim() === "") return true
+  return false
+}
 
 interface TrialDetailSheetProps {
   trial: Trial | null
@@ -29,17 +38,36 @@ interface TrialDetailSheetProps {
 function Field({
   label,
   value,
+  showIfEmpty = true,
 }: {
   label: string
   value: React.ReactNode
+  /** When true, render the row with "N/A" if there is no value (full column coverage in reports). */
+  showIfEmpty?: boolean
 }) {
-  if (!value || value === "—") return null
+  const accent = useContext(SectionAccentContext)
+  const empty = isFieldValueEmpty(value)
+  if (empty && !showIfEmpty) return null
+  const display = empty ? <span className="text-muted-foreground">N/A</span> : value
   return (
-    <div className="py-2.5">
-      <dt className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground mb-1">
+    <div
+      className="py-2.5 pl-3 -ml-0.5 border-l-2 rounded-r-sm"
+      style={{
+        borderColor: accent ? `${accent}40` : "transparent",
+        background: accent ? `linear-gradient(90deg, ${accent}0d, transparent 85%)` : undefined,
+      }}
+    >
+      <dt
+        className="font-mono text-[11px] uppercase tracking-widest mb-1 w-fit rounded px-1.5 py-0.5 -ml-0.5"
+        style={
+          accent
+            ? { color: accent, background: `${accent}18` }
+            : { color: "hsl(var(--muted-foreground))" }
+        }
+      >
         {label}
       </dt>
-      <dd className="font-mono text-xs leading-relaxed text-foreground/90">{value}</dd>
+      <dd className="font-mono text-sm leading-relaxed text-foreground/90 pl-0.5">{display}</dd>
     </div>
   )
 }
@@ -56,27 +84,37 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div
-      className="relative rounded-lg border border-border/60 overflow-hidden"
-      style={{
-        background: `linear-gradient(135deg, ${accent}0d 0%, transparent 60%)`,
-      }}
-    >
-      {/* Accent bar */}
-      <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: `linear-gradient(to right, ${accent}, transparent)` }} />
-      <div className="flex items-center gap-2 px-4 pt-4 pb-2">
+    <SectionAccentContext.Provider value={accent}>
+      <div
+        className="relative rounded-lg border overflow-hidden"
+        style={{
+          borderColor: `${accent}35`,
+          background: `linear-gradient(135deg, ${accent}12 0%, ${accent}04 40%, transparent 70%)`,
+          boxShadow: `inset 0 1px 0 ${accent}20`,
+        }}
+      >
+        {/* Accent bar */}
         <div
-          className="flex items-center justify-center w-7 h-7 rounded"
-          style={{ background: `${accent}1a`, color: accent }}
-        >
-          <Icon className="h-3.5 w-3.5" />
+          className="absolute top-0 left-0 right-0 h-1"
+          style={{ background: `linear-gradient(90deg, ${accent} 0%, ${accent}99 40%, ${accent}33 100%)` }}
+        />
+        <div className="flex items-center gap-2 px-4 pt-4 pb-2 mt-0.5">
+          <div
+            className="flex items-center justify-center w-8 h-8 rounded-md shadow-sm"
+            style={{ background: `linear-gradient(145deg, ${accent}2e, ${accent}14)`, color: accent }}
+          >
+            <Icon className="h-4 w-4" />
+          </div>
+          <h3
+            className="font-[var(--font-bebas)] text-lg tracking-widest"
+            style={{ color: accent, textShadow: `0 0 24px ${accent}30` }}
+          >
+            {title}
+          </h3>
         </div>
-        <h3 className="font-[var(--font-bebas)] text-base tracking-widest" style={{ color: accent }}>
-          {title}
-        </h3>
+        <div className="px-4 pb-3 pt-0.5 divide-y divide-border/30">{children}</div>
       </div>
-      <div className="px-4 pb-3 divide-y divide-border/40">{children}</div>
-    </div>
+    </SectionAccentContext.Provider>
   )
 }
 
@@ -103,10 +141,12 @@ function KpiCard({
         style={{ background: `linear-gradient(to right, ${accent}, transparent)` }}
       />
       <div className="flex items-center gap-2 mb-1.5 text-muted-foreground">
-        <Icon className="h-3 w-3" style={{ color: accent }} />
-        <span className="font-mono text-[9px] uppercase tracking-widest">{label}</span>
+        <span style={{ color: accent }}>
+          <Icon className="h-3 w-3" />
+        </span>
+        <span className="font-mono text-[11px] uppercase tracking-widest">{label}</span>
       </div>
-      <div className="font-[var(--font-bebas)] text-2xl tracking-wide leading-none" style={{ color: accent }}>
+      <div className="font-[var(--font-bebas)] text-3xl tracking-wide leading-none" style={{ color: accent }}>
         {value}
       </div>
     </div>
@@ -129,16 +169,24 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
 
   if (!trial) return null
 
-  const priceVal = trial.drugPrice?.replace(/[$,]/g, "")
-  const priceNum = priceVal ? parseFloat(priceVal) : null
+  const priceNum = parseDrugPriceNumber(trial.drugPrice)
 
-  // Accent palette
+  // Per-section palette: distinct hues so blocks read as separate “chapters”
   const C = {
-    primary: "#1B4965",
-    deep: "#1E6080",
-    teal: "#2A8F9C",
-    mint: "#3AAFA9",
-    accent: "#4FBDBA",
+    hero1: "#1B4965",
+    hero2: "#1E6080",
+    hero3: "#2A8F9C",
+    kpiEnroll: "#2563EB",
+    kpiDuration: "#C2410C",
+    kpiArms: "#7C3AED",
+    kpiAdherence: "#0D9488",
+    therapeutic: "#1B4965",
+    market: "#6D28D9",
+    trialDesign: "#B45309",
+    timeline: "#0E7490",
+    outcomes: "#BE123C",
+    pricing: "#047857",
+    sponsor: "#4338CA",
   }
 
   return (
@@ -158,7 +206,7 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
         <div
           className="relative overflow-hidden"
           style={{
-            background: `linear-gradient(135deg, ${C.primary} 0%, ${C.deep} 50%, ${C.teal} 100%)`,
+            background: `linear-gradient(135deg, ${C.hero1} 0%, ${C.hero2} 50%, ${C.hero3} 100%)`,
           }}
         >
           {/* Diagonal texture */}
@@ -183,10 +231,10 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
           <div className="relative px-6 pt-5 pb-6">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <span className="font-mono text-[9px] uppercase tracking-widest text-white/70">
+                <span className="font-mono text-[11px] uppercase tracking-widest text-white/70">
                   Trial Detail
                 </span>
-                <h2 className="font-[var(--font-bebas)] text-3xl tracking-wider text-white mt-0.5">
+                <h2 className="font-[var(--font-bebas)] text-4xl tracking-wider text-white mt-0.5">
                   {trial.nctId}
                 </h2>
               </div>
@@ -202,10 +250,10 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
             {/* Molecule highlight */}
             {trial.molecule && (
               <div className="mb-4">
-                <span className="font-mono text-[9px] uppercase tracking-widest text-white/60">
+                <span className="font-mono text-[11px] uppercase tracking-widest text-white/60">
                   Molecule
                 </span>
-                <div className="font-[var(--font-bebas)] text-xl tracking-wide text-white">
+                <div className="font-[var(--font-bebas)] text-2xl tracking-wide text-white">
                   {trial.molecule}
                 </div>
               </div>
@@ -213,18 +261,18 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
 
             {/* Badges */}
             <div className="flex flex-wrap gap-1.5">
-              <span className="inline-flex items-center gap-1 rounded-full bg-white/95 text-[#1B4965] px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider font-semibold">
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/95 text-[#1B4965] px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider font-semibold">
                 <Activity className="h-3 w-3" />
                 {normalizePhase(trial.phase)}
               </span>
               {trial.technology && trial.technology.toLowerCase() !== "not specified" && (
-                <span className="rounded-full bg-white/15 backdrop-blur-sm text-white px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider border border-white/20">
+                <span className="rounded-full bg-white/15 backdrop-blur-sm text-white px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider border border-white/20">
                   <span className="opacity-60 mr-1">Tech:</span>
                   {trial.technology}
                 </span>
               )}
               {trial.biologicType && trial.biologicType.toLowerCase() !== "not specified" && (
-                <span className="rounded-full bg-white/15 backdrop-blur-sm text-white px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider border border-white/20">
+                <span className="rounded-full bg-white/15 backdrop-blur-sm text-white px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider border border-white/20">
                   <span className="opacity-60 mr-1">Type:</span>
                   {trial.biologicType}
                 </span>
@@ -246,7 +294,7 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
                     ? `${(trial.enrollment / 1000).toFixed(1)}K`
                     : trial.enrollment.toLocaleString()
                 }
-                accent={C.primary}
+                accent={C.kpiEnroll}
               />
             ) : null}
             {trial.durationYears ? (
@@ -254,24 +302,29 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
                 icon={Clock}
                 label="Duration"
                 value={`${trial.durationYears}y`}
-                accent={C.deep}
+                accent={C.kpiDuration}
               />
             ) : null}
             {trial.arms ? (
-              <KpiCard icon={FlaskConical} label="Arms" value={String(trial.arms)} accent={C.teal} />
+              <KpiCard
+                icon={FlaskConical}
+                label="Arms"
+                value={String(trial.arms)}
+                accent={C.kpiArms}
+              />
             ) : null}
             {trial.adherenceRate != null ? (
               <KpiCard
                 icon={TrendingUp}
                 label="Adherence"
                 value={`${trial.adherenceRate}%`}
-                accent={C.mint}
+                accent={C.kpiAdherence}
               />
             ) : null}
           </div>
 
           {/* Therapeutic Profile */}
-          <Section icon={Stethoscope} title="Therapeutic Profile" accent={C.primary}>
+          <Section icon={Stethoscope} title="Therapeutic Profile" accent={C.therapeutic}>
             <Field label="Approved Biologics" value={trial.approvedBiologics} />
             <Field
               label="Indication"
@@ -286,7 +339,7 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
           </Section>
 
           {/* Market forecast (US$ Mn) */}
-          <Section icon={LineChart} title="Market Forecast" accent={C.teal}>
+          <Section icon={LineChart} title="Market Forecast" accent={C.market}>
             <Field label="2023 (US$ Mn)" value={trial.marketForecast2023} />
             <Field label="2024 (US$ Mn)" value={trial.marketForecast2024} />
             <Field label="2025 (US$ Mn)" value={trial.marketForecast2025} />
@@ -295,7 +348,7 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
           </Section>
 
           {/* Trial Design */}
-          <Section icon={Beaker} title="Trial Design & Dosing" accent={C.deep}>
+          <Section icon={Beaker} title="Trial Design & Dosing" accent={C.trialDesign}>
             <Field label="Trial Design" value={trial.trialDesign} />
             <Field label="Route of Administration" value={trial.routeOfAdmin} />
             <Field label="Administration Type" value={trial.adminType} />
@@ -305,7 +358,7 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
           </Section>
 
           {/* Timeline */}
-          <Section icon={Calendar} title="Dates & Timeline" accent={C.teal}>
+          <Section icon={Calendar} title="Dates & Timeline" accent={C.timeline}>
             <Field label="Study Start" value={trial.startDate} />
             <Field label="Primary Completion" value={trial.primaryCompletionDate} />
             <Field label="Study Completion" value={trial.completionDate} />
@@ -314,10 +367,10 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
           </Section>
 
           {/* Outcomes */}
-          <Section icon={Target} title="Outcomes & Endpoints" accent={C.mint}>
+          <Section icon={Target} title="Outcomes & Endpoints" accent={C.outcomes}>
             <Field label="Primary End Point" value={trial.primaryEndPoint} />
             <Field label="Est. Incidence (2025)" value={
-              trial.incidence2025 ? trial.incidence2025.toLocaleString() : null
+              trial.incidence2025 != null ? trial.incidence2025.toLocaleString() : null
             } />
             <Field
               label="Endpoints"
@@ -329,8 +382,8 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
                       .filter(Boolean)
                       .slice(0, 10)
                       .map((ep, i) => (
-                        <li key={i} className="flex gap-2 text-[11px]">
-                          <span style={{ color: C.mint }}>▸</span>
+                        <li key={i} className="flex gap-2 text-sm">
+                          <span style={{ color: C.outcomes }}>▸</span>
                           <span>{ep.trim()}</span>
                         </li>
                       ))}
@@ -338,32 +391,51 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
                 ) : null
               }
             />
+            <Field label="Adverse effects" value={trial.adverseEffect} />
           </Section>
 
-          {/* Pricing */}
-          {(priceNum || trial.drugPrice || trial.drugBrandSwitch) && (
-            <Section icon={DollarSign} title="Pricing & Alternatives" accent={C.accent}>
-              <Field
-                label="Drug Price"
-                value={
-                  priceNum ? (
-                    <span className="flex items-center gap-2">
-                      <span className="font-[var(--font-bebas)] text-xl" style={{ color: C.accent }}>
-                        ${priceNum.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                      </span>
-                      <span className="text-muted-foreground text-[10px]">(listed)</span>
+          {/* Pricing & access — always shown so pricing / reimbursement / alternatives align with spreadsheet columns */}
+          <Section icon={DollarSign} title="Pricing & Alternatives" accent={C.pricing}>
+            <Field
+              label="Drug Price"
+              value={
+                priceNum != null ? (
+                  <span className="flex items-center gap-2">
+                    <span className="font-[var(--font-bebas)] text-2xl" style={{ color: C.pricing }}>
+                      ${priceNum.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </span>
+                    <span className="text-muted-foreground text-[12px]">(listed)</span>
+                  </span>
+                ) : (
+                  "N/A"
+                )
+              }
+            />
+            <Field label="Reimbursement" value={trial.reimbursement} />
+            <Field
+              label="Price source URL"
+              value={
+                trial.drugPriceUrl && String(trial.drugPriceUrl).trim() ? (
+                  /^https?:\/\//i.test(String(trial.drugPriceUrl).trim()) ? (
+                    <a
+                      href={String(trial.drugPriceUrl).trim()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary underline underline-offset-2 break-all"
+                    >
+                      {String(trial.drugPriceUrl).trim()}
+                    </a>
                   ) : (
-                    trial.drugPrice || null
+                    String(trial.drugPriceUrl).trim()
                   )
-                }
-              />
-              <Field label="Drug/Brand Alternatives" value={trial.drugBrandSwitch} />
-            </Section>
-          )}
+                ) : null
+              }
+            />
+            <Field label="Drug/Brand Alternatives" value={trial.drugBrandSwitch} />
+          </Section>
 
           {/* Sponsor & Meta */}
-          <Section icon={Building2} title="Sponsor & Locations" accent={C.primary}>
+          <Section icon={Building2} title="Sponsor & Locations" accent={C.sponsor}>
             <Field label="Sponsor" value={trial.sponsor} />
             <Field
               label="Other Locations"
@@ -376,7 +448,10 @@ export function TrialDetailSheet({ trial, onClose }: TrialDetailSheetProps) {
                 ) : null
               }
             />
-            <Field label="No. of Related Trials" value={trial.numTrials || null} />
+            <Field
+              label="No. of Related Trials"
+              value={trial.numTrials != null ? String(trial.numTrials) : null}
+            />
             <Field label="ATC Code" value={trial.atcCode} />
           </Section>
         </div>

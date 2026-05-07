@@ -1,13 +1,20 @@
 "use client"
 
-import { useState, useMemo } from "react"
-import type { Trial } from "@/app/dashboard/page"
-import { normalizePhase } from "@/app/dashboard/page"
+import { useState, useMemo, useEffect } from "react"
+import type { Trial } from "@/app/dashboard/trial-types"
+import { normalizePhase } from "@/app/dashboard/trial-types"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ArrowUpDown, ExternalLink } from "lucide-react"
 
 const PAGE_SIZE = 10
 
-type SortField = "nctId" | "molecule" | "phase" | "enrollment" | "durationYears" | "indication" | "technology"
+type SortField =
+  | "nctId"
+  | "molecule"
+  | "phase"
+  | "enrollment"
+  | "dosageStrength"
+  | "indication"
+  | "technology"
 type SortDir = "asc" | "desc"
 
 export function TrialsTable({
@@ -39,8 +46,9 @@ export function TrialsTable({
   const totalPages = Math.ceil(sorted.length / PAGE_SIZE)
   const pageData = sorted.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
 
-  // Reset page when data changes
-  useMemo(() => setPage(0), [trials])
+  useEffect(() => {
+    setPage(0)
+  }, [trials])
 
   const toggleSort = (field: SortField) => {
     if (sortField === field) {
@@ -65,10 +73,10 @@ export function TrialsTable({
     <div className="border border-border bg-background/60 backdrop-blur-sm">
       {/* Table header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-border">
-        <h3 className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        <h3 className="font-mono text-[12px] uppercase tracking-widest text-muted-foreground">
           Trial Records
         </h3>
-        <span className="font-mono text-[10px] text-muted-foreground">
+        <span className="font-mono text-[12px] text-muted-foreground">
           {sorted.length.toLocaleString()} results
         </span>
       </div>
@@ -85,16 +93,16 @@ export function TrialsTable({
                 ["indication", "Indication"],
                 ["technology", "Technology"],
                 ["enrollment", "Enrollment"],
-                ["durationYears", "Duration"],
+                ["dosageStrength", "Dose"],
               ] as [SortField, string][]).map(([field, label]) => (
                 <th
                   key={field}
-                  className="px-4 py-2 text-left font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-normal"
+                  className="px-4 py-2 text-left font-mono text-[12px] uppercase tracking-widest text-muted-foreground font-normal"
                 >
                   <SortHeader field={field}>{label}</SortHeader>
                 </th>
               ))}
-              <th className="px-4 py-2 text-left font-mono text-[10px] uppercase tracking-widest text-muted-foreground font-normal">
+              <th className="px-4 py-2 text-left font-mono text-[12px] uppercase tracking-widest text-muted-foreground font-normal">
                 Actions
               </th>
             </tr>
@@ -102,7 +110,7 @@ export function TrialsTable({
           <tbody>
             {pageData.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-4 py-12 text-center font-mono text-xs text-muted-foreground">
+                <td colSpan={8} className="px-4 py-12 text-center font-mono text-sm text-muted-foreground">
                   No trials found
                 </td>
               </tr>
@@ -113,30 +121,30 @@ export function TrialsTable({
                   className="border-b border-border/50 hover:bg-muted/30 transition-colors cursor-pointer"
                   onClick={() => onSelectTrial(trial)}
                 >
-                  <td className="px-4 py-2 font-mono text-xs text-accent">
+                  <td className="px-4 py-2 font-mono text-sm text-accent">
                     {trial.nctId}
                   </td>
-                  <td className="px-4 py-2 font-mono text-xs font-medium max-w-[160px] truncate">
+                  <td className="px-4 py-2 font-mono text-sm font-medium max-w-[160px] truncate">
                     {trial.molecule || "—"}
                   </td>
                   <td className="px-4 py-2">
-                    <span className="inline-block border border-border px-2 py-0.5 font-mono text-[10px]">
+                    <span className="inline-block border border-border px-2 py-0.5 font-mono text-[12px]">
                       {normalizePhase(trial.phase)}
                     </span>
                   </td>
-                  <td className="px-4 py-2 font-mono text-[11px] max-w-[200px] truncate text-muted-foreground">
+                  <td className="px-4 py-2 font-mono text-sm max-w-[200px] truncate text-muted-foreground">
                     {trial.indication
                       ? trial.indication.charAt(0) + trial.indication.slice(1).toLowerCase()
                       : "—"}
                   </td>
-                  <td className="px-4 py-2 font-mono text-[11px] max-w-[160px] truncate text-muted-foreground">
+                  <td className="px-4 py-2 font-mono text-sm max-w-[160px] truncate text-muted-foreground">
                     {trial.technology || "—"}
                   </td>
-                  <td className="px-4 py-2 font-mono text-xs tabular-nums">
+                  <td className="px-4 py-2 font-mono text-sm tabular-nums">
                     {trial.enrollment ? trial.enrollment.toLocaleString() : "—"}
                   </td>
-                  <td className="px-4 py-2 font-mono text-xs tabular-nums text-muted-foreground">
-                    {trial.durationYears ? `${trial.durationYears}y` : "—"}
+                  <td className="px-4 py-2 font-mono text-sm max-w-[120px] truncate text-muted-foreground" title={trial.dosageStrength || undefined}>
+                    {trial.dosageStrength?.trim() ? trial.dosageStrength : "—"}
                   </td>
                   <td className="px-4 py-2">
                     <button
@@ -159,7 +167,7 @@ export function TrialsTable({
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between px-5 py-3 border-t border-border">
-          <span className="font-mono text-[10px] text-muted-foreground">
+          <span className="font-mono text-[12px] text-muted-foreground">
             Page {page + 1} of {totalPages}
           </span>
           <div className="flex items-center gap-1">

@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { cn } from "@/lib/utils"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 
@@ -175,11 +176,14 @@ function CoverageCarousel({
   setSlide: React.Dispatch<React.SetStateAction<number>>
 }) {
   const slides = 2
-
-  useEffect(() => {
-    const id = setInterval(() => setSlide(s => (s + 1) % slides), 5000)
-    return () => clearInterval(id)
-  }, [])
+  const goNext = useCallback(
+    () => setSlide(s => (s + 1) % slides),
+    [setSlide, slides],
+  )
+  const goPrev = useCallback(
+    () => setSlide(s => (s - 1 + slides) % slides),
+    [setSlide, slides],
+  )
 
   return (
     <div className="relative">
@@ -216,20 +220,39 @@ function CoverageCarousel({
         </div>
       </div>
 
-      {/* Slide indicators */}
-      <div className="mt-6 flex justify-center gap-2">
-        {Array.from({ length: slides }).map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setSlide(i)}
-            aria-label={`Slide ${i + 1}`}
-            className="h-[2px] transition-all duration-300"
-            style={{
-              width: slide === i ? 40 : 18,
-              background: slide === i ? "#1E6080" : "rgba(30, 96, 128, 0.25)",
-            }}
-          />
-        ))}
+      {/* Manual navigation: arrows + dot indicators (no auto-advance) */}
+      <div className="mt-6 flex items-center justify-center gap-3 sm:gap-5">
+        <button
+          type="button"
+          onClick={goPrev}
+          aria-label="Previous slide"
+          className="inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-md border border-[#1E6080]/40 bg-background/80 text-[#1E6080] shadow-sm transition hover:border-[#1E6080] hover:bg-[#1E6080]/10"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <div className="flex items-center justify-center gap-2">
+          {Array.from({ length: slides }).map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setSlide(i)}
+              aria-label={slide === i ? `Slide ${i + 1} (current)` : `Go to slide ${i + 1}`}
+              className="h-[2px] transition-all duration-300"
+              style={{
+                width: slide === i ? 40 : 18,
+                background: slide === i ? "#1E6080" : "rgba(30, 96, 128, 0.25)",
+              }}
+            />
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={goNext}
+          aria-label="Next slide"
+          className="inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-md border border-[#1E6080]/40 bg-background/80 text-[#1E6080] shadow-sm transition hover:border-[#1E6080] hover:bg-[#1E6080]/10"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
       </div>
     </div>
   )
