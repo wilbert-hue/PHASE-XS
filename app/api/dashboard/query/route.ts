@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 import type { Filters } from "@/app/dashboard/trial-types"
+
+export const dynamic = "force-dynamic"
 import { defaultFilters } from "@/app/dashboard/trial-types"
 import { auth0 } from "@/lib/auth0"
 import { parseDashboardRegion } from "@/lib/dashboard-region"

@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation"
 import { auth0 } from "@/lib/auth0"
+
+export const dynamic = "force-dynamic"
 import { loadDashboardInitialData } from "@/lib/dashboard-initial-data"
 import DashboardClient from "./dashboard-client"
 

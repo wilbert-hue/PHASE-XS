@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 import { auth0 } from "@/lib/auth0"
+
+export const dynamic = "force-dynamic"
 import { parseDashboardRegion } from "@/lib/dashboard-region"
 import { fetchTrialsForRegion } from "@/lib/trials-for-region"
 import { computeInsights } from "@/lib/insights-query"
