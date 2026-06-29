@@ -1,8 +1,32 @@
 import type { NextRequest } from "next/server"
 import { Auth0Client } from "@auth0/nextjs-auth0/server"
 
+function getBaseURL(request: NextRequest): string {
+  // On Vercel (any deployment), never use localhost
+  if (process.env.VERCEL === "1") {
+    // Use the explicit override if set correctly
+    const explicit = process.env.AUTH0_BASE_URL?.trim()
+    if (explicit && !explicit.includes("localhost")) return explicit
+
+    // Read the actual request host (always correct on Vercel)
+    const host =
+      request.headers.get("x-forwarded-host") ||
+      request.headers.get("host") ||
+      ""
+    if (host && !host.includes("localhost")) {
+      return `https://${host}`
+    }
+
+    // Final hardcoded fallback for production
+    return "https://phasexs.com"
+  }
+
+  // Local dev
+  return process.env.AUTH0_BASE_URL?.trim() || "http://localhost:3000"
+}
+
 export async function middleware(request: NextRequest) {
-  // Strip stale Clerk query params from bookmarks/history
+  // Strip stale Clerk query params
   const url = new URL(request.url)
   let changed = false
   for (const key of [...url.searchParams.keys()]) {
@@ -11,23 +35,15 @@ export async function middleware(request: NextRequest) {
       changed = true
     }
   }
-  if (changed) {
-    return Response.redirect(url, 307)
-  }
+  if (changed) return Response.redirect(url, 307)
 
-  // Derive the real base URL from the incoming request (never localhost on production)
-  const forwardedHost = request.headers.get("x-forwarded-host")
-  const host = request.headers.get("host") || ""
-  const actualHost = forwardedHost || host
-  const isLocalhost = actualHost.includes("localhost") || actualHost.includes("127.0.0.1")
-
-  let baseURL: string
-  if (!isLocalhost && actualHost) {
-    const proto = request.headers.get("x-forwarded-proto") || "https"
-    baseURL = `${proto}://${actualHost}`
-  } else {
-    baseURL = process.env.AUTH0_BASE_URL?.trim() || "http://localhost:3000"
-  }
+  const baseURL = getBaseURL(request)
+  console.info("[middleware] baseURL resolved to", baseURL, {
+    VERCEL: process.env.VERCEL,
+    AUTH0_BASE_URL: process.env.AUTH0_BASE_URL,
+    host: request.headers.get("host"),
+    "x-forwarded-host": request.headers.get("x-forwarded-host"),
+  })
 
   const client = new Auth0Client({
     domain: process.env.AUTH0_DOMAIN?.trim() ?? "",
