@@ -3,16 +3,29 @@ import type { NextRequest } from "next/server"
 
 export const dynamic = "force-dynamic"
 
-// Build a fresh Auth0Client per request using the actual incoming host,
-// so the redirect_uri always matches the domain the user is on —
-// regardless of what AUTH0_BASE_URL is set to in env vars.
-function getClient(req: NextRequest): Auth0Client {
+function getBaseURL(req: NextRequest): string {
+  // On Vercel production, use the custom domain automatically
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  }
+  // On Vercel preview deployments, use the deployment URL
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+  // Fallback: read from request headers
   const proto = req.headers.get("x-forwarded-proto") || "https"
-  const host =
-    req.headers.get("x-forwarded-host") ||
-    req.headers.get("host") ||
-    "phasexs.com"
-  const baseURL = `${proto}://${host}`
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || ""
+  if (host && !host.includes("localhost")) {
+    return `${proto}://${host}`
+  }
+  // Local dev fallback
+  return process.env.AUTH0_BASE_URL?.trim() || "http://localhost:3000"
+}
+
+function getClient(req: NextRequest): Auth0Client {
+  const baseURL = getBaseURL(req)
+  // Force the SDK env var to match so it cannot fall back to a stale value
+  process.env.AUTH0_BASE_URL = baseURL
 
   return new Auth0Client({
     domain: process.env.AUTH0_DOMAIN?.trim() ?? "",
