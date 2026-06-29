@@ -21,9 +21,11 @@ function getBaseURL(req: NextRequest): string {
 
 function getClient(req: NextRequest): Auth0Client {
   const baseURL = getBaseURL(req)
+  const redirectUri = `${baseURL}/auth/callback`
 
-  console.info("[auth0/route] GET", req.nextUrl.pathname, {
+  console.info("[auth0/route] creating client", {
     baseURL,
+    redirectUri,
     VERCEL: process.env.VERCEL,
     AUTH0_BASE_URL: process.env.AUTH0_BASE_URL,
     host: req.headers.get("host"),
@@ -40,11 +42,15 @@ function getClient(req: NextRequest): Auth0Client {
     clientSecret: process.env.AUTH0_CLIENT_SECRET?.trim() ?? "",
     secret: process.env.AUTH0_SECRET?.trim() ?? "",
     baseURL,
+    authorizationParameters: {
+      redirect_uri: redirectUri,
+    },
     signInReturnToPath: "/dashboard",
   })
 }
 
 export async function GET(req: NextRequest) {
+  console.info("[auth0/route] GET", req.nextUrl.pathname)
   try {
     return await getClient(req).handler(req)
   } catch (err) {
