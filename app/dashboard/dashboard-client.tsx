@@ -62,20 +62,6 @@ export default function DashboardClient({
   const filtersKeyRef = useRef(JSON.stringify(defaultFilters))
   const skipHydrationFetchRef = useRef(true)
 
-  useEffect(() => {
-    const url = new URL(window.location.href)
-    let changed = false
-    for (const key of [...url.searchParams.keys()]) {
-      if (key.startsWith("__clerk")) {
-        url.searchParams.delete(key)
-        changed = true
-      }
-    }
-    if (changed) {
-      const next = url.pathname + (url.searchParams.toString() ? `?${url.searchParams.toString()}` : "") + url.hash
-      window.history.replaceState(window.history.state, "", next)
-    }
-  }, [])
 
   useEffect(() => {
     try {
