@@ -1,65 +1,63 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
 import type { Trial } from "@/app/dashboard/trial-types"
+import type { DashboardTableSortField } from "@/lib/dashboard-query"
+import type { DashboardRegion } from "@/lib/dashboard-region"
+import { getRegionProfile } from "@/lib/dashboard-region-profile"
+import { normalizeCtriId } from "@/lib/ctri-id"
 import { normalizePhase } from "@/app/dashboard/trial-types"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ArrowUpDown, ExternalLink } from "lucide-react"
 
-const PAGE_SIZE = 10
-
-type SortField =
-  | "nctId"
-  | "molecule"
-  | "phase"
-  | "enrollment"
-  | "dosageStrength"
-  | "indication"
-  | "technology"
 type SortDir = "asc" | "desc"
 
 export function TrialsTable({
-  trials,
+  region,
+  rows,
+  totalFiltered,
+  page,
+  totalPages,
+  sortField,
+  sortDir,
+  onPageChange,
+  onSortChange,
   onSelectTrial,
 }: {
-  trials: Trial[]
+  region: DashboardRegion
+  rows: Trial[]
+  totalFiltered: number
+  page: number
+  totalPages: number
+  sortField: DashboardTableSortField
+  sortDir: SortDir
+  onPageChange: (page: number) => void
+  onSortChange: (field: DashboardTableSortField) => void
   onSelectTrial: (t: Trial) => void
 }) {
-  const [page, setPage] = useState(0)
-  const [sortField, setSortField] = useState<SortField>("enrollment")
-  const [sortDir, setSortDir] = useState<SortDir>("desc")
-
-  const sorted = useMemo(() => {
-    const arr = [...trials]
-    arr.sort((a, b) => {
-      let av: string | number = a[sortField] ?? ""
-      let bv: string | number = b[sortField] ?? ""
-      if (typeof av === "number" && typeof bv === "number") {
-        return sortDir === "asc" ? av - bv : bv - av
-      }
-      av = String(av).toLowerCase()
-      bv = String(bv).toLowerCase()
-      return sortDir === "asc" ? av.localeCompare(bv) : bv.localeCompare(av)
-    })
-    return arr
-  }, [trials, sortField, sortDir])
-
-  const totalPages = Math.ceil(sorted.length / PAGE_SIZE)
-  const pageData = sorted.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
-
-  useEffect(() => {
-    setPage(0)
-  }, [trials])
-
-  const toggleSort = (field: SortField) => {
-    if (sortField === field) {
-      setSortDir(d => (d === "asc" ? "desc" : "asc"))
-    } else {
-      setSortField(field)
-      setSortDir("desc")
-    }
+  const profile = getRegionProfile(region)
+  const toggleSort = (field: DashboardTableSortField) => {
+    onSortChange(field)
   }
 
-  const SortHeader = ({ field, children }: { field: SortField; children: React.ReactNode }) => (
+  const columns: [DashboardTableSortField, string][] = [
+    ["nctId", profile.trialIdLabel],
+    ["molecule", profile.moleculeLabel],
+    ["phase", "Phase"],
+    [
+      "indication",
+      region === "in" || region === "uk" ? "Condition" : "Indication",
+    ],
+    [
+      "technology",
+      region === "in" ? "Study Type" : region === "uk" ? "Study Design" : "Technology",
+    ],
+    ["enrollment", "Enrollment"],
+    [
+      "dosageStrength",
+      region === "in" ? "Intervention" : region === "uk" ? "Drug / Biologic" : "Dose",
+    ],
+  ]
+
+  const SortHeader = ({ field, children }: { field: DashboardTableSortField; children: React.ReactNode }) => (
     <button
       onClick={() => toggleSort(field)}
       className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
@@ -71,30 +69,20 @@ export function TrialsTable({
 
   return (
     <div className="border border-border bg-background/60 backdrop-blur-sm">
-      {/* Table header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-border">
         <h3 className="font-mono text-[12px] uppercase tracking-widest text-muted-foreground">
           Trial Records
         </h3>
         <span className="font-mono text-[12px] text-muted-foreground">
-          {sorted.length.toLocaleString()} results
+          {totalFiltered.toLocaleString()} results
         </span>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto">
         <table className="w-full min-w-[900px]">
           <thead>
             <tr className="border-b border-border">
-              {([
-                ["nctId", "NCT ID"],
-                ["molecule", "Molecule"],
-                ["phase", "Phase"],
-                ["indication", "Indication"],
-                ["technology", "Technology"],
-                ["enrollment", "Enrollment"],
-                ["dosageStrength", "Dose"],
-              ] as [SortField, string][]).map(([field, label]) => (
+              {columns.map(([field, label]) => (
                 <th
                   key={field}
                   className="px-4 py-2 text-left font-mono text-[12px] uppercase tracking-widest text-muted-foreground font-normal"
@@ -108,21 +96,21 @@ export function TrialsTable({
             </tr>
           </thead>
           <tbody>
-            {pageData.length === 0 ? (
+            {rows.length === 0 ? (
               <tr>
                 <td colSpan={8} className="px-4 py-12 text-center font-mono text-sm text-muted-foreground">
                   No trials found
                 </td>
               </tr>
             ) : (
-              pageData.map((trial, i) => (
+              rows.map((trial, i) => (
                 <tr
                   key={trial.nctId + "-" + i}
                   className="border-b border-border/50 hover:bg-muted/30 transition-colors cursor-pointer"
                   onClick={() => onSelectTrial(trial)}
                 >
                   <td className="px-4 py-2 font-mono text-sm text-accent">
-                    {trial.nctId}
+                    {region === "in" ? normalizeCtriId(trial.nctId) : trial.nctId}
                   </td>
                   <td className="px-4 py-2 font-mono text-sm font-medium max-w-[160px] truncate">
                     {trial.molecule || "—"}
@@ -138,7 +126,7 @@ export function TrialsTable({
                       : "—"}
                   </td>
                   <td className="px-4 py-2 font-mono text-sm max-w-[160px] truncate text-muted-foreground">
-                    {trial.technology || "—"}
+                    {(region === "in" || region === "uk" ? trial.adminType : trial.technology) || "—"}
                   </td>
                   <td className="px-4 py-2 font-mono text-sm tabular-nums">
                     {trial.enrollment ? trial.enrollment.toLocaleString() : "—"}
@@ -164,23 +152,22 @@ export function TrialsTable({
         </table>
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between px-5 py-3 border-t border-border">
           <span className="font-mono text-[12px] text-muted-foreground">
             Page {page + 1} of {totalPages}
           </span>
           <div className="flex items-center gap-1">
-            <PaginationBtn onClick={() => setPage(0)} disabled={page === 0}>
+            <PaginationBtn onClick={() => onPageChange(0)} disabled={page === 0}>
               <ChevronsLeft className="h-3 w-3" />
             </PaginationBtn>
-            <PaginationBtn onClick={() => setPage(p => p - 1)} disabled={page === 0}>
+            <PaginationBtn onClick={() => onPageChange(page - 1)} disabled={page === 0}>
               <ChevronLeft className="h-3 w-3" />
             </PaginationBtn>
-            <PaginationBtn onClick={() => setPage(p => p + 1)} disabled={page >= totalPages - 1}>
+            <PaginationBtn onClick={() => onPageChange(page + 1)} disabled={page >= totalPages - 1}>
               <ChevronRight className="h-3 w-3" />
             </PaginationBtn>
-            <PaginationBtn onClick={() => setPage(totalPages - 1)} disabled={page >= totalPages - 1}>
+            <PaginationBtn onClick={() => onPageChange(totalPages - 1)} disabled={page >= totalPages - 1}>
               <ChevronsRight className="h-3 w-3" />
             </PaginationBtn>
           </div>

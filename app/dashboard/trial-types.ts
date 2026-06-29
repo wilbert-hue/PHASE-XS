@@ -40,8 +40,21 @@ export interface Trial {
   marketForecast2025: string
   marketForecast2026: string
   marketForecast2027: string
-  /** Payor / access (from source spreadsheet) */
+  /** Payor / access (US spreadsheet only) */
   reimbursement?: string
+  /** CTRI / India registry (empty for US rows) */
+  publicTitle?: string
+  scientificTitle?: string
+  briefSummary?: string
+  recruitmentStatus?: string
+  secondaryOutcomes?: string
+  outcomeTimepoints?: string
+  blinding?: string
+  randomization?: string
+  genderCriteria?: string
+  ctriDetailUrl?: string
+  /** Full spreadsheet / registry columns for PDF & detail (not loaded in list views). */
+  sourceFields?: Record<string, string>
 }
 
 export interface Filters {
@@ -52,6 +65,8 @@ export interface Filters {
   trialDesigns: string[]
   routeOfAdmin: string[]
   adminType: string[]
+  /** India (CTRI): Recruitment Status of Trial (India) */
+  recruitmentStatuses: string[]
 }
 
 export const defaultFilters: Filters = {
@@ -62,6 +77,7 @@ export const defaultFilters: Filters = {
   trialDesigns: [],
   routeOfAdmin: [],
   adminType: [],
+  recruitmentStatuses: [],
 }
 
 /** Case-insensitive trimmed key for counting unique molecules across trials. */
@@ -106,4 +122,18 @@ export function normalizePhase(p: string): string {
     .replace(/PHASE4/g, "Phase 4")
     .replace(/ \/ /g, " / ")
     .replace(/, /g, " / ")
+}
+
+/** Landing / marketing copy aligned with dashboard KPI uniqueness rules. */
+export type DatasetCoverageStats = { trials: number; molecules: number; indications: number }
+
+export function computeDatasetCoverageStats(trials: Trial[]): DatasetCoverageStats {
+  const moleculeKeys = trials
+    .map(t => normalizeMoleculeKey(t.molecule))
+    .filter(k => k.length > 0)
+  const uniqueMolecules = new Set(moleculeKeys).size
+  const uniqueIndications = new Set(
+    trials.map(t => (t.indication ?? "").trim()).filter(Boolean),
+  ).size
+  return { trials: trials.length, molecules: uniqueMolecules, indications: uniqueIndications }
 }

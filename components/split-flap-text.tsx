@@ -210,14 +210,18 @@ function NctLetterTile({ letter }: { letter: string }) {
 function DigitTickerTile({
   speed = 140,
   tickKey = 0,
+  initialDigit,
   playClick,
 }: {
   speed?: number
   tickKey?: number
+  /** Must be deterministic (no Math.random) so SSR and hydration match. */
+  initialDigit: string
   playClick?: () => void
 }) {
-  const [d, setD] = useState(() => DIGITS[Math.floor(Math.random() * DIGITS.length)])
+  const [d, setD] = useState(initialDigit)
   useEffect(() => {
+    setD(DIGITS[Math.floor(Math.random() * DIGITS.length)])
     const id = setInterval(() => {
       setD(DIGITS[Math.floor(Math.random() * DIGITS.length)])
       playClick?.()
@@ -290,6 +294,7 @@ export function SplitFlapPhaseXsNctBack({ speed = 72 }: { speed?: number }) {
               key={`${replayKey}-d-${index}`}
               speed={115 + (index - 3) * 18}
               tickKey={tickKey}
+              initialDigit={DIGITS[(index * 3 + index) % 10]}
               playClick={audio?.playClick}
             />
           ),

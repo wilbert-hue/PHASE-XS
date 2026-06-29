@@ -1,23 +1,23 @@
 "use client"
 
-import { useState, useMemo, useCallback, useEffect, useRef } from "react"
+import { useState, useCallback, useEffect, useRef } from "react"
 import Link from "next/link"
 import type { User } from "@auth0/nextjs-auth0/types"
 import type { Trial, Filters } from "@/app/dashboard/trial-types"
-import { defaultFilters, normalizePhase } from "@/app/dashboard/trial-types"
+import { defaultFilters } from "@/app/dashboard/trial-types"
 import { DashboardKPIs } from "@/components/dashboard/kpi-cards"
 import { DashboardCharts } from "@/components/dashboard/charts"
 import { TrialsTable } from "@/components/dashboard/trials-table"
 import { DashboardFilters } from "@/components/dashboard/filters"
 import { TrialDetailSheet } from "@/components/dashboard/trial-detail-sheet"
 import { ComparisonPanel } from "@/components/dashboard/comparison-panel"
+import { InsightsPanel } from "@/components/dashboard/insights-panel"
 import { PageSection } from "@/components/page-section"
-import {
-  buildMoleculeSuggestionCatalog,
-  moleculePrefixSuggestions,
-  activeSearchTypingSegment,
-} from "@/lib/molecule-suggestions"
 import { facetApplied } from "@/lib/dashboard-facets"
+import { getRegionProfile } from "@/lib/dashboard-region-profile"
+import type { DashboardQueryResult, DashboardTableSortField } from "@/lib/dashboard-query"
+import type { DashboardRegion } from "@/lib/dashboard-region"
+import { DashboardRegionTabs } from "@/components/dashboard/region-tabs"
 import { ArrowLeft, User as UserIcon, Search as SearchIcon, FileText, Trash2, X, LogOut } from "lucide-react"
 
 interface ViewedTrialEntry {
@@ -30,14 +30,37 @@ interface ViewedTrialEntry {
 const HISTORY_KEY = "phase-xs:user-history"
 const MAX_HISTORY = 20
 
-export default function DashboardClient({ user, trials }: { user: User; trials: Trial[] }) {
+export default function DashboardClient({
+  user,
+  initialUs,
+  initialIn,
+  initialUk,
+  initialEs,
+}: {
+  user: User
+  initialUs: DashboardQueryResult
+  initialIn: DashboardQueryResult
+  initialUk: DashboardQueryResult
+  initialEs: DashboardQueryResult
+}) {
+  const [region, setRegion] = useState<DashboardRegion>("us")
   const [filters, setFilters] = useState<Filters>(defaultFilters)
-  const [selectedTrial, setSelectedTrialState] = useState<Trial | null>(null)
+  const [data, setData] = useState<DashboardQueryResult>(initialUs)
+  const [tablePage, setTablePage] = useState(initialUs.tablePage)
+  const [tableSort, setTableSort] = useState<{ field: DashboardTableSortField; dir: "asc" | "desc" }>(() => ({
+    field: "enrollment",
+    dir: "desc",
+  }))
+  const [pending, setPending] = useState(false)
 
+  const [selectedTrial, setSelectedTrialState] = useState<Trial | null>(null)
   const [searchHistory, setSearchHistory] = useState<string[]>([])
   const [viewedHistory, setViewedHistory] = useState<ViewedTrialEntry[]>([])
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
+
+  const filtersKeyRef = useRef(JSON.stringify(defaultFilters))
+  const skipHydrationFetchRef = useRef(true)
 
   useEffect(() => {
     const url = new URL(window.location.href)
@@ -119,107 +142,139 @@ export default function DashboardClient({ user, trials }: { user: User; trials: 
   }
 
   const updateFilter = useCallback(<K extends keyof Filters>(key: K, value: Filters[K]) => {
+    setTablePage(0)
     setFilters(prev => ({ ...prev, [key]: value }))
   }, [])
 
-  const resetFilters = useCallback(() => setFilters(defaultFilters), [])
-
-  const matchesTerm = useCallback((t: Trial, s: string) => {
-    const ls = s.toLowerCase()
-    return (
-      t.nctId.toLowerCase().includes(ls) ||
-      t.molecule.toLowerCase().includes(ls) ||
-      t.indication.toLowerCase().includes(ls) ||
-      t.sponsor.toLowerCase().includes(ls) ||
-      t.diseaseCondition.toLowerCase().includes(ls) ||
-      t.technology.toLowerCase().includes(ls) ||
-      (t.reimbursement?.toLowerCase() ?? "").includes(ls)
-    )
+  const resetFilters = useCallback(() => {
+    setTablePage(0)
+    setFilters(defaultFilters)
   }, [])
 
-  const searchTerms = useMemo(
-    () => filters.search.split(",").map(s => s.trim()).filter(Boolean),
-    [filters.search],
+  const switchRegion = useCallback(
+    (next: DashboardRegion) => {
+      if (next === region) return
+      setRegion(next)
+      setFilters(defaultFilters)
+      setTablePage(0)
+      setTableSort({ field: "enrollment", dir: "desc" })
+      setData(
+        next === "us" ? initialUs
+        : next === "in" ? initialIn
+        : next === "uk" ? initialUk
+        : initialEs
+      )
+      filtersKeyRef.current = JSON.stringify(defaultFilters)
+      skipHydrationFetchRef.current = true
+      setSelectedTrialState(null)
+    },
+    [region, initialUs, initialIn, initialUk, initialEs],
   )
+
+  const fetchDashboard = useCallback(async () => {
+    setPending(true)
+    try {
+      const res = await fetch("/api/dashboard/query", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({
+          region,
+          filters,
+          tablePage,
+          tableSort,
+        }),
+      })
+      if (res.status === 401) {
+        window.location.href = "/auth/login?returnTo=/dashboard"
+        return
+      }
+      if (!res.ok) {
+        console.error("[dashboard] query failed", res.status)
+        return
+      }
+      const next = (await res.json()) as DashboardQueryResult
+      setData(next)
+      setTablePage(next.tablePage)
+    } catch (e) {
+      console.error("[dashboard] query error", e)
+    } finally {
+      setPending(false)
+    }
+  }, [region, filters, tablePage, tableSort])
+
+  const filtersKey = JSON.stringify(filters)
+  const sortKey = `${tableSort.field}:${tableSort.dir}`
+
+  useEffect(() => {
+    if (skipHydrationFetchRef.current) {
+      skipHydrationFetchRef.current = false
+      filtersKeyRef.current = filtersKey
+      return
+    }
+    const changed = filtersKeyRef.current !== filtersKey
+    filtersKeyRef.current = filtersKey
+    const delay = changed ? 320 : 0
+    const id = setTimeout(() => {
+      void fetchDashboard()
+    }, delay)
+    return () => clearTimeout(id)
+  }, [filtersKey, tablePage, sortKey, region, fetchDashboard])
+
+  const openTrialByNctId = useCallback(async (nctId: string) => {
+    try {
+      const res = await fetch(
+        `/api/dashboard/trial/${encodeURIComponent(nctId)}?region=${region}`,
+        { credentials: "same-origin" },
+      )
+      if (res.status === 401) {
+        window.location.href = "/auth/login?returnTo=/dashboard"
+        return
+      }
+      if (!res.ok) return
+      const trial = (await res.json()) as Trial
+      setSelectedTrial(trial)
+    } catch (e) {
+      console.error("[dashboard] trial fetch", e)
+    }
+  }, [setSelectedTrial, region])
+
+  const regionProfile = getRegionProfile(region)
+  const footerLabel = `${regionProfile.footerPrefix} / ${data.totalTrialCount.toLocaleString()} Records`
+
+  const searchTerms = data.searchTerms
   const isComparing = searchTerms.length >= 2
 
-  const filterOptions = useMemo(() => {
-    const phases = [...new Set(trials.map(t => normalizePhase(t.phase)))].filter(Boolean).sort()
-    const technologies = [...new Set(trials.map(t => t.technology))].filter(Boolean).sort()
-    const indMap = new Map<string, number>()
-    trials.forEach(t => {
-      if (t.indication) indMap.set(t.indication, (indMap.get(t.indication) || 0) + 1)
-    })
-    const indications = [...indMap.entries()].sort((a, b) => b[1] - a[1]).slice(0, 30).map(e => e[0])
-    const trialDesigns = [...new Set(trials.map(t => t.trialDesign))].filter(Boolean).sort()
-    const routes = [...new Set(trials.flatMap(t => t.routeOfAdmin.split(", ").map(r => r.trim())))].filter(Boolean).sort()
-    const adminTypes = [...new Set(trials.map(t => t.adminType))].filter(Boolean).sort()
-    return { phases, technologies, indications, trialDesigns, routes, adminTypes }
-  }, [trials])
+  const filterOptions = data.filterOptions
+  const activeFilterCount = regionProfile.filterFacets.reduce((n, facet) => {
+    switch (facet.key) {
+      case "phases":
+        return n + Number(facetApplied(filters.phases, filterOptions.phases))
+      case "technologies":
+        return n + Number(facetApplied(filters.technologies, filterOptions.technologies))
+      case "indications":
+        return n + Number(facetApplied(filters.indications, filterOptions.indications))
+      case "trialDesigns":
+        return n + Number(facetApplied(filters.trialDesigns, filterOptions.trialDesigns))
+      case "routeOfAdmin":
+        return n + Number(facetApplied(filters.routeOfAdmin, filterOptions.routes))
+      case "adminType":
+        return n + Number(facetApplied(filters.adminType, filterOptions.adminTypes))
+      case "recruitmentStatuses":
+        return n + Number(facetApplied(filters.recruitmentStatuses, filterOptions.recruitmentStatuses))
+      default:
+        return n
+    }
+  }, 0)
 
-  const passesNonSearchFilters = useCallback(
-    (t: Trial) => {
-      if (facetApplied(filters.phases, filterOptions.phases)) {
-        if (!filters.phases.includes(normalizePhase(t.phase))) return false
-      }
-      if (facetApplied(filters.technologies, filterOptions.technologies)) {
-        if (!filters.technologies.includes(t.technology)) return false
-      }
-      if (facetApplied(filters.indications, filterOptions.indications)) {
-        if (
-          !filters.indications.some(ind =>
-            t.indication.toUpperCase().includes(ind.toUpperCase()),
-          )
-        )
-          return false
-      }
-      if (facetApplied(filters.trialDesigns, filterOptions.trialDesigns)) {
-        if (!filters.trialDesigns.includes(t.trialDesign)) return false
-      }
-      if (facetApplied(filters.routeOfAdmin, filterOptions.routes)) {
-        if (!filters.routeOfAdmin.some(r => t.routeOfAdmin.includes(r))) return false
-      }
-      if (facetApplied(filters.adminType, filterOptions.adminTypes)) {
-        if (!filters.adminType.includes(t.adminType)) return false
-      }
-      return true
-    },
-    [filters, filterOptions],
-  )
-
-  const filteredTrials = useMemo(() => {
-    return trials.filter(t => {
-      if (!passesNonSearchFilters(t)) return false
-      if (searchTerms.length === 0) return true
-      return searchTerms.some(term => matchesTerm(t, term))
-    })
-  }, [trials, searchTerms, passesNonSearchFilters, matchesTerm])
-
-  const comparisonGroups = useMemo(() => {
-    if (!isComparing) return []
-    return searchTerms.map(term => ({
-      term,
-      trials: trials.filter(t => passesNonSearchFilters(t) && matchesTerm(t, term)),
-    }))
-  }, [isComparing, trials, searchTerms, passesNonSearchFilters, matchesTerm])
-
-  const moleculeSuggestionCatalog = useMemo(() => buildMoleculeSuggestionCatalog(trials), [trials])
-  const moleculeSearchSuggestions = useMemo(
-    () =>
-      moleculePrefixSuggestions(
-        moleculeSuggestionCatalog,
-        activeSearchTypingSegment(filters.search),
-      ),
-    [moleculeSuggestionCatalog, filters.search],
-  )
-
-  const activeFilterCount =
-    Number(facetApplied(filters.phases, filterOptions.phases)) +
-    Number(facetApplied(filters.technologies, filterOptions.technologies)) +
-    Number(facetApplied(filters.indications, filterOptions.indications)) +
-    Number(facetApplied(filters.trialDesigns, filterOptions.trialDesigns)) +
-    Number(facetApplied(filters.routeOfAdmin, filterOptions.routes)) +
-    Number(facetApplied(filters.adminType, filterOptions.adminTypes))
+  const handleSortChange = useCallback((field: DashboardTableSortField) => {
+    setTableSort(prev =>
+      prev.field === field
+        ? { field, dir: prev.dir === "asc" ? "desc" : "asc" }
+        : { field, dir: "desc" },
+    )
+    setTablePage(0)
+  }, [])
 
   return (
     <div className="min-h-screen bg-background">
@@ -247,8 +302,8 @@ export default function DashboardClient({ user, trials }: { user: User; trials: 
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="font-mono text-[12px] text-muted-foreground">
-                  {filteredTrials.length.toLocaleString()} / {trials.length.toLocaleString()} trials
+                <span className={`font-mono text-[12px] text-muted-foreground ${pending ? "opacity-60" : ""}`}>
+                  {data.filteredCount.toLocaleString()} / {data.totalTrialCount.toLocaleString()} trials
                 </span>
                 {user.email && (
                   <span
@@ -368,28 +423,25 @@ export default function DashboardClient({ user, trials }: { user: User; trials: 
                           </p>
                         ) : (
                           <ul className="space-y-0.5">
-                            {viewedHistory.map(v => {
-                              const trial = trials.find(t => t.nctId === v.nctId)
-                              return (
-                                <li key={v.nctId}>
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      if (trial) setSelectedTrial(trial)
-                                      setUserMenuOpen(false)
-                                    }}
-                                    className="w-full text-left rounded px-2 py-1 hover:bg-muted transition-colors"
-                                  >
-                                    <div className="font-mono text-sm text-foreground/90 truncate">
-                                      {v.nctId}
-                                    </div>
-                                    <div className="font-mono text-[11px] text-muted-foreground truncate">
-                                      {v.molecule || "—"} · {v.indication || "—"}
-                                    </div>
-                                  </button>
-                                </li>
-                              )
-                            })}
+                            {viewedHistory.map(v => (
+                              <li key={v.nctId}>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    void openTrialByNctId(v.nctId)
+                                    setUserMenuOpen(false)
+                                  }}
+                                  className="w-full text-left rounded px-2 py-1 hover:bg-muted transition-colors"
+                                >
+                                  <div className="font-mono text-sm text-foreground/90 truncate">
+                                    {v.nctId}
+                                  </div>
+                                  <div className="font-mono text-[11px] text-muted-foreground truncate">
+                                    {v.molecule || "—"} · {v.indication || "—"}
+                                  </div>
+                                </button>
+                              </li>
+                            ))}
                           </ul>
                         )}
                       </div>
@@ -401,16 +453,34 @@ export default function DashboardClient({ user, trials }: { user: User; trials: 
           </div>
         </header>
 
-        <main className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8 pt-6 pb-4">
+        <main
+          className={`mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8 pt-6 pb-4 transition-opacity ${pending ? "opacity-[0.92]" : ""}`}
+        >
+          <div className="mb-4">
+            <DashboardRegionTabs
+              region={region}
+              onChange={switchRegion}
+              usCount={initialUs.totalTrialCount}
+              inCount={initialIn.totalTrialCount}
+              ukCount={initialUk.totalTrialCount}
+              esCount={initialEs.totalTrialCount}
+            />
+          </div>
+
+          <div className="relative z-0 mb-4">
+            <InsightsPanel region={region} moleculeTokenCatalog={data.moleculeTokenCatalog} />
+          </div>
+
           <div className="relative z-40">
             <PageSection page="dashboard" variant="filters" className="p-4 sm:p-5">
               <DashboardFilters
+                region={region}
                 filters={filters}
                 filterOptions={filterOptions}
                 updateFilter={updateFilter}
                 resetFilters={resetFilters}
                 activeFilterCount={activeFilterCount}
-                moleculeSearchSuggestions={moleculeSearchSuggestions}
+                moleculeSearchSuggestions={data.moleculeSearchSuggestions}
               />
             </PageSection>
           </div>
@@ -420,14 +490,26 @@ export default function DashboardClient({ user, trials }: { user: User; trials: 
             variant="data"
             className="relative z-0 mt-6 space-y-6"
           >
-            {isComparing && <ComparisonPanel groups={comparisonGroups} />}
-            <DashboardKPIs trials={filteredTrials} searchTerms={searchTerms} />
-            <DashboardCharts trials={filteredTrials} />
+            {isComparing && <ComparisonPanel region={region} groups={data.comparison} />}
+            <DashboardKPIs
+              region={region}
+              filteredTrialCount={data.filteredCount}
+              kpi={data.kpi}
+            />
+            <DashboardCharts region={region} charts={data.charts} />
           </PageSection>
 
           <PageSection page="dashboard" variant="table" className="relative z-0 mt-6">
             <TrialsTable
-              trials={filteredTrials}
+              region={region}
+              rows={data.tableRows}
+              totalFiltered={data.filteredCount}
+              page={data.tablePage}
+              totalPages={data.tableTotalPages}
+              sortField={tableSort.field}
+              sortDir={tableSort.dir}
+              onPageChange={setTablePage}
+              onSortChange={handleSortChange}
               onSelectTrial={setSelectedTrial}
             />
           </PageSection>
@@ -436,13 +518,17 @@ export default function DashboardClient({ user, trials }: { user: User; trials: 
         <footer className="border-t border-border py-4 mt-6">
           <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
             <p className="font-mono text-[12px] uppercase tracking-widest text-muted-foreground">
-              PHASE-XS / US Clinical Trials Database / {trials.length.toLocaleString()} Records
+              {footerLabel}
             </p>
           </div>
         </footer>
       </div>
 
-      <TrialDetailSheet trial={selectedTrial} onClose={() => setSelectedTrial(null)} />
+      <TrialDetailSheet
+        trial={selectedTrial}
+        region={region}
+        onClose={() => setSelectedTrial(null)}
+      />
     </div>
   )
 }

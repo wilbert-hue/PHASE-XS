@@ -3,27 +3,64 @@
 import { useState, useRef, useEffect, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import type { Filters } from "@/app/dashboard/trial-types"
+import type { DashboardFilterOptions } from "@/lib/dashboard-query"
+import type { DashboardRegion } from "@/lib/dashboard-region"
+import { getRegionProfile, type FilterFacetKey } from "@/lib/dashboard-region-profile"
 import { Search, X, ChevronDown } from "lucide-react"
 import { activeSearchTypingSegment, applyMoleculeSuggestion } from "@/lib/molecule-suggestions"
 import { selectionCoversCatalog } from "@/lib/dashboard-facets"
 
-interface FilterOptions {
-  phases: string[]
-  technologies: string[]
-  indications: string[]
-  trialDesigns: string[]
-  routes: string[]
-  adminTypes: string[]
-}
-
 interface DashboardFiltersProps {
+  region: DashboardRegion
   filters: Filters
-  filterOptions: FilterOptions
+  filterOptions: DashboardFilterOptions
   updateFilter: <K extends keyof Filters>(key: K, value: Filters[K]) => void
   resetFilters: () => void
   activeFilterCount: number
-  /** Molecule name autocomplete (prefix of current typing segment) */
   moleculeSearchSuggestions?: string[]
+}
+
+function facetState(
+  key: FilterFacetKey,
+  filters: Filters,
+  filterOptions: DashboardFilterOptions,
+): { selected: string[]; options: string[]; filterKey: keyof Filters } {
+  switch (key) {
+    case "phases":
+      return { selected: filters.phases, options: filterOptions.phases, filterKey: "phases" }
+    case "technologies":
+      return {
+        selected: filters.technologies,
+        options: filterOptions.technologies,
+        filterKey: "technologies",
+      }
+    case "indications":
+      return {
+        selected: filters.indications,
+        options: filterOptions.indications,
+        filterKey: "indications",
+      }
+    case "trialDesigns":
+      return {
+        selected: filters.trialDesigns,
+        options: filterOptions.trialDesigns,
+        filterKey: "trialDesigns",
+      }
+    case "routeOfAdmin":
+      return {
+        selected: filters.routeOfAdmin,
+        options: filterOptions.routes,
+        filterKey: "routeOfAdmin",
+      }
+    case "adminType":
+      return { selected: filters.adminType, options: filterOptions.adminTypes, filterKey: "adminType" }
+    case "recruitmentStatuses":
+      return {
+        selected: filters.recruitmentStatuses,
+        options: filterOptions.recruitmentStatuses,
+        filterKey: "recruitmentStatuses",
+      }
+  }
 }
 
 function MultiSelect({
@@ -83,11 +120,11 @@ function MultiSelect({
           background: `linear-gradient(165deg, ${accent}20 0%, ${accent}0a 45%, ${accent}06 100%)`,
           color: accent,
         }}
-        onMouseOver={(e) => {
+        onMouseOver={e => {
           e.currentTarget.style.background = `linear-gradient(165deg, ${accent}2e 0%, ${accent}16 50%, ${accent}0c 100%)`
           e.currentTarget.style.borderColor = `${accent}aa`
         }}
-        onMouseOut={(e) => {
+        onMouseOut={e => {
           e.currentTarget.style.background = `linear-gradient(165deg, ${accent}20 0%, ${accent}0a 45%, ${accent}06 100%)`
           e.currentTarget.style.borderColor = `${accent}50`
         }}
@@ -132,7 +169,7 @@ function MultiSelect({
               }}
               className="z-[999] border-2 bg-background/95 backdrop-blur-sm shadow-xl max-h-64 overflow-hidden flex flex-col overscroll-contain rounded-md"
             >
-                {options.length > 8 && (
+              {options.length > 8 && (
                 <div
                   className="shrink-0 p-2 border-b"
                   style={{ borderColor: `${accent}25`, background: `${accent}08` }}
@@ -147,7 +184,6 @@ function MultiSelect({
                   />
                 </div>
               )}
-              {/* "All" selects every option for this facet; uncheck clears selection (no restriction). */}
               <div
                 className="shrink-0 px-2 py-1.5 border-b"
                 style={{ borderColor: `${accent}25`, background: `${accent}06` }}
@@ -204,7 +240,7 @@ function MultiSelect({
                         onChange(
                           selected.includes(option)
                             ? selected.filter(s => s !== option)
-                            : [...selected, option]
+                            : [...selected, option],
                         )
                       }}
                       className="h-3 w-3 rounded border-border shrink-0"
@@ -233,6 +269,7 @@ function MultiSelect({
 }
 
 export function DashboardFilters({
+  region,
   filters,
   filterOptions,
   updateFilter,
@@ -240,6 +277,7 @@ export function DashboardFilters({
   activeFilterCount,
   moleculeSearchSuggestions = [],
 }: DashboardFiltersProps) {
+  const profile = getRegionProfile(region)
   const [suggestOpen, setSuggestOpen] = useState(false)
   const [highlight, setHighlight] = useState(0)
   const searchWrapRef = useRef<HTMLDivElement>(null)
@@ -260,9 +298,7 @@ export function DashboardFilters({
   }, [])
 
   const suggestionsVisible =
-    suggestOpen &&
-    typingSegment.length >= 2 &&
-    moleculeSearchSuggestions.length > 0
+    suggestOpen && typingSegment.length >= 2 && moleculeSearchSuggestions.length > 0
 
   const commitSuggestion = (label: string) => {
     updateFilter("search", applyMoleculeSuggestion(filters.search, label))
@@ -296,9 +332,14 @@ export function DashboardFilters({
     }
   }
 
+  const facetCount = profile.filterFacets.length
+  const gridCols =
+    facetCount <= 5
+      ? "grid-cols-2 md:grid-cols-3 lg:grid-cols-5"
+      : "grid-cols-2 md:grid-cols-3 lg:grid-cols-6"
+
   return (
     <div className="space-y-3">
-      {/* Search row */}
       <div className="flex items-center gap-3">
         <div ref={searchWrapRef} className="relative flex-1 z-[100]">
           <div className="flex items-center gap-2 border border-border bg-background px-3 py-2">
@@ -310,7 +351,7 @@ export function DashboardFilters({
               aria-expanded={suggestionsVisible}
               aria-controls="dash-molecule-suggestions"
               id="dash-search-query"
-              placeholder="Search by NCT ID, molecule, indication, sponsor, technology…  (use commas to compare: e.g. roche, pfizer)"
+              placeholder={profile.searchPlaceholder}
               value={filters.search}
               onChange={e => {
                 updateFilter("search", e.target.value)
@@ -374,56 +415,26 @@ export function DashboardFilters({
         )}
       </div>
 
-      {/* Filter dropdowns — distinct accent per control (aligns with report section palette) */}
       <div
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 p-4 rounded-lg border border-border/70 overflow-hidden"
+        className={`grid ${gridCols} gap-3 p-4 rounded-lg border border-border/70 overflow-hidden`}
         style={{
           background:
             "linear-gradient(125deg, rgba(37,99,235,0.07) 0%, rgba(109,40,217,0.06) 25%, rgba(180,83,9,0.06) 50%, rgba(14,116,144,0.07) 75%, rgba(4,120,87,0.05) 100%)",
         }}
       >
-        <MultiSelect
-          label="Phase"
-          accent="#2563EB"
-          options={filterOptions.phases}
-          selected={filters.phases}
-          onChange={v => updateFilter("phases", v)}
-        />
-        <MultiSelect
-          label="Technology"
-          accent="#6D28D9"
-          options={filterOptions.technologies}
-          selected={filters.technologies}
-          onChange={v => updateFilter("technologies", v)}
-        />
-        <MultiSelect
-          label="Indication"
-          accent="#BE123C"
-          options={filterOptions.indications}
-          selected={filters.indications}
-          onChange={v => updateFilter("indications", v)}
-        />
-        <MultiSelect
-          label="Trial Design"
-          accent="#B45309"
-          options={filterOptions.trialDesigns}
-          selected={filters.trialDesigns}
-          onChange={v => updateFilter("trialDesigns", v)}
-        />
-        <MultiSelect
-          label="Route of Admin"
-          accent="#0E7490"
-          options={filterOptions.routes}
-          selected={filters.routeOfAdmin}
-          onChange={v => updateFilter("routeOfAdmin", v)}
-        />
-        <MultiSelect
-          label="Administration"
-          accent="#047857"
-          options={filterOptions.adminTypes}
-          selected={filters.adminType}
-          onChange={v => updateFilter("adminType", v)}
-        />
+        {profile.filterFacets.map(facet => {
+          const { selected, options, filterKey } = facetState(facet.key, filters, filterOptions)
+          return (
+            <MultiSelect
+              key={facet.key}
+              label={facet.label}
+              accent={facet.accent}
+              options={options}
+              selected={selected}
+              onChange={v => updateFilter(filterKey, v)}
+            />
+          )
+        })}
       </div>
     </div>
   )

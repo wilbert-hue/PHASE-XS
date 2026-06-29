@@ -11,7 +11,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 gsap.registerPlugin(ScrollTrigger)
 
-export function HeroSection() {
+export function HeroSection({
+  trialCount,
+  moleculeCount,
+}: {
+  trialCount: number
+  moleculeCount: number
+}) {
   const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
@@ -88,7 +94,7 @@ export function HeroSection() {
         </h2>
 
         <p className="mt-12 max-w-md font-mono text-sm leading-relaxed" style={{ color: "#3d6070" }}>
-          <span style={{ color: "#3AAFA9", fontWeight: 600 }}>1,000+ molecules.</span>{" "}
+          <span style={{ color: "#3AAFA9", fontWeight: 600 }}>{moleculeCount.toLocaleString()} molecules.</span>{" "}
           Access the dashboard with Auth0—Universal Login, SSO, and social connections. Built for teams that need audited access and optional billing-ready flows.
         </p>
 
@@ -149,7 +155,7 @@ export function HeroSection() {
             background: "rgba(27, 73, 101, 0.04)",
           }}
         >
-          v.01 / 3,049 US Biologics Trials
+          v.01 / {trialCount.toLocaleString()} US Biologics Trials
         </div>
       </div>
     </section>

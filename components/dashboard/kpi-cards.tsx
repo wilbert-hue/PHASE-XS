@@ -1,9 +1,9 @@
 "use client"
 
-import { useMemo } from "react"
-import type { Trial } from "@/app/dashboard/trial-types"
-import { normalizeMoleculeKey, parseDrugPriceNumber, moleculeFieldContainsInn } from "@/app/dashboard/trial-types"
-import { Activity, Users, Clock, Beaker, Pill, DollarSign } from "lucide-react"
+import type { KpiSnapshot } from "@/lib/dashboard-query"
+import type { DashboardRegion } from "@/lib/dashboard-region"
+import { getRegionProfile, type KpiCardKey } from "@/lib/dashboard-region-profile"
+import { Activity, Users, Clock, Beaker, Pill, DollarSign, Target } from "lucide-react"
 
 interface KPICardProps {
   label: string
@@ -57,101 +57,74 @@ function KPICard({ label, value, sub, icon: Icon, accent }: KPICardProps) {
   )
 }
 
+const KPI_ACCENTS: Record<KpiCardKey, string> = {
+  trials: "#2563EB",
+  enrollment: "#6D28D9",
+  duration: "#B45309",
+  molecules: "#0E7490",
+  indications: "#BE123C",
+  adherence: "#0D9488",
+  price: "#047857",
+}
+
+const KPI_ICONS: Record<KpiCardKey, React.ComponentType<{ className?: string }>> = {
+  trials: Activity,
+  enrollment: Users,
+  duration: Clock,
+  molecules: Beaker,
+  indications: Target,
+  adherence: Pill,
+  price: DollarSign,
+}
+
+function kpiValue(key: KpiCardKey, filteredTrialCount: number, kpi: KpiSnapshot): string | number {
+  switch (key) {
+    case "trials":
+      return filteredTrialCount.toLocaleString()
+    case "enrollment":
+      return kpi.totalEnrollment.toLocaleString()
+    case "duration":
+      return `${kpi.avgDuration} yr`
+    case "molecules":
+      return kpi.uniqueMolecules.toLocaleString()
+    case "indications":
+      return kpi.uniqueIndications.toLocaleString()
+    case "adherence":
+      return kpi.adherence === "N/A" ? "N/A" : `${kpi.adherence}%`
+    case "price":
+      return kpi.avgPrice === "N/A" ? "N/A" : `$${Number(kpi.avgPrice).toLocaleString()}`
+    default:
+      return "—"
+  }
+}
+
 export function DashboardKPIs({
-  trials,
-  searchTerms = [],
+  region,
+  filteredTrialCount,
+  kpi,
 }: {
-  trials: Trial[]
-  /** Single term + INN present in molecule cells: combo/regimen rows count as the searched drug once. */
-  searchTerms?: string[]
+  region: DashboardRegion
+  filteredTrialCount: number
+  kpi: KpiSnapshot
 }) {
-  const stats = useMemo(() => {
-    const totalEnrollment = trials.reduce((s, t) => s + (t.enrollment || 0), 0)
-    const avgDuration = trials.length
-      ? (trials.reduce((s, t) => s + (t.durationYears || 0), 0) / trials.length).toFixed(1)
-      : "0"
-
-    const singleTerm = searchTerms.length === 1 ? searchTerms[0].trim() : ""
-    const innNorm = normalizeMoleculeKey(singleTerm)
-    const innCollapse =
-      innNorm.length >= 6 &&
-      trials.some(t => moleculeFieldContainsInn(t.molecule, singleTerm))
-
-    const moleculeKeys = trials.flatMap(t => {
-      const mk = normalizeMoleculeKey(t.molecule)
-      if (!mk) return []
-      if (innCollapse && moleculeFieldContainsInn(t.molecule, singleTerm)) return [innNorm]
-      return [mk]
-    })
-    const uniqueMolecules = new Set(moleculeKeys).size
-    const moleculesSub = innCollapse ? "Searched INN in molecule (combos merged)" : "Unique compounds"
-
-    const uniqueIndications = new Set(trials.map(t => t.indication).filter(Boolean)).size
-    const avgAdherence = trials.filter(t => t.adherenceRate != null)
-    const adherence = avgAdherence.length
-      ? (avgAdherence.reduce((s, t) => s + t.adherenceRate!, 0) / avgAdherence.length).toFixed(1)
-      : "N/A"
-    const priceTrials = trials.map(t => parseDrugPriceNumber(t.drugPrice)).filter((n): n is number => n != null)
-    const avgPrice = priceTrials.length
-      ? (priceTrials.reduce((s, p) => s + p, 0) / priceTrials.length).toFixed(0)
-      : "N/A"
-
-    return { totalEnrollment, avgDuration, uniqueMolecules, uniqueIndications, adherence, avgPrice, moleculesSub }
-  }, [trials, searchTerms])
-
-  const accent = {
-    trials: "#2563EB",
-    enrollment: "#6D28D9",
-    duration: "#B45309",
-    molecules: "#0E7490",
-    adherence: "#0D9488",
-    price: "#047857",
-  } as const
+  const cards = getRegionProfile(region).kpiCards
+  const colClass =
+    cards.length <= 5
+      ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3"
+      : "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3"
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-      <KPICard
-        label="Total Trials"
-        value={trials.length.toLocaleString()}
-        sub="Filtered results"
-        icon={Activity}
-        accent={accent.trials}
-      />
-      <KPICard
-        label="Total Enrollment"
-        value={stats.totalEnrollment.toLocaleString()}
-        sub="Participants across trials"
-        icon={Users}
-        accent={accent.enrollment}
-      />
-      <KPICard
-        label="Avg Duration"
-        value={`${stats.avgDuration} yr`}
-        sub="Mean trial duration"
-        icon={Clock}
-        accent={accent.duration}
-      />
-      <KPICard
-        label="Molecules"
-        value={stats.uniqueMolecules.toLocaleString()}
-        sub={stats.moleculesSub}
-        icon={Beaker}
-        accent={accent.molecules}
-      />
-      <KPICard
-        label="Avg Adherence"
-        value={stats.adherence === "N/A" ? "N/A" : `${stats.adherence}%`}
-        sub="Patient compliance"
-        icon={Pill}
-        accent={accent.adherence}
-      />
-      <KPICard
-        label="Avg Drug Price"
-        value={stats.avgPrice === "N/A" ? "N/A" : `$${Number(stats.avgPrice).toLocaleString()}`}
-        sub="Average per dose"
-        icon={DollarSign}
-        accent={accent.price}
-      />
+    <div className={colClass}>
+      {cards.map(card => (
+        <KPICard
+          key={card.key}
+          label={card.label}
+          value={kpiValue(card.key, filteredTrialCount, kpi)}
+          sub={card.key === "molecules" ? kpi.moleculesSub : card.sub}
+          icon={KPI_ICONS[card.key]}
+          accent={KPI_ACCENTS[card.key]}
+        />
+      ))}
     </div>
   )
 }

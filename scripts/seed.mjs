@@ -55,6 +55,7 @@ try {
   await db.collection("offices").insertMany(offices)
   await db.collection("contact_submissions").createIndex({ createdAt: -1 })
   await db.collection("contact_submissions").createIndex({ email: 1 })
+  await db.collection("contact_ip_attempts").createIndex({ createdAt: 1 }, { expireAfterSeconds: 172800 })
   console.log(`Seeded ${offices.length} offices into ${dbName}.offices`)
 } catch (e) {
   console.error(e)

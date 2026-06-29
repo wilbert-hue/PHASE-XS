@@ -1,34 +1,36 @@
 "use client"
 
-import { useMemo } from "react"
-import type { Trial } from "@/app/dashboard/trial-types"
-import { normalizePhase } from "@/app/dashboard/trial-types"
+import type { ChartSeriesPayload } from "@/lib/dashboard-query"
+import type { DashboardRegion } from "@/lib/dashboard-region"
+import { getRegionProfile, type ChartKey } from "@/lib/dashboard-region-profile"
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend,
-  AreaChart, Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  AreaChart,
+  Area,
 } from "recharts"
 
 const COLORS = [
-  "#1B4965", "#1E6080", "#2A8F9C", "#3AAFA9", "#4FBDBA",
-  "#266B80", "#34969E", "#48B5AD", "#1A5276", "#2E8B8B",
+  "#1B4965",
+  "#1E6080",
+  "#2A8F9C",
+  "#3AAFA9",
+  "#4FBDBA",
+  "#266B80",
+  "#34969E",
+  "#48B5AD",
+  "#1A5276",
+  "#2E8B8B",
 ]
-
-/** Stable key for grouping free-text dosage strengths (collapses casing / spacing variants). */
-function dosageStrengthGroupingKey(raw: string): string | null {
-  const s = raw.trim()
-  if (!s || /^n\/?a$/i.test(s) || /^not\s*available$/i.test(s)) return null
-  return s
-    .toLowerCase()
-    .replace(/\s+/g, " ")
-    .replace(/(\d+(?:\.\d+)?)\s*mg\/m2\b/gi, "$1 mg/m²")
-    .replace(/(\d+(?:\.\d+)?)\s*mg\/kg\b/gi, "$1 mg/kg")
-    .replace(/(\d+(?:\.\d+)?)\s*mg\b/gi, "$1 mg")
-}
-
-function formatDosageStrengthLabel(key: string): string {
-  return key.charAt(0).toUpperCase() + key.slice(1)
-}
 
 function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -50,110 +52,40 @@ const customTooltipStyle = {
   padding: "8px 12px",
 }
 
-export function DashboardCharts({ trials }: { trials: Trial[] }) {
-  const phaseData = useMemo(() => {
-    const map = new Map<string, number>()
-    trials.forEach(t => {
-      const p = normalizePhase(t.phase)
-      map.set(p, (map.get(p) || 0) + 1)
-    })
-    return [...map.entries()]
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value)
-  }, [trials])
-
-  const techData = useMemo(() => {
-    const map = new Map<string, number>()
-    trials.forEach(t => {
-      if (t.technology) map.set(t.technology, (map.get(t.technology) || 0) + 1)
-    })
-    return [...map.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 10)
-      .map(([name, value]) => ({ name: name.length > 25 ? name.slice(0, 22) + "..." : name, value, fullName: name }))
-  }, [trials])
-
-  const doseFocusData = useMemo(() => {
-    const map = new Map<string, number>()
-    trials.forEach(t => {
-      const key = dosageStrengthGroupingKey(t.dosageStrength || "")
-      if (!key) return
-      map.set(key, (map.get(key) || 0) + 1)
-    })
-    return [...map.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 10)
-      .map(([key, value]) => {
-        const full = formatDosageStrengthLabel(key)
-        return {
-          fullName: full,
-          name: full.length > 28 ? `${full.slice(0, 25)}…` : full,
-          value,
-        }
-      })
-  }, [trials])
-
-  const timelineData = useMemo(() => {
-    const map = new Map<string, number>()
-    trials.forEach(t => {
-      if (t.startDate) {
-        const year = t.startDate.slice(0, 4)
-        if (year && !isNaN(Number(year))) {
-          map.set(year, (map.get(year) || 0) + 1)
-        }
-      }
-    })
-    return [...map.entries()]
-      .sort((a, b) => a[0].localeCompare(b[0]))
-      .map(([year, count]) => ({ year, count }))
-  }, [trials])
-
-  const topIndications = useMemo(() => {
-    const map = new Map<string, number>()
-    trials.forEach(t => {
-      if (t.indication) map.set(t.indication, (map.get(t.indication) || 0) + 1)
-    })
-    return [...map.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 8)
-      .map(([name, value]) => ({
-        name: name.length > 30 ? name.slice(0, 27) + "..." : name.charAt(0) + name.slice(1).toLowerCase(),
-        value,
-        fullName: name,
-      }))
-  }, [trials])
-
-  const routeData = useMemo(() => {
-    const map = new Map<string, number>()
-    trials.forEach(t => {
-      if (t.routeOfAdmin) {
-        const primary = t.routeOfAdmin.split(",")[0].trim()
-        if (primary) map.set(primary, (map.get(primary) || 0) + 1)
-      }
-    })
-    return [...map.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 6)
-      .map(([name, value]) => ({ name, value }))
-  }, [trials])
-
-  if (trials.length === 0) {
-    return (
-      <div className="border border-border p-12 text-center">
-        <p className="font-mono text-base text-muted-foreground">No trials match the current filters</p>
-      </div>
-    )
+function chartHasData(key: ChartKey, charts: ChartSeriesPayload): boolean {
+  switch (key) {
+    case "phase":
+      return charts.phaseData.length > 0
+    case "technology":
+      return charts.techData.length > 0
+    case "studyType":
+      return charts.studyTypeData.length > 0
+    case "studyStatus":
+      return charts.studyStatusData.length > 0
+    case "dose":
+      return charts.doseFocusData.length > 0
+    case "timeline":
+      return charts.timelineData.length > 0
+    case "indications":
+      return charts.topIndications.length > 0
+    case "route":
+      return charts.routeData.length > 0
+    case "recruitment":
+      return charts.recruitmentData.length > 0
+    default:
+      return false
   }
+}
 
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-      {/* Phase Distribution */}
-      <ChartCard title="Trials by Phase">
+function ChartBlock({ chartKey, charts }: { chartKey: ChartKey; charts: ChartSeriesPayload }) {
+  switch (chartKey) {
+    case "phase":
+      return (
         <div className="h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={phaseData}
+                data={charts.phaseData}
                 cx="50%"
                 cy="50%"
                 innerRadius={50}
@@ -162,7 +94,7 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
                 dataKey="value"
                 stroke="none"
               >
-                {phaseData.map((_, i) => (
+                {charts.phaseData.map((_, i) => (
                   <Cell key={i} fill={COLORS[i % COLORS.length]} />
                 ))}
               </Pie>
@@ -174,39 +106,50 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
             </PieChart>
           </ResponsiveContainer>
         </div>
-      </ChartCard>
-
-      {/* Technology Breakdown */}
-      <ChartCard title="Top Technologies">
-        <div className="h-[250px]">
+      )
+    case "technology":
+    case "studyType": {
+      const barData = chartKey === "studyType" ? charts.studyTypeData : charts.techData
+      return (
+        <div className="h-[280px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={techData} layout="vertical" margin={{ left: 10, right: 16, top: 0, bottom: 0 }}>
+            <BarChart
+              data={barData}
+              layout="vertical"
+              margin={{ left: 10, right: 16, top: 0, bottom: 0 }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={false} />
               <XAxis type="number" tick={{ fontSize: 12, fontFamily: "var(--font-mono, monospace)" }} />
               <YAxis
                 type="category"
                 dataKey="name"
-                width={132}
-                tick={{ fontSize: 11, fontFamily: "var(--font-mono, monospace)" }}
+                width={chartKey === "studyType" ? 168 : 132}
+                tick={{ fontSize: 10, fontFamily: "var(--font-mono, monospace)" }}
               />
-              <Tooltip contentStyle={customTooltipStyle} />
-              <Bar dataKey="value" fill="#1B4965" barSize={14} />
+              <Tooltip
+                contentStyle={customTooltipStyle}
+                labelFormatter={(_, payload) => {
+                  const row = payload?.[0]?.payload as { fullName?: string }
+                  return row?.fullName ?? ""
+                }}
+              />
+              <Bar dataKey="value" fill={chartKey === "studyType" ? "#6D28D9" : "#1B4965"} barSize={14} />
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </ChartCard>
-
-      {/* Dose focus — trials by grouped dosage strength */}
-      <ChartCard title="Dose focus">
+      )
+    }
+    case "dose":
+      return (
         <div className="h-[270px] min-h-[270px] flex items-center justify-center">
-          {doseFocusData.length === 0 ? (
+          {charts.doseFocusData.length === 0 ? (
             <p className="font-mono text-sm text-muted-foreground px-6 text-center">
-              No dosage strength values in the current filter set (excludes N/A and “Not Available”).
+              No intervention detail values in the current filter set.
             </p>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={doseFocusData}
+                data={charts.doseFocusData}
                 layout="vertical"
                 margin={{ left: 4, right: 16, top: 4, bottom: 4 }}
               >
@@ -231,13 +174,12 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
             </ResponsiveContainer>
           )}
         </div>
-      </ChartCard>
-
-      {/* Timeline */}
-      <ChartCard title="Trials Started Over Time">
+      )
+    case "timeline":
+      return (
         <div className="h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={timelineData} margin={{ left: 0, right: 16, top: 0, bottom: 0 }}>
+            <AreaChart data={charts.timelineData} margin={{ left: 0, right: 16, top: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
               <XAxis dataKey="year" tick={{ fontSize: 11, fontFamily: "var(--font-mono, monospace)" }} />
               <YAxis tick={{ fontSize: 12, fontFamily: "var(--font-mono, monospace)" }} />
@@ -253,13 +195,16 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
             </AreaChart>
           </ResponsiveContainer>
         </div>
-      </ChartCard>
-
-      {/* Top Indications */}
-      <ChartCard title="Top Indications">
+      )
+    case "indications":
+      return (
         <div className="h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={topIndications} layout="vertical" margin={{ left: 10, right: 16, top: 0, bottom: 0 }}>
+            <BarChart
+              data={charts.topIndications}
+              layout="vertical"
+              margin={{ left: 10, right: 16, top: 0, bottom: 0 }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={false} />
               <XAxis type="number" tick={{ fontSize: 12, fontFamily: "var(--font-mono, monospace)" }} />
               <YAxis
@@ -273,15 +218,14 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </ChartCard>
-
-      {/* Route of Administration */}
-      <ChartCard title="Route of Administration">
+      )
+    case "route":
+      return (
         <div className="h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={routeData}
+                data={charts.routeData}
                 cx="50%"
                 cy="50%"
                 innerRadius={50}
@@ -290,7 +234,7 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
                 dataKey="value"
                 stroke="none"
               >
-                {routeData.map((_, i) => (
+                {charts.routeData.map((_, i) => (
                   <Cell key={i} fill={COLORS[i % COLORS.length]} />
                 ))}
               </Pie>
@@ -302,7 +246,87 @@ export function DashboardCharts({ trials }: { trials: Trial[] }) {
             </PieChart>
           </ResponsiveContainer>
         </div>
-      </ChartCard>
+      )
+    case "studyStatus":
+      return (
+        <div className="h-[250px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={charts.studyStatusData}
+                cx="50%"
+                cy="50%"
+                innerRadius={50}
+                outerRadius={90}
+                paddingAngle={2}
+                dataKey="value"
+                stroke="none"
+              >
+                {charts.studyStatusData.map((_, i) => (
+                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip contentStyle={customTooltipStyle} />
+              <Legend
+                wrapperStyle={{ fontFamily: "var(--font-mono, monospace)", fontSize: "12px" }}
+                iconSize={10}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      )
+    case "recruitment":
+      return (
+        <div className="h-[250px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={charts.recruitmentData}
+              layout="vertical"
+              margin={{ left: 10, right: 16, top: 0, bottom: 0 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={false} />
+              <XAxis type="number" tick={{ fontSize: 12, fontFamily: "var(--font-mono, monospace)" }} />
+              <YAxis
+                type="category"
+                dataKey="name"
+                width={180}
+                tick={{ fontSize: 10, fontFamily: "var(--font-mono, monospace)" }}
+              />
+              <Tooltip contentStyle={customTooltipStyle} />
+              <Bar dataKey="value" fill="#0E7490" barSize={14} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )
+    default:
+      return null
+  }
+}
+
+export function DashboardCharts({
+  region,
+  charts,
+}: {
+  region: DashboardRegion
+  charts: ChartSeriesPayload
+}) {
+  const profileCharts = getRegionProfile(region).charts.filter(c => chartHasData(c.key, charts))
+
+  if (profileCharts.length === 0) {
+    return (
+      <div className="border border-border p-12 text-center">
+        <p className="font-mono text-base text-muted-foreground">No trials match the current filters</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      {profileCharts.map(chart => (
+        <ChartCard key={chart.key} title={chart.title}>
+          <ChartBlock chartKey={chart.key} charts={charts} />
+        </ChartCard>
+      ))}
     </div>
   )
 }

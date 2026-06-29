@@ -1,5 +1,6 @@
 "use client"
 
+import type { DatasetCoverageStats } from "@/app/dashboard/trial-types"
 import { useRef, useState, useEffect } from "react"
 import { BarChart3, Globe2, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -39,7 +40,7 @@ const metrics = [
   },
 ]
 
-export function SignalsSection() {
+export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats }) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
@@ -170,44 +171,51 @@ export function SignalsSection() {
       </div>
 
       {/* Diagram-style scope block — hub + bracketed lists (see dataset breadth at a glance) */}
-      <DatasetScopeDiagram />
+      <DatasetScopeDiagram coverage={coverage} />
     </section>
   )
 }
 
-const scopeDiagramRows: {
+function scopeDiagramRowsFromCoverage(coverage: DatasetCoverageStats): {
   hub: string
   Icon: LucideIcon
   left: { title: string; items: string[] }
   right: { title: string; items: string[] }
-}[] = [
-  {
-    hub: "TRIAL\nLANDSCAPE",
-    Icon: BarChart3,
-    left: {
-      title: "Coverage",
-      items: ["3,049 Trials", "1,246 Molecules", "1,085 Indications"],
+}[] {
+  return [
+    {
+      hub: "TRIAL\nLANDSCAPE",
+      Icon: BarChart3,
+      left: {
+        title: "Coverage",
+        items: [
+          `${coverage.trials.toLocaleString()} Trials`,
+          `${coverage.molecules.toLocaleString()} Molecules`,
+          `${coverage.indications.toLocaleString()} Indications`,
+        ],
+      },
+      right: {
+        title: "Phases",
+        items: ["Early Phase 1", "Phase 1 – 4", "Combined Phases"],
+      },
     },
-    right: {
-      title: "Phases",
-      items: ["Early Phase 1", "Phase 1 – 4", "Combined Phases"],
+    {
+      hub: "MODALITY\n& REGION",
+      Icon: Globe2,
+      left: {
+        title: "Technologies",
+        items: ["Monoclonal Antibodies", "CAR-T / Cell Therapy", "ADCs & Biosimilars"],
+      },
+      right: {
+        title: "Region",
+        items: ["United States", "India", "United Kingdom", "Global Collaborators"],
+      },
     },
-  },
-  {
-    hub: "MODALITY\n& REGION",
-    Icon: Globe2,
-    left: {
-      title: "Technologies",
-      items: ["Monoclonal Antibodies", "CAR-T / Cell Therapy", "ADCs & Biosimilars"],
-    },
-    right: {
-      title: "Region",
-      items: ["United States", "Global Collaborators"],
-    },
-  },
-]
+  ]
+}
 
-function DatasetScopeDiagram() {
+function DatasetScopeDiagram({ coverage }: { coverage: DatasetCoverageStats }) {
+  const scopeDiagramRows = scopeDiagramRowsFromCoverage(coverage)
   return (
     <div
       className="mt-24 mr-6 md:mr-12 relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#0f2d3f] via-[#0a2230] to-[#051820] p-6 sm:p-8 md:p-10 shadow-[0_24px_60px_-16px_rgba(0,0,0,0.5)]"

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { auth0 } from "@/lib/auth0"
-import { fetchTrialsFromPostgres } from "@/lib/trials-from-db"
+import { loadDashboardInitialData } from "@/lib/dashboard-initial-data"
 import DashboardClient from "./dashboard-client"
 
 export default async function DashboardPage() {
@@ -9,6 +9,15 @@ export default async function DashboardPage() {
     redirect("/auth/login?returnTo=/dashboard")
   }
 
-  const trials = await fetchTrialsFromPostgres()
-  return <DashboardClient user={session.user} trials={trials} />
+  const { initialUs, initialIn, initialUk, initialEs } = await loadDashboardInitialData()
+
+  return (
+    <DashboardClient
+      user={session.user}
+      initialUs={initialUs}
+      initialIn={initialIn}
+      initialUk={initialUk}
+      initialEs={initialEs}
+    />
+  )
 }

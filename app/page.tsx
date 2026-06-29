@@ -1,5 +1,7 @@
+import { computeDatasetCoverageStats } from "@/app/dashboard/trial-types"
 import { HeroSection } from "@/components/hero-section"
 import { SignalsSection } from "@/components/signals-section"
+import { loadTrialsForMarketing } from "@/lib/trials-for-marketing"
 import { WorkSection } from "@/components/work-section"
 import { PrinciplesSection } from "@/components/principles-section"
 import { WhyCmiSection } from "@/components/why-cmi-section"
@@ -13,7 +15,10 @@ import { ContactTab } from "@/components/contact-tab"
 import { AnimatedBackground } from "@/components/animated-background"
 import { PageSection } from "@/components/page-section"
 
-export default function Page() {
+export default async function Page() {
+  const trials = await loadTrialsForMarketing()
+  const coverage = computeDatasetCoverageStats(trials)
+
   return (
     <main className="relative min-h-screen">
       <SideNav />
@@ -21,9 +26,9 @@ export default function Page() {
       <AnimatedBackground />
 
       <div className="relative z-10">
-        <HeroSection />
+        <HeroSection trialCount={coverage.trials} moleculeCount={coverage.molecules} />
         <PageSection page="landing" variant="metrics">
-          <SignalsSection />
+          <SignalsSection coverage={coverage} />
         </PageSection>
         <PageSection page="landing" variant="coverage">
           <WorkSection />
