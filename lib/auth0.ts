@@ -26,11 +26,21 @@ function resolveAuth0Domain(): string | undefined {
   }
 }
 
+function resolveBaseURL(): string | undefined {
+  return (
+    process.env.AUTH0_BASE_URL?.trim() ||
+    process.env.APP_BASE_URL?.trim() ||
+    undefined
+  )
+}
+
 function createClient(): Auth0Client {
   const domain = resolveAuth0Domain()
+  const baseURL = resolveBaseURL()
   return new Auth0Client({
     secret: requireAuth0Secret(),
     ...(domain ? { domain } : {}),
+    ...(baseURL ? { baseURL } : {}),
     signInReturnToPath: "/dashboard",
   })
 }
