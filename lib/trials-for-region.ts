@@ -10,6 +10,8 @@ import { fetchTrialsFromPostgresUk } from "@/lib/trials-from-db-uk"
 import { trialToUkListTrial } from "@/lib/uk-trial-map"
 import { fetchTrialsFromPostgresSpain } from "@/lib/trials-from-db-spain"
 import { trialToSpainListTrial } from "@/lib/spain-trial-map"
+import { fetchTrialsFromPostgresBelgium } from "@/lib/trials-from-db-belgium"
+import { trialToBelgiumListTrial } from "@/lib/belgium-trial-map"
 
 function hasPostgresDsn(): boolean {
   return Boolean(process.env.POSTGRES_DSN?.trim() || process.env.DATABASE_URL?.trim())
@@ -32,6 +34,10 @@ export async function fetchTrialsForRegion(region: DashboardRegion): Promise<Tri
   if (region === "es") {
     const es = await fetchTrialsFromPostgresSpain()
     return es.map(trialToSpainListTrial)
+  }
+  if (region === "be") {
+    const be = await fetchTrialsFromPostgresBelgium()
+    return be.map(trialToBelgiumListTrial)
   }
   const us = await fetchTrialsFromPostgres()
   return us.map(trialToUsListRow)

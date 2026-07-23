@@ -43,6 +43,7 @@ const REGION_PLACEHOLDER: Record<DashboardRegion, string> = {
   in: "Ask about an intervention, condition, or sponsor… e.g. methotrexate, lung cancer, AIIMS",
   uk: "Ask about a drug, condition, or sponsor… e.g. pembrolizumab, breast cancer, Cancer Research UK",
   es: "Ask about a product, condition, or sponsor… e.g. nivolumab, bladder cancer, Roche",
+  be: "Ask about a drug, condition, or sponsor… e.g. pembrolizumab, colorectal cancer, UCB",
 }
 
 const REGION_LABEL: Record<DashboardRegion, string> = {
@@ -50,6 +51,7 @@ const REGION_LABEL: Record<DashboardRegion, string> = {
   in: "India",
   uk: "United Kingdom",
   es: "Spain",
+  be: "Belgium",
 }
 
 const SUGGESTION_LIMIT = 10

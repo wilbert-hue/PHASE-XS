@@ -11,7 +11,7 @@ export default async function DashboardPage() {
     redirect("/auth/login?returnTo=/dashboard")
   }
 
-  const { initialUs, initialIn, initialUk, initialEs } = await loadDashboardInitialData()
+  const { initialUs, initialIn, initialUk, initialEs, initialBe } = await loadDashboardInitialData()
 
   return (
     <DashboardClient
@@ -20,6 +20,7 @@ export default async function DashboardPage() {
       initialIn={initialIn}
       initialUk={initialUk}
       initialEs={initialEs}
+      initialBe={initialBe}
     />
   )
 }

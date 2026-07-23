@@ -36,12 +36,14 @@ export default function DashboardClient({
   initialIn,
   initialUk,
   initialEs,
+  initialBe,
 }: {
   user: User
   initialUs: DashboardQueryResult
   initialIn: DashboardQueryResult
   initialUk: DashboardQueryResult
   initialEs: DashboardQueryResult
+  initialBe: DashboardQueryResult
 }) {
   const [region, setRegion] = useState<DashboardRegion>("us")
   const [filters, setFilters] = useState<Filters>(defaultFilters)
@@ -148,13 +150,14 @@ export default function DashboardClient({
         next === "us" ? initialUs
         : next === "in" ? initialIn
         : next === "uk" ? initialUk
+        : next === "be" ? initialBe
         : initialEs
       )
       filtersKeyRef.current = JSON.stringify(defaultFilters)
       skipHydrationFetchRef.current = true
       setSelectedTrialState(null)
     },
-    [region, initialUs, initialIn, initialUk, initialEs],
+    [region, initialUs, initialIn, initialUk, initialEs, initialBe],
   )
 
   const fetchDashboard = useCallback(async () => {

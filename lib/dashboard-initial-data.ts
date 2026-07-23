@@ -15,6 +15,7 @@ export type DashboardInitialPayload = {
   initialIn: DashboardQueryResult
   initialUk: DashboardQueryResult
   initialEs: DashboardQueryResult
+  initialBe: DashboardQueryResult
 }
 
 export async function loadDashboardInitialData(): Promise<DashboardInitialPayload> {
@@ -38,10 +39,16 @@ export async function loadDashboardInitialData(): Promise<DashboardInitialPayloa
     return [] as Awaited<ReturnType<typeof fetchTrialsForRegion>>
   })
 
+  const beTrials = await fetchTrialsForRegion("be").catch(err => {
+    console.error("[dashboard] Belgium trials unavailable", err)
+    return [] as Awaited<ReturnType<typeof fetchTrialsForRegion>>
+  })
+
   return {
     initialUs: runDashboardQuery(usTrials, defaultQueryInput, "us"),
     initialIn: runDashboardQuery(inTrials, defaultQueryInput, "in"),
     initialUk: runDashboardQuery(ukTrials, defaultQueryInput, "uk"),
     initialEs: runDashboardQuery(esTrials, defaultQueryInput, "es"),
+    initialBe: runDashboardQuery(beTrials, defaultQueryInput, "be"),
   }
 }

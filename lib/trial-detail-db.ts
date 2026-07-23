@@ -15,13 +15,19 @@ import {
   mapUkDbRow,
   mapUkDetailRow,
 } from "@/lib/uk-trial-map"
-import { ctriDetailTableName, ukDetailTableName, usDetailTableName, spainDetailTableName } from "@/lib/trial-detail-tables"
+import { ctriDetailTableName, ukDetailTableName, usDetailTableName, spainDetailTableName, belgiumDetailTableName } from "@/lib/trial-detail-tables"
 import {
   SPAIN_DB_TABLE_DEFAULT,
   applySpainDetailToTrial,
   mapSpainDbRow,
   mapSpainDetailRow,
 } from "@/lib/spain-trial-map"
+import {
+  BELGIUM_DB_TABLE_DEFAULT,
+  applyBelgiumDetailToTrial,
+  mapBelgiumDbRow,
+  mapBelgiumDetailRow,
+} from "@/lib/belgium-trial-map"
 import { applyUsDetailToTrial, mapUsDetailRow } from "@/lib/us-trial-detail-map"
 import { US_EXCEL_COLUMNS, pickSourceFields } from "@/lib/excel-column-order"
 import { hydrateCtriSourceFields, hydrateUsSourceFields } from "@/lib/trial-source-hydrate"
@@ -150,6 +156,34 @@ export async function fetchSpainTrialDetail(ctNumber: string): Promise<Trial | n
   return trial
 }
 
+export async function fetchBelgiumTrialDetail(nctId: string): Promise<Trial | null> {
+  const id = nctId.trim()
+  if (!id) return null
+
+  const mainTable = process.env.POSTGRES_BELGIUM_TABLE?.trim() || BELGIUM_DB_TABLE_DEFAULT
+  const detailTable = belgiumDetailTableName(mainTable)
+  const { schema } = getSchemaTableNames(mainTable)
+  const pool = getPool()
+  const fqMain = `"${schema}"."${mainTable}"`
+  const fqDetail = `"${schema}"."${detailTable}"`
+
+  const mainRes = await pool.query(`SELECT * FROM ${fqMain} WHERE nct_id = $1 LIMIT 1`, [id])
+  if (mainRes.rows.length === 0) return null
+
+  let trial = mapBelgiumDbRow(mainRes.rows[0] as Record<string, unknown>)
+  try {
+    const detailRes = await pool.query(`SELECT * FROM ${fqDetail} WHERE nct_id = $1 LIMIT 1`, [id])
+    if (detailRes.rows[0]) {
+      trial = applyBelgiumDetailToTrial(trial, mapBelgiumDetailRow(detailRes.rows[0] as Record<string, unknown>))
+    }
+  } catch (err) {
+    const code = err && typeof err === "object" && "code" in err ? String((err as { code?: string }).code) : ""
+    if (code !== "42P01") throw err
+    console.warn(LOG, "Belgium detail table missing; returning list row only", { detailTable })
+  }
+  return trial
+}
+
 export async function fetchTrialDetailForRegion(
   region: DashboardRegion,
   trialId: string,
@@ -162,7 +196,9 @@ export async function fetchTrialDetailForRegion(
         ? await fetchUkTrialDetail(trialId)
         : region === "es"
           ? await fetchSpainTrialDetail(trialId)
-          : await fetchUsTrialDetail(trialId)
+          : region === "be"
+            ? await fetchBelgiumTrialDetail(trialId)
+            : await fetchUsTrialDetail(trialId)
   console.info(LOG, "fetch", { region, trialId, found: !!trial, ms: msSince(start) })
   return trial
 }

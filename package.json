@@ -9,6 +9,7 @@
     "data:sync-ctri": "npx tsx scripts/append-ctri-to-postgres.ts",
     "data:sync-uk": "npx tsx scripts/append-uk-to-postgres.ts",
     "data:sync-spain": "npx tsx scripts/append-spain-to-postgres.ts",
+    "data:sync-belgium": "npx tsx scripts/append-belgium-to-postgres.ts",
     "data:filter-uk-sheet": "node scripts/filter-uk-xlsx-interventional.mjs",
     "data:create-indexes": "npx tsx scripts/create-trial-indexes.ts",
     "data:migrate-detail": "npx tsx scripts/migrate-trial-detail-tables.ts",
