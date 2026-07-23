@@ -167,7 +167,7 @@ export function matchesSearchTerm(trial: Trial, term: string, region: DashboardR
       splitUkHealthConditions(trial.indication).some(c => c.toLowerCase().includes(ls))
     )
   }
-  if (region === "es") {
+  if (region === "es" || region === "be") {
     return (
       base ||
       (trial.publicTitle?.toLowerCase().includes(ls) ?? false) ||
@@ -344,7 +344,7 @@ export function computeChartSeries(trials: Trial[], region: DashboardRegion): Ch
 
   const doseMap = new Map<string, number>()
   trials.forEach(t => {
-    if (region === "uk" || region === "es") {
+    if (region === "uk" || region === "es" || region === "be") {
       const raw = (t.dosageStrength || t.molecule || "").trim()
       if (!isMeaningfulTrialValue(raw)) return
       const drugs = raw.split(/[,;]+/).map(s => s.trim()).filter(isMeaningfulTrialValue)

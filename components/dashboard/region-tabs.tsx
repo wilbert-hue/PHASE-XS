@@ -10,6 +10,7 @@ export function DashboardRegionTabs({
   inCount,
   ukCount,
   esCount,
+  beCount,
 }: {
   region: DashboardRegion
   onChange: (r: DashboardRegion) => void
@@ -17,12 +18,14 @@ export function DashboardRegionTabs({
   inCount: number
   ukCount: number
   esCount: number
+  beCount: number
 }) {
   const tabs: { id: DashboardRegion; label: string; count: number }[] = [
     { id: "us", label: "United States", count: usCount },
     { id: "in", label: "India", count: inCount },
     { id: "uk", label: "United Kingdom", count: ukCount },
     { id: "es", label: "Spain", count: esCount },
+    { id: "be", label: "Belgium", count: beCount },
   ]
 
   return (

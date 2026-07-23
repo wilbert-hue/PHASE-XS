@@ -453,6 +453,7 @@ export default function DashboardClient({
               inCount={initialIn.totalTrialCount}
               ukCount={initialUk.totalTrialCount}
               esCount={initialEs.totalTrialCount}
+              beCount={initialBe.totalTrialCount}
             />
           </div>
 
