@@ -36,9 +36,26 @@ function avg(values: number[]): number {
 }
 
 function regionLabel(region: DashboardRegion): string {
-  if (region === "us") return "United States"
-  if (region === "in") return "India (CTRI)"
-  return "United Kingdom (ISRCTN)"
+  const labels: Record<DashboardRegion, string> = {
+    us: "United States",
+    in: "India (CTRI)",
+    uk: "United Kingdom (ISRCTN)",
+    es: "Spain",
+    be: "Belgium",
+    dk: "Denmark",
+    fr: "France",
+    de: "Germany",
+    it: "Italy",
+    lu: "Luxembourg",
+    nl: "Netherlands",
+    no: "Norway",
+    pl: "Poland",
+    ru: "Russia",
+    sg: "Singapore",
+    kr: "South Korea",
+    se: "Sweden",
+  }
+  return labels[region] ?? region
 }
 
 export function computeInsights(
