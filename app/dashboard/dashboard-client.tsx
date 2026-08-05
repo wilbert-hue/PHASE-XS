@@ -37,6 +37,18 @@ export default function DashboardClient({
   initialUk,
   initialEs,
   initialBe,
+  initialDk,
+  initialFr,
+  initialDe,
+  initialIt,
+  initialLu,
+  initialNl,
+  initialNo,
+  initialPl,
+  initialRu,
+  initialSg,
+  initialKr,
+  initialSe,
 }: {
   user: User
   initialUs: DashboardQueryResult
@@ -44,6 +56,18 @@ export default function DashboardClient({
   initialUk: DashboardQueryResult
   initialEs: DashboardQueryResult
   initialBe: DashboardQueryResult
+  initialDk: DashboardQueryResult
+  initialFr: DashboardQueryResult
+  initialDe: DashboardQueryResult
+  initialIt: DashboardQueryResult
+  initialLu: DashboardQueryResult
+  initialNl: DashboardQueryResult
+  initialNo: DashboardQueryResult
+  initialPl: DashboardQueryResult
+  initialRu: DashboardQueryResult
+  initialSg: DashboardQueryResult
+  initialKr: DashboardQueryResult
+  initialSe: DashboardQueryResult
 }) {
   const [region, setRegion] = useState<DashboardRegion>("us")
   const [filters, setFilters] = useState<Filters>(defaultFilters)
@@ -150,14 +174,27 @@ export default function DashboardClient({
         next === "us" ? initialUs
         : next === "in" ? initialIn
         : next === "uk" ? initialUk
+        : next === "es" ? initialEs
         : next === "be" ? initialBe
-        : initialEs
+        : next === "dk" ? initialDk
+        : next === "fr" ? initialFr
+        : next === "de" ? initialDe
+        : next === "it" ? initialIt
+        : next === "lu" ? initialLu
+        : next === "nl" ? initialNl
+        : next === "no" ? initialNo
+        : next === "pl" ? initialPl
+        : next === "ru" ? initialRu
+        : next === "sg" ? initialSg
+        : next === "kr" ? initialKr
+        : next === "se" ? initialSe
+        : initialUs
       )
       filtersKeyRef.current = JSON.stringify(defaultFilters)
       skipHydrationFetchRef.current = true
       setSelectedTrialState(null)
     },
-    [region, initialUs, initialIn, initialUk, initialEs, initialBe],
+    [region, initialUs, initialIn, initialUk, initialEs, initialBe, initialDk, initialFr, initialDe, initialIt, initialLu, initialNl, initialNo, initialPl, initialRu, initialSg, initialKr, initialSe],
   )
 
   const fetchDashboard = useCallback(async () => {
@@ -454,6 +491,18 @@ export default function DashboardClient({
               ukCount={initialUk.totalTrialCount}
               esCount={initialEs.totalTrialCount}
               beCount={initialBe.totalTrialCount}
+              dkCount={initialDk.totalTrialCount}
+              frCount={initialFr.totalTrialCount}
+              deCount={initialDe.totalTrialCount}
+              itCount={initialIt.totalTrialCount}
+              luCount={initialLu.totalTrialCount}
+              nlCount={initialNl.totalTrialCount}
+              noCount={initialNo.totalTrialCount}
+              plCount={initialPl.totalTrialCount}
+              ruCount={initialRu.totalTrialCount}
+              sgCount={initialSg.totalTrialCount}
+              krCount={initialKr.totalTrialCount}
+              seCount={initialSe.totalTrialCount}
             />
           </div>
 

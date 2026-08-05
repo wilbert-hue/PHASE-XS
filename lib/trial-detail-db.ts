@@ -15,7 +15,7 @@ import {
   mapUkDbRow,
   mapUkDetailRow,
 } from "@/lib/uk-trial-map"
-import { ctriDetailTableName, ukDetailTableName, usDetailTableName, spainDetailTableName, belgiumDetailTableName } from "@/lib/trial-detail-tables"
+import { ctriDetailTableName, ukDetailTableName, usDetailTableName, spainDetailTableName, belgiumDetailTableName, ctgCountryDetailTableName } from "@/lib/trial-detail-tables"
 import {
   SPAIN_DB_TABLE_DEFAULT,
   applySpainDetailToTrial,
@@ -28,6 +28,13 @@ import {
   mapBelgiumDbRow,
   mapBelgiumDetailRow,
 } from "@/lib/belgium-trial-map"
+import {
+  CTG_COUNTRY_CONFIGS,
+  CTG_COUNTRY_TABLE_DEFAULT,
+  applyCtgCountryDetailToTrial,
+  mapCtgCountryDbRow,
+  mapCtgCountryDetailRow,
+} from "@/lib/ctg-country-trial-map"
 import { applyUsDetailToTrial, mapUsDetailRow } from "@/lib/us-trial-detail-map"
 import { US_EXCEL_COLUMNS, pickSourceFields } from "@/lib/excel-column-order"
 import { hydrateCtriSourceFields, hydrateUsSourceFields } from "@/lib/trial-source-hydrate"
@@ -184,21 +191,68 @@ export async function fetchBelgiumTrialDetail(nctId: string): Promise<Trial | nu
   return trial
 }
 
+export async function fetchCtgCountryTrialDetail(
+  regionId: string,
+  nctId: string,
+): Promise<Trial | null> {
+  const id = nctId.trim()
+  if (!id) return null
+
+  const config = CTG_COUNTRY_CONFIGS[regionId]
+  if (!config) return null
+
+  const envVar = `POSTGRES_${regionId.toUpperCase()}_TABLE`
+  const mainTable = (process.env[envVar]?.trim()) || CTG_COUNTRY_TABLE_DEFAULT(regionId)
+  const detailTable = ctgCountryDetailTableName(regionId, mainTable)
+  const { schema } = getSchemaTableNames(mainTable)
+  const pool = getPool()
+  const fqMain = `"${schema}"."${mainTable}"`
+  const fqDetail = `"${schema}"."${detailTable}"`
+
+  const mainRes = await pool.query(`SELECT * FROM ${fqMain} WHERE nct_id = $1 LIMIT 1`, [id])
+  if (mainRes.rows.length === 0) return null
+
+  let trial = mapCtgCountryDbRow(mainRes.rows[0] as Record<string, unknown>)
+  try {
+    const detailRes = await pool.query(`SELECT * FROM ${fqDetail} WHERE nct_id = $1 LIMIT 1`, [id])
+    if (detailRes.rows[0]) {
+      trial = applyCtgCountryDetailToTrial(
+        trial,
+        mapCtgCountryDetailRow(detailRes.rows[0] as Record<string, unknown>),
+      )
+    }
+  } catch (err) {
+    const code =
+      err && typeof err === "object" && "code" in err
+        ? String((err as { code?: string }).code)
+        : ""
+    if (code !== "42P01") throw err
+    console.warn(LOG, `${config.label} detail table missing; returning list row only`, {
+      detailTable,
+    })
+  }
+  return trial
+}
+
 export async function fetchTrialDetailForRegion(
   region: DashboardRegion,
   trialId: string,
 ): Promise<Trial | null> {
   const start = performance.now()
-  const trial =
-    region === "in"
-      ? await fetchCtriTrialDetail(trialId)
-      : region === "uk"
-        ? await fetchUkTrialDetail(trialId)
-        : region === "es"
-          ? await fetchSpainTrialDetail(trialId)
-          : region === "be"
-            ? await fetchBelgiumTrialDetail(trialId)
-            : await fetchUsTrialDetail(trialId)
+  let trial: Trial | null
+  if (region === "in") {
+    trial = await fetchCtriTrialDetail(trialId)
+  } else if (region === "uk") {
+    trial = await fetchUkTrialDetail(trialId)
+  } else if (region === "es") {
+    trial = await fetchSpainTrialDetail(trialId)
+  } else if (region === "be") {
+    trial = await fetchBelgiumTrialDetail(trialId)
+  } else if (CTG_COUNTRY_CONFIGS[region]) {
+    trial = await fetchCtgCountryTrialDetail(region, trialId)
+  } else {
+    trial = await fetchUsTrialDetail(trialId)
+  }
   console.info(LOG, "fetch", { region, trialId, found: !!trial, ms: msSince(start) })
   return trial
 }

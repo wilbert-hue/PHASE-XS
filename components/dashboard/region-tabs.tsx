@@ -11,6 +11,18 @@ export function DashboardRegionTabs({
   ukCount,
   esCount,
   beCount,
+  dkCount,
+  frCount,
+  deCount,
+  itCount,
+  luCount,
+  nlCount,
+  noCount,
+  plCount,
+  ruCount,
+  sgCount,
+  krCount,
+  seCount,
 }: {
   region: DashboardRegion
   onChange: (r: DashboardRegion) => void
@@ -19,6 +31,18 @@ export function DashboardRegionTabs({
   ukCount: number
   esCount: number
   beCount: number
+  dkCount: number
+  frCount: number
+  deCount: number
+  itCount: number
+  luCount: number
+  nlCount: number
+  noCount: number
+  plCount: number
+  ruCount: number
+  sgCount: number
+  krCount: number
+  seCount: number
 }) {
   const tabs: { id: DashboardRegion; label: string; count: number }[] = [
     { id: "us", label: "United States", count: usCount },
@@ -26,6 +50,18 @@ export function DashboardRegionTabs({
     { id: "uk", label: "United Kingdom", count: ukCount },
     { id: "es", label: "Spain", count: esCount },
     { id: "be", label: "Belgium", count: beCount },
+    { id: "dk", label: "Denmark", count: dkCount },
+    { id: "fr", label: "France", count: frCount },
+    { id: "de", label: "Germany", count: deCount },
+    { id: "it", label: "Italy", count: itCount },
+    { id: "lu", label: "Luxembourg", count: luCount },
+    { id: "nl", label: "Netherlands", count: nlCount },
+    { id: "no", label: "Norway", count: noCount },
+    { id: "pl", label: "Poland", count: plCount },
+    { id: "ru", label: "Russia", count: ruCount },
+    { id: "sg", label: "Singapore", count: sgCount },
+    { id: "kr", label: "South Korea", count: krCount },
+    { id: "se", label: "Sweden", count: seCount },
   ]
 
   return (

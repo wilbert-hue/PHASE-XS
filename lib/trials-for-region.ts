@@ -12,6 +12,8 @@ import { fetchTrialsFromPostgresSpain } from "@/lib/trials-from-db-spain"
 import { trialToSpainListTrial } from "@/lib/spain-trial-map"
 import { fetchTrialsFromPostgresBelgium } from "@/lib/trials-from-db-belgium"
 import { trialToBelgiumListTrial } from "@/lib/belgium-trial-map"
+import { CTG_COUNTRY_CONFIGS, trialToCtgCountryListTrial } from "@/lib/ctg-country-trial-map"
+import { fetchTrialsFromPostgresCtgCountry } from "@/lib/trials-from-db-ctg-country"
 
 function hasPostgresDsn(): boolean {
   return Boolean(process.env.POSTGRES_DSN?.trim() || process.env.DATABASE_URL?.trim())
@@ -38,6 +40,10 @@ export async function fetchTrialsForRegion(region: DashboardRegion): Promise<Tri
   if (region === "be") {
     const be = await fetchTrialsFromPostgresBelgium()
     return be.map(trialToBelgiumListTrial)
+  }
+  if (CTG_COUNTRY_CONFIGS[region]) {
+    const ctg = await fetchTrialsFromPostgresCtgCountry(region)
+    return ctg.map(trialToCtgCountryListTrial)
   }
   const us = await fetchTrialsFromPostgres()
   return us.map(trialToUsListRow)

@@ -240,11 +240,431 @@ const BE_PROFILE: RegionDashboardProfile = {
   detailHideEmpty: true,
 }
 
+const DK_PROFILE: RegionDashboardProfile = {
+  region: "dk",
+  trialIdLabel: "NCT ID",
+  moleculeLabel: "Drug / Intervention",
+  searchPlaceholder:
+    "Search by NCT ID, drug, condition, sponsor, trial title…  (commas to compare)",
+  footerPrefix: "PHASE-XS / Denmark ClinicalTrials.gov",
+  filterFacets: [
+    { key: "phases", label: "Phase", accent: "#2563EB" },
+    { key: "indications", label: "Condition", accent: "#BE123C" },
+    { key: "trialDesigns", label: "Intervention Model", accent: "#B45309" },
+    { key: "adminType", label: "Study Type", accent: "#047857" },
+    { key: "recruitmentStatuses", label: "Status", accent: "#0E7490" },
+  ],
+  kpiCards: [
+    { key: "trials", label: "Total Trials", sub: "Filtered results" },
+    { key: "enrollment", label: "Total Enrollment", sub: "Enrolled participants" },
+    { key: "duration", label: "Avg Duration", sub: "Start to completion (years)" },
+    { key: "molecules", label: "Drugs / Biologics", sub: "Unique intervention names" },
+    { key: "indications", label: "Conditions", sub: "Unique conditions studied" },
+  ],
+  charts: [
+    { key: "phase", title: "Trials by Phase" },
+    { key: "studyType", title: "Study Types" },
+    { key: "studyStatus", title: "Trial Status" },
+    { key: "indications", title: "Top Conditions" },
+    { key: "timeline", title: "Trials Started Over Time" },
+    { key: "dose", title: "Top Drugs / Interventions" },
+    { key: "recruitment", title: "Recruitment Status" },
+  ],
+  comparisonMetrics: ["trials", "enrollment", "duration"],
+  detailHideEmpty: true,
+}
+
+const FR_PROFILE: RegionDashboardProfile = {
+  region: "fr",
+  trialIdLabel: "NCT ID",
+  moleculeLabel: "Drug / Intervention",
+  searchPlaceholder:
+    "Search by NCT ID, drug, condition, sponsor, trial title…  (commas to compare)",
+  footerPrefix: "PHASE-XS / France ClinicalTrials.gov",
+  filterFacets: [
+    { key: "phases", label: "Phase", accent: "#2563EB" },
+    { key: "indications", label: "Condition", accent: "#BE123C" },
+    { key: "trialDesigns", label: "Intervention Model", accent: "#B45309" },
+    { key: "adminType", label: "Study Type", accent: "#047857" },
+    { key: "recruitmentStatuses", label: "Status", accent: "#0E7490" },
+  ],
+  kpiCards: [
+    { key: "trials", label: "Total Trials", sub: "Filtered results" },
+    { key: "enrollment", label: "Total Enrollment", sub: "Enrolled participants" },
+    { key: "duration", label: "Avg Duration", sub: "Start to completion (years)" },
+    { key: "molecules", label: "Drugs / Biologics", sub: "Unique intervention names" },
+    { key: "indications", label: "Conditions", sub: "Unique conditions studied" },
+  ],
+  charts: [
+    { key: "phase", title: "Trials by Phase" },
+    { key: "studyType", title: "Study Types" },
+    { key: "studyStatus", title: "Trial Status" },
+    { key: "indications", title: "Top Conditions" },
+    { key: "timeline", title: "Trials Started Over Time" },
+    { key: "dose", title: "Top Drugs / Interventions" },
+    { key: "recruitment", title: "Recruitment Status" },
+  ],
+  comparisonMetrics: ["trials", "enrollment", "duration"],
+  detailHideEmpty: true,
+}
+
+const DE_PROFILE: RegionDashboardProfile = {
+  region: "de",
+  trialIdLabel: "NCT ID",
+  moleculeLabel: "Drug / Intervention",
+  searchPlaceholder:
+    "Search by NCT ID, drug, condition, sponsor, trial title…  (commas to compare)",
+  footerPrefix: "PHASE-XS / Germany ClinicalTrials.gov",
+  filterFacets: [
+    { key: "phases", label: "Phase", accent: "#2563EB" },
+    { key: "indications", label: "Condition", accent: "#BE123C" },
+    { key: "trialDesigns", label: "Intervention Model", accent: "#B45309" },
+    { key: "adminType", label: "Study Type", accent: "#047857" },
+    { key: "recruitmentStatuses", label: "Status", accent: "#0E7490" },
+  ],
+  kpiCards: [
+    { key: "trials", label: "Total Trials", sub: "Filtered results" },
+    { key: "enrollment", label: "Total Enrollment", sub: "Enrolled participants" },
+    { key: "duration", label: "Avg Duration", sub: "Start to completion (years)" },
+    { key: "molecules", label: "Drugs / Biologics", sub: "Unique intervention names" },
+    { key: "indications", label: "Conditions", sub: "Unique conditions studied" },
+  ],
+  charts: [
+    { key: "phase", title: "Trials by Phase" },
+    { key: "studyType", title: "Study Types" },
+    { key: "studyStatus", title: "Trial Status" },
+    { key: "indications", title: "Top Conditions" },
+    { key: "timeline", title: "Trials Started Over Time" },
+    { key: "dose", title: "Top Drugs / Interventions" },
+    { key: "recruitment", title: "Recruitment Status" },
+  ],
+  comparisonMetrics: ["trials", "enrollment", "duration"],
+  detailHideEmpty: true,
+}
+
+const IT_PROFILE: RegionDashboardProfile = {
+  region: "it",
+  trialIdLabel: "NCT ID",
+  moleculeLabel: "Drug / Intervention",
+  searchPlaceholder:
+    "Search by NCT ID, drug, condition, sponsor, trial title…  (commas to compare)",
+  footerPrefix: "PHASE-XS / Italy ClinicalTrials.gov",
+  filterFacets: [
+    { key: "phases", label: "Phase", accent: "#2563EB" },
+    { key: "indications", label: "Condition", accent: "#BE123C" },
+    { key: "trialDesigns", label: "Intervention Model", accent: "#B45309" },
+    { key: "adminType", label: "Study Type", accent: "#047857" },
+    { key: "recruitmentStatuses", label: "Status", accent: "#0E7490" },
+  ],
+  kpiCards: [
+    { key: "trials", label: "Total Trials", sub: "Filtered results" },
+    { key: "enrollment", label: "Total Enrollment", sub: "Enrolled participants" },
+    { key: "duration", label: "Avg Duration", sub: "Start to completion (years)" },
+    { key: "molecules", label: "Drugs / Biologics", sub: "Unique intervention names" },
+    { key: "indications", label: "Conditions", sub: "Unique conditions studied" },
+  ],
+  charts: [
+    { key: "phase", title: "Trials by Phase" },
+    { key: "studyType", title: "Study Types" },
+    { key: "studyStatus", title: "Trial Status" },
+    { key: "indications", title: "Top Conditions" },
+    { key: "timeline", title: "Trials Started Over Time" },
+    { key: "dose", title: "Top Drugs / Interventions" },
+    { key: "recruitment", title: "Recruitment Status" },
+  ],
+  comparisonMetrics: ["trials", "enrollment", "duration"],
+  detailHideEmpty: true,
+}
+
+const LU_PROFILE: RegionDashboardProfile = {
+  region: "lu",
+  trialIdLabel: "NCT ID",
+  moleculeLabel: "Drug / Intervention",
+  searchPlaceholder:
+    "Search by NCT ID, drug, condition, sponsor, trial title…  (commas to compare)",
+  footerPrefix: "PHASE-XS / Luxembourg ClinicalTrials.gov",
+  filterFacets: [
+    { key: "phases", label: "Phase", accent: "#2563EB" },
+    { key: "indications", label: "Condition", accent: "#BE123C" },
+    { key: "trialDesigns", label: "Intervention Model", accent: "#B45309" },
+    { key: "adminType", label: "Study Type", accent: "#047857" },
+    { key: "recruitmentStatuses", label: "Status", accent: "#0E7490" },
+  ],
+  kpiCards: [
+    { key: "trials", label: "Total Trials", sub: "Filtered results" },
+    { key: "enrollment", label: "Total Enrollment", sub: "Enrolled participants" },
+    { key: "duration", label: "Avg Duration", sub: "Start to completion (years)" },
+    { key: "molecules", label: "Drugs / Biologics", sub: "Unique intervention names" },
+    { key: "indications", label: "Conditions", sub: "Unique conditions studied" },
+  ],
+  charts: [
+    { key: "phase", title: "Trials by Phase" },
+    { key: "studyType", title: "Study Types" },
+    { key: "studyStatus", title: "Trial Status" },
+    { key: "indications", title: "Top Conditions" },
+    { key: "timeline", title: "Trials Started Over Time" },
+    { key: "dose", title: "Top Drugs / Interventions" },
+    { key: "recruitment", title: "Recruitment Status" },
+  ],
+  comparisonMetrics: ["trials", "enrollment", "duration"],
+  detailHideEmpty: true,
+}
+
+const NL_PROFILE: RegionDashboardProfile = {
+  region: "nl",
+  trialIdLabel: "NCT ID",
+  moleculeLabel: "Drug / Intervention",
+  searchPlaceholder:
+    "Search by NCT ID, drug, condition, sponsor, trial title…  (commas to compare)",
+  footerPrefix: "PHASE-XS / Netherlands ClinicalTrials.gov",
+  filterFacets: [
+    { key: "phases", label: "Phase", accent: "#2563EB" },
+    { key: "indications", label: "Condition", accent: "#BE123C" },
+    { key: "trialDesigns", label: "Intervention Model", accent: "#B45309" },
+    { key: "adminType", label: "Study Type", accent: "#047857" },
+    { key: "recruitmentStatuses", label: "Status", accent: "#0E7490" },
+  ],
+  kpiCards: [
+    { key: "trials", label: "Total Trials", sub: "Filtered results" },
+    { key: "enrollment", label: "Total Enrollment", sub: "Enrolled participants" },
+    { key: "duration", label: "Avg Duration", sub: "Start to completion (years)" },
+    { key: "molecules", label: "Drugs / Biologics", sub: "Unique intervention names" },
+    { key: "indications", label: "Conditions", sub: "Unique conditions studied" },
+  ],
+  charts: [
+    { key: "phase", title: "Trials by Phase" },
+    { key: "studyType", title: "Study Types" },
+    { key: "studyStatus", title: "Trial Status" },
+    { key: "indications", title: "Top Conditions" },
+    { key: "timeline", title: "Trials Started Over Time" },
+    { key: "dose", title: "Top Drugs / Interventions" },
+    { key: "recruitment", title: "Recruitment Status" },
+  ],
+  comparisonMetrics: ["trials", "enrollment", "duration"],
+  detailHideEmpty: true,
+}
+
+const NO_PROFILE: RegionDashboardProfile = {
+  region: "no",
+  trialIdLabel: "NCT ID",
+  moleculeLabel: "Drug / Intervention",
+  searchPlaceholder:
+    "Search by NCT ID, drug, condition, sponsor, trial title…  (commas to compare)",
+  footerPrefix: "PHASE-XS / Norway ClinicalTrials.gov",
+  filterFacets: [
+    { key: "phases", label: "Phase", accent: "#2563EB" },
+    { key: "indications", label: "Condition", accent: "#BE123C" },
+    { key: "trialDesigns", label: "Intervention Model", accent: "#B45309" },
+    { key: "adminType", label: "Study Type", accent: "#047857" },
+    { key: "recruitmentStatuses", label: "Status", accent: "#0E7490" },
+  ],
+  kpiCards: [
+    { key: "trials", label: "Total Trials", sub: "Filtered results" },
+    { key: "enrollment", label: "Total Enrollment", sub: "Enrolled participants" },
+    { key: "duration", label: "Avg Duration", sub: "Start to completion (years)" },
+    { key: "molecules", label: "Drugs / Biologics", sub: "Unique intervention names" },
+    { key: "indications", label: "Conditions", sub: "Unique conditions studied" },
+  ],
+  charts: [
+    { key: "phase", title: "Trials by Phase" },
+    { key: "studyType", title: "Study Types" },
+    { key: "studyStatus", title: "Trial Status" },
+    { key: "indications", title: "Top Conditions" },
+    { key: "timeline", title: "Trials Started Over Time" },
+    { key: "dose", title: "Top Drugs / Interventions" },
+    { key: "recruitment", title: "Recruitment Status" },
+  ],
+  comparisonMetrics: ["trials", "enrollment", "duration"],
+  detailHideEmpty: true,
+}
+
+const PL_PROFILE: RegionDashboardProfile = {
+  region: "pl",
+  trialIdLabel: "NCT ID",
+  moleculeLabel: "Drug / Intervention",
+  searchPlaceholder:
+    "Search by NCT ID, drug, condition, sponsor, trial title…  (commas to compare)",
+  footerPrefix: "PHASE-XS / Poland ClinicalTrials.gov",
+  filterFacets: [
+    { key: "phases", label: "Phase", accent: "#2563EB" },
+    { key: "indications", label: "Condition", accent: "#BE123C" },
+    { key: "trialDesigns", label: "Intervention Model", accent: "#B45309" },
+    { key: "adminType", label: "Study Type", accent: "#047857" },
+    { key: "recruitmentStatuses", label: "Status", accent: "#0E7490" },
+  ],
+  kpiCards: [
+    { key: "trials", label: "Total Trials", sub: "Filtered results" },
+    { key: "enrollment", label: "Total Enrollment", sub: "Enrolled participants" },
+    { key: "duration", label: "Avg Duration", sub: "Start to completion (years)" },
+    { key: "molecules", label: "Drugs / Biologics", sub: "Unique intervention names" },
+    { key: "indications", label: "Conditions", sub: "Unique conditions studied" },
+  ],
+  charts: [
+    { key: "phase", title: "Trials by Phase" },
+    { key: "studyType", title: "Study Types" },
+    { key: "studyStatus", title: "Trial Status" },
+    { key: "indications", title: "Top Conditions" },
+    { key: "timeline", title: "Trials Started Over Time" },
+    { key: "dose", title: "Top Drugs / Interventions" },
+    { key: "recruitment", title: "Recruitment Status" },
+  ],
+  comparisonMetrics: ["trials", "enrollment", "duration"],
+  detailHideEmpty: true,
+}
+
+const RU_PROFILE: RegionDashboardProfile = {
+  region: "ru",
+  trialIdLabel: "NCT ID",
+  moleculeLabel: "Drug / Intervention",
+  searchPlaceholder:
+    "Search by NCT ID, drug, condition, sponsor, trial title…  (commas to compare)",
+  footerPrefix: "PHASE-XS / Russia ClinicalTrials.gov",
+  filterFacets: [
+    { key: "phases", label: "Phase", accent: "#2563EB" },
+    { key: "indications", label: "Condition", accent: "#BE123C" },
+    { key: "trialDesigns", label: "Intervention Model", accent: "#B45309" },
+    { key: "adminType", label: "Study Type", accent: "#047857" },
+    { key: "recruitmentStatuses", label: "Status", accent: "#0E7490" },
+  ],
+  kpiCards: [
+    { key: "trials", label: "Total Trials", sub: "Filtered results" },
+    { key: "enrollment", label: "Total Enrollment", sub: "Enrolled participants" },
+    { key: "duration", label: "Avg Duration", sub: "Start to completion (years)" },
+    { key: "molecules", label: "Drugs / Biologics", sub: "Unique intervention names" },
+    { key: "indications", label: "Conditions", sub: "Unique conditions studied" },
+  ],
+  charts: [
+    { key: "phase", title: "Trials by Phase" },
+    { key: "studyType", title: "Study Types" },
+    { key: "studyStatus", title: "Trial Status" },
+    { key: "indications", title: "Top Conditions" },
+    { key: "timeline", title: "Trials Started Over Time" },
+    { key: "dose", title: "Top Drugs / Interventions" },
+    { key: "recruitment", title: "Recruitment Status" },
+  ],
+  comparisonMetrics: ["trials", "enrollment", "duration"],
+  detailHideEmpty: true,
+}
+
+const SG_PROFILE: RegionDashboardProfile = {
+  region: "sg",
+  trialIdLabel: "NCT ID",
+  moleculeLabel: "Drug / Intervention",
+  searchPlaceholder:
+    "Search by NCT ID, drug, condition, sponsor, trial title…  (commas to compare)",
+  footerPrefix: "PHASE-XS / Singapore ClinicalTrials.gov",
+  filterFacets: [
+    { key: "phases", label: "Phase", accent: "#2563EB" },
+    { key: "indications", label: "Condition", accent: "#BE123C" },
+    { key: "trialDesigns", label: "Intervention Model", accent: "#B45309" },
+    { key: "adminType", label: "Study Type", accent: "#047857" },
+    { key: "recruitmentStatuses", label: "Status", accent: "#0E7490" },
+  ],
+  kpiCards: [
+    { key: "trials", label: "Total Trials", sub: "Filtered results" },
+    { key: "enrollment", label: "Total Enrollment", sub: "Enrolled participants" },
+    { key: "duration", label: "Avg Duration", sub: "Start to completion (years)" },
+    { key: "molecules", label: "Drugs / Biologics", sub: "Unique intervention names" },
+    { key: "indications", label: "Conditions", sub: "Unique conditions studied" },
+  ],
+  charts: [
+    { key: "phase", title: "Trials by Phase" },
+    { key: "studyType", title: "Study Types" },
+    { key: "studyStatus", title: "Trial Status" },
+    { key: "indications", title: "Top Conditions" },
+    { key: "timeline", title: "Trials Started Over Time" },
+    { key: "dose", title: "Top Drugs / Interventions" },
+    { key: "recruitment", title: "Recruitment Status" },
+  ],
+  comparisonMetrics: ["trials", "enrollment", "duration"],
+  detailHideEmpty: true,
+}
+
+const KR_PROFILE: RegionDashboardProfile = {
+  region: "kr",
+  trialIdLabel: "NCT ID",
+  moleculeLabel: "Drug / Intervention",
+  searchPlaceholder:
+    "Search by NCT ID, drug, condition, sponsor, trial title…  (commas to compare)",
+  footerPrefix: "PHASE-XS / South Korea ClinicalTrials.gov",
+  filterFacets: [
+    { key: "phases", label: "Phase", accent: "#2563EB" },
+    { key: "indications", label: "Condition", accent: "#BE123C" },
+    { key: "trialDesigns", label: "Intervention Model", accent: "#B45309" },
+    { key: "adminType", label: "Study Type", accent: "#047857" },
+    { key: "recruitmentStatuses", label: "Status", accent: "#0E7490" },
+  ],
+  kpiCards: [
+    { key: "trials", label: "Total Trials", sub: "Filtered results" },
+    { key: "enrollment", label: "Total Enrollment", sub: "Enrolled participants" },
+    { key: "duration", label: "Avg Duration", sub: "Start to completion (years)" },
+    { key: "molecules", label: "Drugs / Biologics", sub: "Unique intervention names" },
+    { key: "indications", label: "Conditions", sub: "Unique conditions studied" },
+  ],
+  charts: [
+    { key: "phase", title: "Trials by Phase" },
+    { key: "studyType", title: "Study Types" },
+    { key: "studyStatus", title: "Trial Status" },
+    { key: "indications", title: "Top Conditions" },
+    { key: "timeline", title: "Trials Started Over Time" },
+    { key: "dose", title: "Top Drugs / Interventions" },
+    { key: "recruitment", title: "Recruitment Status" },
+  ],
+  comparisonMetrics: ["trials", "enrollment", "duration"],
+  detailHideEmpty: true,
+}
+
+const SE_PROFILE: RegionDashboardProfile = {
+  region: "se",
+  trialIdLabel: "NCT ID",
+  moleculeLabel: "Drug / Intervention",
+  searchPlaceholder:
+    "Search by NCT ID, drug, condition, sponsor, trial title…  (commas to compare)",
+  footerPrefix: "PHASE-XS / Sweden ClinicalTrials.gov",
+  filterFacets: [
+    { key: "phases", label: "Phase", accent: "#2563EB" },
+    { key: "indications", label: "Condition", accent: "#BE123C" },
+    { key: "trialDesigns", label: "Intervention Model", accent: "#B45309" },
+    { key: "adminType", label: "Study Type", accent: "#047857" },
+    { key: "recruitmentStatuses", label: "Status", accent: "#0E7490" },
+  ],
+  kpiCards: [
+    { key: "trials", label: "Total Trials", sub: "Filtered results" },
+    { key: "enrollment", label: "Total Enrollment", sub: "Enrolled participants" },
+    { key: "duration", label: "Avg Duration", sub: "Start to completion (years)" },
+    { key: "molecules", label: "Drugs / Biologics", sub: "Unique intervention names" },
+    { key: "indications", label: "Conditions", sub: "Unique conditions studied" },
+  ],
+  charts: [
+    { key: "phase", title: "Trials by Phase" },
+    { key: "studyType", title: "Study Types" },
+    { key: "studyStatus", title: "Trial Status" },
+    { key: "indications", title: "Top Conditions" },
+    { key: "timeline", title: "Trials Started Over Time" },
+    { key: "dose", title: "Top Drugs / Interventions" },
+    { key: "recruitment", title: "Recruitment Status" },
+  ],
+  comparisonMetrics: ["trials", "enrollment", "duration"],
+  detailHideEmpty: true,
+}
+
 export function getRegionProfile(region: DashboardRegion): RegionDashboardProfile {
   if (region === "in") return IN_PROFILE
   if (region === "uk") return UK_PROFILE
   if (region === "es") return ES_PROFILE
   if (region === "be") return BE_PROFILE
+  if (region === "dk") return DK_PROFILE
+  if (region === "fr") return FR_PROFILE
+  if (region === "de") return DE_PROFILE
+  if (region === "it") return IT_PROFILE
+  if (region === "lu") return LU_PROFILE
+  if (region === "nl") return NL_PROFILE
+  if (region === "no") return NO_PROFILE
+  if (region === "pl") return PL_PROFILE
+  if (region === "ru") return RU_PROFILE
+  if (region === "sg") return SG_PROFILE
+  if (region === "kr") return KR_PROFILE
+  if (region === "se") return SE_PROFILE
   return US_PROFILE
 }
 

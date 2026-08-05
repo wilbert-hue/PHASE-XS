@@ -1,26 +1,27 @@
 /**
- * Load Belgium cancer trials from the ANZCTR/ClinicalTrials.gov scrape Excel
- * into Postgres.
+ * Load a ClinicalTrials.gov country dataset from Excel into Postgres.
  *
- *   npm run data:sync-belgium
- *   npm run data:sync-belgium -- path/to/Belgium.xlsx
+ * Usage:
+ *   npm run data:sync-dk               # Denmark (default path)
+ *   npm run data:sync-fr               # France
+ *   npx tsx scripts/append-ctg-country-to-postgres.ts dk
+ *   npx tsx scripts/append-ctg-country-to-postgres.ts dk path/to/Denmark_biologic.xlsx
+ *
+ * Supported region IDs: dk, fr, de, it, lu, nl, no, pl, ru, sg, kr, se
  */
 import fs from "node:fs"
 import path from "node:path"
 import XLSX from "xlsx"
 import {
-  BELGIUM_DB_COLUMNS,
-  BELGIUM_DB_TABLE_DEFAULT,
-  BELGIUM_DETAIL_COLUMNS,
-  mapBelgiumExcelRow,
-  trialToBelgiumDetailRow,
-  trialToBelgiumListRow,
-} from "../lib/belgium-trial-map"
-import {
-  ensureSchema,
-  getPool,
-  getSchemaTableNames,
-} from "../lib/postgres-client"
+  CTG_COUNTRY_CONFIGS,
+  CTG_COUNTRY_DB_COLUMNS,
+  CTG_COUNTRY_DETAIL_COLUMNS,
+  CTG_COUNTRY_TABLE_DEFAULT,
+  mapCtgCountryExcelRow,
+  trialToCtgCountryDetailRow,
+  trialToCtgCountryListRow,
+} from "../lib/ctg-country-trial-map"
+import { ensureSchema, getPool, getSchemaTableNames } from "../lib/postgres-client"
 
 function loadEnvFile(filePath: string): void {
   if (!fs.existsSync(filePath)) return
@@ -37,12 +38,14 @@ function fq(schema: string, table: string): string {
   return `"${schema.replace(/"/g, '""')}"."${table.replace(/"/g, '""')}"`
 }
 
-function loadTrialsFromBelgiumXlsx(xlsxPath: string) {
+function loadTrialsFromXlsx(xlsxPath: string, locationCol: string, label: string) {
   const wb = XLSX.readFile(xlsxPath)
   const sheet = wb.Sheets[wb.SheetNames[0]]
   const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: "" })
-  const mapped = rows.map(mapBelgiumExcelRow).filter(t => t.nctId)
-  console.log(`Belgium rows: ${rows.length} total → ${mapped.length} with NCT ID`)
+  const mapped = rows
+    .map(row => mapCtgCountryExcelRow(row, locationCol))
+    .filter(t => t.nctId)
+  console.log(`${label} rows: ${rows.length} total → ${mapped.length} with NCT ID`)
   return mapped
 }
 
@@ -51,22 +54,37 @@ async function main(): Promise<void> {
   loadEnvFile(path.join(root, ".env.local"))
   loadEnvFile(path.join(root, ".env"))
 
-  const xlsxPath = process.argv[2]
-    ? path.resolve(process.argv[2])
-    : path.join(root, "Pol-xs", "ct-scraper", "output", "Belgium_biologic.xlsx")
+  const regionId = process.argv[2]?.toLowerCase()
+  if (!regionId) {
+    console.error("Usage: npx tsx scripts/append-ctg-country-to-postgres.ts <regionId> [xlsxPath]")
+    console.error("Region IDs:", Object.keys(CTG_COUNTRY_CONFIGS).join(", "))
+    process.exit(1)
+  }
+
+  const config = CTG_COUNTRY_CONFIGS[regionId]
+  if (!config) {
+    console.error(`Unknown region ID: ${regionId}`)
+    console.error("Supported:", Object.keys(CTG_COUNTRY_CONFIGS).join(", "))
+    process.exit(1)
+  }
+
+  const xlsxPath = process.argv[3]
+    ? path.resolve(process.argv[3])
+    : path.join(root, "Pol-xs", "ct-scraper", "output", config.excelFile)
 
   if (!fs.existsSync(xlsxPath)) {
     console.error("Excel file not found:", xlsxPath)
     process.exit(1)
   }
 
-  const trials = loadTrialsFromBelgiumXlsx(xlsxPath)
+  const trials = loadTrialsFromXlsx(xlsxPath, config.locationCol, config.label)
   if (trials.length === 0) {
-    console.error("No Belgium trials loaded from", xlsxPath)
+    console.error(`No ${config.label} trials loaded from`, xlsxPath)
     process.exit(1)
   }
 
-  const table = process.env.POSTGRES_BELGIUM_TABLE?.trim() || BELGIUM_DB_TABLE_DEFAULT
+  const envVar = `POSTGRES_${regionId.toUpperCase()}_TABLE`
+  const table = (process.env[envVar]?.trim()) || CTG_COUNTRY_TABLE_DEFAULT(regionId)
   const detailTable = `${table}_detail`
   const { schema } = getSchemaTableNames(table)
   const pool = getPool()
@@ -127,20 +145,20 @@ async function main(): Promise<void> {
     await client.query(`TRUNCATE TABLE ${fqDetail}`)
     await client.query(`TRUNCATE TABLE ${fqMain}`)
 
-    const mainCols = BELGIUM_DB_COLUMNS.join(", ")
-    const mainPh = BELGIUM_DB_COLUMNS.map((_, i) => `$${i + 1}`).join(", ")
+    const mainCols = CTG_COUNTRY_DB_COLUMNS.join(", ")
+    const mainPh = CTG_COUNTRY_DB_COLUMNS.map((_, i) => `$${i + 1}`).join(", ")
     const insertMain = `INSERT INTO ${fqMain} (${mainCols}) VALUES (${mainPh})`
 
-    const detailCols = BELGIUM_DETAIL_COLUMNS.join(", ")
-    const detailPh = BELGIUM_DETAIL_COLUMNS.map((_, i) => `$${i + 1}`).join(", ")
+    const detailCols = CTG_COUNTRY_DETAIL_COLUMNS.join(", ")
+    const detailPh = CTG_COUNTRY_DETAIL_COLUMNS.map((_, i) => `$${i + 1}`).join(", ")
     const insertDetail = `INSERT INTO ${fqDetail} (${detailCols}) VALUES (${detailPh})`
 
     let inserted = 0
     for (const trial of trials) {
-      const main = trialToBelgiumListRow(trial)
-      await client.query(insertMain, BELGIUM_DB_COLUMNS.map(c => main[c]))
-      const detail = trialToBelgiumDetailRow(trial)
-      await client.query(insertDetail, BELGIUM_DETAIL_COLUMNS.map(c => detail[c]))
+      const main = trialToCtgCountryListRow(trial)
+      await client.query(insertMain, CTG_COUNTRY_DB_COLUMNS.map(c => main[c]))
+      const detail = trialToCtgCountryDetailRow(trial)
+      await client.query(insertDetail, CTG_COUNTRY_DETAIL_COLUMNS.map(c => detail[c]))
       inserted++
     }
     await client.query("COMMIT")
@@ -158,7 +176,9 @@ async function main(): Promise<void> {
     for (const sql of idxStmts) await pool.query(sql)
     await pool.query(`VACUUM ANALYZE ${fqMain}`)
 
-    console.log(`Inserted ${inserted} Belgium trials into ${schema}.${table} + ${detailTable}.`)
+    console.log(
+      `Inserted ${inserted} ${config.label} trials into ${schema}.${table} + ${detailTable}.`,
+    )
   } catch (e) {
     await client.query("ROLLBACK")
     console.error("Upload failed:", e)

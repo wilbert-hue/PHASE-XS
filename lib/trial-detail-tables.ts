@@ -2,6 +2,7 @@ import { CTRI_DB_TABLE_DEFAULT } from "@/lib/ctri-trial-map"
 import { UK_DB_TABLE_DEFAULT } from "@/lib/uk-trial-map"
 import { SPAIN_DB_TABLE_DEFAULT } from "@/lib/spain-trial-map"
 import { BELGIUM_DB_TABLE_DEFAULT } from "@/lib/belgium-trial-map"
+import { CTG_COUNTRY_TABLE_DEFAULT } from "@/lib/ctg-country-trial-map"
 
 export function ctriDetailTableName(base = CTRI_DB_TABLE_DEFAULT): string {
   return `${base}_detail`
@@ -23,4 +24,9 @@ export function usDetailTableName(
   base = (process.env.POSTGRES_TABLE?.trim() || "final_output_22").trim() || "final_output_22",
 ): string {
   return `${base}_detail`
+}
+
+export function ctgCountryDetailTableName(regionId: string, base?: string): string {
+  const resolvedBase = base ?? CTG_COUNTRY_TABLE_DEFAULT(regionId)
+  return `${resolvedBase}_detail`
 }
