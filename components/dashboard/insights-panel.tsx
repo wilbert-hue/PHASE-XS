@@ -357,8 +357,36 @@ export function InsightsPanel({ region, moleculeTokenCatalog }: InsightsPanelPro
       {/* Results */}
       {result && !error && (
         <div className="border-t border-border/40">
-          {/* Summary card — always visible */}
-          <div className="mx-4 mt-4 rounded-lg border border-[rgba(42,143,156,0.3)] bg-gradient-to-r from-[rgba(42,143,156,0.08)] to-[rgba(42,143,156,0.03)] px-4 py-3.5">
+          {/* Expand / collapse toggle for detailed takeaways */}
+          {!result.noResults && (
+            <div className="flex items-center justify-between px-4 pt-3 pb-1">
+              <span className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+                Detailed Takeaways
+              </span>
+              <button
+                type="button"
+                onClick={() => setExpanded(v => !v)}
+                className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              >
+                {expanded ? (
+                  <>Hide <ChevronUp className="h-3 w-3" /></>
+                ) : (
+                  <>Show {result.takeaways.length} <ChevronDown className="h-3 w-3" /></>
+                )}
+              </button>
+            </div>
+          )}
+
+          {!result.noResults && expanded && (
+            <div className="grid gap-2 p-4 pt-2 sm:grid-cols-2">
+              {result.takeaways.map((item, i) => (
+                <TakeawayCard key={item.category} item={item} index={i} />
+              ))}
+            </div>
+          )}
+
+          {/* Summary card — below takeaways */}
+          <div className="mx-4 mt-2 mb-4 rounded-lg border border-[rgba(42,143,156,0.3)] bg-gradient-to-r from-[rgba(42,143,156,0.08)] to-[rgba(42,143,156,0.03)] px-4 py-3.5">
             <div className="flex items-start gap-3">
               <div className="mt-0.5 flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-lg bg-[rgba(42,143,156,0.15)]">
                 <Sparkles className="h-4 w-4 text-[#2A8F9C]" />
@@ -387,38 +415,6 @@ export function InsightsPanel({ region, moleculeTokenCatalog }: InsightsPanelPro
               </div>
             </div>
           </div>
-
-          {/* Expand / collapse toggle for detailed takeaways */}
-          {!result.noResults && (
-            <div className="flex items-center justify-between px-4 pt-3 pb-1">
-              <span className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
-                Detailed Takeaways
-              </span>
-              <button
-                type="button"
-                onClick={() => setExpanded(v => !v)}
-                className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-              >
-                {expanded ? (
-                  <>Hide <ChevronUp className="h-3 w-3" /></>
-                ) : (
-                  <>Show {result.takeaways.length} <ChevronDown className="h-3 w-3" /></>
-                )}
-              </button>
-            </div>
-          )}
-
-          {!result.noResults && expanded ? (
-            <div className="grid gap-2 p-4 pt-2 sm:grid-cols-2">
-              {result.takeaways.map((item, i) => (
-                <TakeawayCard key={item.category} item={item} index={i} />
-              ))}
-            </div>
-          ) : !result.noResults ? (
-            <div className="pb-4" />
-          ) : (
-            <div className="pb-4" />
-          )}
         </div>
       )}
     </div>

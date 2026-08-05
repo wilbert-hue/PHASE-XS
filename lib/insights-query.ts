@@ -27,7 +27,9 @@ function topN(map: Map<string, number>, n: number): [string, number][] {
 
 function pct(count: number, total: number): string {
   if (total === 0) return "0%"
-  return `${Math.round((count / total) * 100)}%`
+  const rounded = Math.round((count / total) * 100)
+  if (rounded === 0 && count > 0) return "<1%"
+  return `${rounded}%`
 }
 
 function avg(values: number[]): number {
