@@ -292,24 +292,6 @@ function UsTrialBody({ trial, showEmpty }: { trial: Trial; showEmpty: boolean })
           showIfEmpty={showEmpty}
         />
         <Field label="Reimbursement" value={trial.reimbursement} showIfEmpty={showEmpty} />
-        <Field
-          label="Price source URL"
-          value={
-            trial.drugPriceUrl && /^https?:\/\//i.test(trial.drugPriceUrl.trim()) ? (
-              <a
-                href={trial.drugPriceUrl.trim()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline underline-offset-2 break-all"
-              >
-                {trial.drugPriceUrl.trim()}
-              </a>
-            ) : trial.drugPriceUrl
-              ? trial.drugPriceUrl.trim()
-              : null
-          }
-          showIfEmpty={showEmpty}
-        />
         <Field label="Drug/Brand Alternatives" value={trial.drugBrandSwitch} showIfEmpty={showEmpty} />
       </Section>
 
@@ -410,22 +392,6 @@ function UkTrialBody({ trial }: { trial: Trial }) {
                 <MapPin className="h-3 w-3 mt-0.5 flex-shrink-0 text-muted-foreground" />
                 <span>{trial.locationOther}</span>
               </span>
-            ) : null
-          }
-          showIfEmpty={false}
-        />
-        <Field
-          label="ISRCTN Registry"
-          value={
-            trial.ctriDetailUrl && /^https?:\/\//i.test(trial.ctriDetailUrl.trim()) ? (
-              <a
-                href={trial.ctriDetailUrl.trim()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline underline-offset-2 break-all"
-              >
-                View on ISRCTN
-              </a>
             ) : null
           }
           showIfEmpty={false}
@@ -533,22 +499,6 @@ function InTrialBody({ trial }: { trial: Trial }) {
           }
           showIfEmpty={false}
         />
-        <Field
-          label="CTRI Registry"
-          value={
-            trial.ctriDetailUrl && /^https?:\/\//i.test(trial.ctriDetailUrl.trim()) ? (
-              <a
-                href={trial.ctriDetailUrl.trim()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline underline-offset-2 break-all"
-              >
-                View on CTRI
-              </a>
-            ) : null
-          }
-          showIfEmpty={false}
-        />
       </Section>
     </>
   )
@@ -643,22 +593,6 @@ function CtgCountryTrialBody({ trial }: { trial: Trial }) {
                 <MapPin className="h-3 w-3 mt-0.5 flex-shrink-0 text-muted-foreground" />
                 <span>{trial.locationOther}</span>
               </span>
-            ) : null
-          }
-          showIfEmpty={false}
-        />
-        <Field
-          label="Registry URL"
-          value={
-            trial.ctriDetailUrl && /^https?:\/\//i.test(trial.ctriDetailUrl.trim()) ? (
-              <a
-                href={trial.ctriDetailUrl.trim()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline underline-offset-2 break-all"
-              >
-                View on ClinicalTrials.gov
-              </a>
             ) : null
           }
           showIfEmpty={false}
