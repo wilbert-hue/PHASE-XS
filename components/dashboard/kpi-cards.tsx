@@ -46,9 +46,15 @@ function KPICard({ label, value, sub, icon: Icon, accent }: KPICardProps) {
         </div>
       </div>
       <div>
-        <p className="font-[var(--font-bebas)] text-4xl tracking-wider" style={{ color: accent }}>
-          {value}
-        </p>
+        {(() => {
+          const valueStr = String(value)
+          const valueFontClass = valueStr.length > 9 ? "text-xl" : valueStr.length > 6 ? "text-2xl" : valueStr.length > 4 ? "text-3xl" : "text-4xl"
+          return (
+            <p className={`font-[var(--font-bebas)] ${valueFontClass} tracking-wider`} style={{ color: accent }}>
+              {value}
+            </p>
+          )
+        })()}
         {sub && (
           <p className="font-mono text-[12px] text-muted-foreground mt-1.5 pl-0.5">{sub}</p>
         )}
@@ -81,8 +87,12 @@ function kpiValue(key: KpiCardKey, filteredTrialCount: number, kpi: KpiSnapshot)
   switch (key) {
     case "trials":
       return filteredTrialCount.toLocaleString()
-    case "enrollment":
-      return kpi.totalEnrollment.toLocaleString()
+    case "enrollment": {
+      const n = kpi.totalEnrollment
+      if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
+      if (n >= 10_000) return `${(n / 1_000).toFixed(0)}K`
+      return n.toLocaleString()
+    }
     case "duration":
       return `${kpi.avgDuration} yr`
     case "molecules":

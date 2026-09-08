@@ -554,6 +554,120 @@ function InTrialBody({ trial }: { trial: Trial }) {
   )
 }
 
+function CtgCountryTrialBody({ trial }: { trial: Trial }) {
+  const C = {
+    kpiEnroll: "#2563EB",
+    kpiDuration: "#C2410C",
+    overview: "#1B4965",
+    design: "#B45309",
+    timeline: "#0E7490",
+    outcomes: "#BE123C",
+    sponsor: "#4338CA",
+  }
+
+  return (
+    <>
+      <div className="grid grid-cols-2 gap-2.5">
+        {trial.enrollment > 0 ? (
+          <KpiCard
+            icon={Users}
+            label="Enrollment"
+            value={
+              trial.enrollment >= 1000
+                ? `${(trial.enrollment / 1000).toFixed(1)}K`
+                : trial.enrollment.toLocaleString()
+            }
+            accent={C.kpiEnroll}
+          />
+        ) : null}
+        {trial.durationYears > 0 ? (
+          <KpiCard icon={Clock} label="Duration" value={`${trial.durationYears}y`} accent={C.kpiDuration} />
+        ) : null}
+      </div>
+
+      <Section icon={FileText} title="Study Overview" accent={C.overview}>
+        <Field label="Public Title" value={trial.publicTitle} showIfEmpty={false} />
+        <Field label="Scientific Title" value={trial.scientificTitle} showIfEmpty={false} />
+        <Field label="Brief Summary" value={trial.briefSummary} showIfEmpty={false} />
+        <Field
+          label="Indication"
+          value={trial.indication ? trial.indication.charAt(0) + trial.indication.slice(1).toLowerCase() : null}
+          showIfEmpty={false}
+        />
+        <Field label="Disease Condition" value={trial.diseaseCondition} showIfEmpty={false} />
+        <Field label="Pharmacological Class" value={trial.pharmClass} showIfEmpty={false} />
+      </Section>
+
+      <Section icon={Beaker} title="Trial Design & Dosing" accent={C.design}>
+        <Field label="Trial Design" value={trial.trialDesign} showIfEmpty={false} />
+        <Field label="Study Type" value={trial.adminType} showIfEmpty={false} />
+        <Field label="Technology" value={trial.technology} showIfEmpty={false} />
+        <Field label="Route of Administration" value={trial.routeOfAdmin} showIfEmpty={false} />
+        <Field label="Age Group" value={trial.age} showIfEmpty={false} />
+        <Field label="Dosage / Strength" value={trial.dosageStrength} showIfEmpty={false} />
+        <Field label="Blinding" value={trial.blinding} showIfEmpty={false} />
+        <Field label="Randomization" value={trial.randomization} showIfEmpty={false} />
+        <Field label="Gender Criteria" value={trial.genderCriteria} showIfEmpty={false} />
+        <Field label="Biologic / Drug Type" value={trial.biologicType} showIfEmpty={false} />
+      </Section>
+
+      <Section icon={Calendar} title="Dates & Timeline" accent={C.timeline}>
+        <Field label="Study Start" value={trial.startDate} showIfEmpty={false} />
+        <Field label="Primary Completion" value={trial.primaryCompletionDate} showIfEmpty={false} />
+        <Field label="Study Completion" value={trial.completionDate} showIfEmpty={false} />
+      </Section>
+
+      <Section icon={Target} title="Outcomes & Endpoints" accent={C.outcomes}>
+        <Field label="Primary End Point" value={trial.primaryEndPoint} showIfEmpty={false} />
+        <Field
+          label="Endpoints"
+          value={trial.endpoints ? <EndpointList text={trial.endpoints} accent={C.outcomes} /> : null}
+          showIfEmpty={false}
+        />
+        <Field label="Outcome Timepoints" value={trial.outcomeTimepoints} showIfEmpty={false} />
+        <Field
+          label="Secondary Outcomes"
+          value={trial.secondaryOutcomes ? <EndpointList text={trial.secondaryOutcomes} accent={C.outcomes} /> : null}
+          showIfEmpty={false}
+        />
+      </Section>
+
+      <Section icon={Building2} title="Sponsor & Locations" accent={C.sponsor}>
+        <Field label="Sponsor" value={trial.sponsor} showIfEmpty={false} />
+        <Field label="Recruitment Status" value={trial.recruitmentStatus} showIfEmpty={false} />
+        <Field
+          label="Other Locations"
+          value={
+            trial.locationOther ? (
+              <span className="inline-flex items-start gap-1.5">
+                <MapPin className="h-3 w-3 mt-0.5 flex-shrink-0 text-muted-foreground" />
+                <span>{trial.locationOther}</span>
+              </span>
+            ) : null
+          }
+          showIfEmpty={false}
+        />
+        <Field
+          label="Registry URL"
+          value={
+            trial.ctriDetailUrl && /^https?:\/\//i.test(trial.ctriDetailUrl.trim()) ? (
+              <a
+                href={trial.ctriDetailUrl.trim()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary underline underline-offset-2 break-all"
+              >
+                View on ClinicalTrials.gov
+              </a>
+            ) : null
+          }
+          showIfEmpty={false}
+        />
+      </Section>
+    </>
+  )
+}
+
 async function fetchTrialDetail(nctId: string, region: DashboardRegion): Promise<Trial | null> {
   const res = await fetch(
     `/api/dashboard/trial/${encodeURIComponent(nctId)}?region=${region}`,
@@ -627,6 +741,7 @@ export function TrialDetailSheet({ trial, region, onClose }: TrialDetailSheetPro
 
   const isIndia = region === "in"
   const isUk = region === "uk"
+  const isCtgCountry = ["be", "dk", "fr", "de", "it", "lu", "nl", "no", "pl", "ru", "sg", "kr", "se"].includes(region)
   const displayId = isIndia ? normalizeCtriId(detail.nctId) : detail.nctId
   const C = { hero1: "#1B4965", hero2: "#1E6080", hero3: "#2A8F9C" }
 
@@ -742,6 +857,8 @@ export function TrialDetailSheet({ trial, region, onClose }: TrialDetailSheetPro
             <InTrialBody trial={detail} />
           ) : isUk ? (
             <UkTrialBody trial={detail} />
+          ) : isCtgCountry ? (
+            <CtgCountryTrialBody trial={detail} />
           ) : (
             <UsTrialBody trial={detail} showEmpty={!profile.detailHideEmpty} />
           )}
