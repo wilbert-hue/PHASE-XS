@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
-  Color palette — 5-stop blue-teal gradient:
+  Color palette - 5-stop blue-teal gradient:
   --c1: #1B4965  Deep Navy     rgb(27, 73, 101)
   --c2: #1E6080  Medium Blue   rgb(30, 96, 128)
   --c3: #2A8F9C  Teal          rgb(42, 143, 156)
