@@ -53,7 +53,7 @@ async function main(): Promise<void> {
 
   const xlsxPath = process.argv[2]
     ? path.resolve(process.argv[2])
-    : path.join(root, "Pol-xs", "ct-scraper", "output", "Belgium_biologic.xlsx")
+    : path.join(root, "Pol-xs", "ct-scraper", "output", "Belgium.xlsx")
 
   if (!fs.existsSync(xlsxPath)) {
     console.error("Excel file not found:", xlsxPath)
