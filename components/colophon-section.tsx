@@ -80,7 +80,7 @@ export function ColophonSection() {
         style={{ borderTop: "1px solid rgba(192, 212, 220, 0.2)" }}
       >
         <p className="font-mono text-[10px] uppercase tracking-widest" style={{ color: "#1E6080" }}>
-          © 2026 PHASE-XS. US Clinical Trials Intelligence.
+          © 2026 PHASE-XS. AI Powered Clinical Intelligence Platform.
         </p>
         <p className="font-mono text-[10px]" style={{ color: "#3AAFA9" }}>
           Data-driven insights. Built with precision.

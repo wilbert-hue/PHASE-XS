@@ -90,7 +90,7 @@ export function HeroSection({
           className="font-[var(--font-bebas)] text-[clamp(1rem,3vw,2rem)] mt-4 tracking-wide"
           style={{ color: "#1E6080" }}
         >
-          Secure trials intelligence
+          AI powered clinical intelligence platform
         </h2>
 
         <p className="mt-12 max-w-md font-mono text-sm leading-relaxed" style={{ color: "#3d6070" }}>

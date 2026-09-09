@@ -320,9 +320,20 @@ export default function DashboardClient({
                   Back
                 </Link>
                 <div className="h-4 w-px bg-border" />
-                <h1 className="font-[var(--font-bebas)] text-3xl tracking-wider">
-                  PHASE-XS
-                </h1>
+                <div className="flex items-center gap-2.5">
+                  <svg width="28" height="28" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
+                    <circle cx="22" cy="22" r="19" stroke="#2A8F9C" strokeWidth="1.2" strokeDasharray="3 2.5"/>
+                    <circle cx="22" cy="22" r="11" stroke="#2A8F9C" strokeWidth="1" opacity="0.4"/>
+                    <line x1="22" y1="2" x2="22" y2="9" stroke="#2A8F9C" strokeWidth="1.5" strokeLinecap="round"/>
+                    <line x1="22" y1="35" x2="22" y2="42" stroke="#2A8F9C" strokeWidth="1.5" strokeLinecap="round"/>
+                    <line x1="2" y1="22" x2="9" y2="22" stroke="#2A8F9C" strokeWidth="1.5" strokeLinecap="round"/>
+                    <line x1="35" y1="22" x2="42" y2="22" stroke="#2A8F9C" strokeWidth="1.5" strokeLinecap="round"/>
+                    <circle cx="22" cy="22" r="2.5" fill="#2A8F9C"/>
+                  </svg>
+                  <h1 className="font-[var(--font-bebas)] text-3xl tracking-wider">
+                    PHASE-XS
+                  </h1>
+                </div>
                 <span className="hidden sm:inline-block font-mono text-[12px] uppercase tracking-widest text-muted-foreground border border-border px-2 py-0.5">
                   Clinical Trials Dashboard
                 </span>

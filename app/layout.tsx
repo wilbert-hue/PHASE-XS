@@ -18,7 +18,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 const bebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"], variable: "--font-bebas" })
 
 export const metadata: Metadata = {
-  title: "PHASE-XS — Clinical trials intelligence",
+  title: "PHASE-XS — AI Powered Clinical Intelligence Platform",
   description:
     "Sign in to explore 3,049 US biologics trials—phases, indications, and therapeutic analytics in one dashboard.",
   generator: "v0.app",
