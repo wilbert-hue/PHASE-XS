@@ -55,8 +55,8 @@ export function TopNav() {
       <div className="max-w-7xl mx-auto px-6 md:px-10 h-14 flex items-center justify-between">
 
         {/* Logo */}
-        <button onClick={() => scrollTo("hero")} className="flex items-center gap-2.5 group">
-          <svg width="26" height="26" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <button onClick={() => scrollTo("hero")} className="flex items-center gap-2 shrink-0 group">
+          <svg width="24" height="24" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
             <circle cx="22" cy="22" r="19" stroke="#2A8F9C" strokeWidth="1.3" strokeDasharray="3 2.5"/>
             <circle cx="22" cy="22" r="11" stroke="#2A8F9C" strokeWidth="1" opacity="0.4"/>
             <line x1="22" y1="2"  x2="22" y2="9"  stroke="#2A8F9C" strokeWidth="1.6" strokeLinecap="round"/>
@@ -66,16 +66,10 @@ export function TopNav() {
             <circle cx="22" cy="22" r="2.5" fill="#2A8F9C"/>
           </svg>
           <div className="flex flex-col leading-none">
-            <span
-              className="font-[var(--font-bebas)] text-xl tracking-[0.1em]"
-              style={{ color: "#1B4965" }}
-            >
+            <span className="font-[var(--font-bebas)] text-[18px] tracking-[0.1em] whitespace-nowrap" style={{ color: "#1B4965" }}>
               PHASE-XS
             </span>
-            <span
-              className="font-mono text-[7.5px] tracking-[0.28em] uppercase"
-              style={{ color: "#2A8F9C" }}
-            >
+            <span className="font-mono text-[7px] tracking-[0.22em] uppercase whitespace-nowrap" style={{ color: "#2A8F9C" }}>
               Clinical Intelligence
             </span>
           </div>
