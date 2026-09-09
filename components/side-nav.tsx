@@ -59,7 +59,7 @@ export function SideNav() {
   return (
     <nav
       ref={navRef}
-      className="fixed left-0 top-0 z-50 w-16 md:w-20 hidden md:flex flex-col justify-center backdrop-blur-sm transition-all duration-300"
+      className="fixed left-0 top-0 z-40 w-16 md:w-20 hidden flex-col justify-center backdrop-blur-sm transition-all duration-300"
       style={{
         borderRight: "1px solid rgba(192, 212, 220, 0.3)",
         background: "rgba(240, 245, 247, 0.8)",
