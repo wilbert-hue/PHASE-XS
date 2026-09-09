@@ -10,11 +10,7 @@ type ContactPayload = {
   requirements?: string
 }
 
-let transporter: nodemailer.Transporter | null = null
-
 function getTransporter() {
-  if (transporter) return transporter
-
   const host = process.env.SMTP_HOST
   const port = Number(process.env.SMTP_PORT || 587)
   const user = process.env.SMTP_USER
@@ -24,13 +20,13 @@ function getTransporter() {
     throw new Error("SMTP not configured (need SMTP_HOST, SMTP_USER, SMTP_PASS)")
   }
 
-  transporter = nodemailer.createTransport({
+  return nodemailer.createTransport({
     host,
     port,
     secure: port === 465,
     auth: { user, pass },
+    tls: { rejectUnauthorized: false },
   })
-  return transporter
 }
 
 export async function sendContactNotification(data: ContactPayload) {
