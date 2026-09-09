@@ -11,6 +11,7 @@ import { ClienteleSection } from "@/components/clientele-section"
 import { ColophonSection } from "@/components/colophon-section"
 import { Footer } from "@/components/footer"
 import { SideNav } from "@/components/side-nav"
+import { TopNav } from "@/components/top-nav"
 import { ContactTab } from "@/components/contact-tab"
 import { AnimatedBackground } from "@/components/animated-background"
 import { PageSection } from "@/components/page-section"
@@ -21,6 +22,7 @@ export default async function Page() {
 
   return (
     <main className="relative min-h-screen">
+      <TopNav />
       <SideNav />
       <ContactTab />
       <AnimatedBackground />
