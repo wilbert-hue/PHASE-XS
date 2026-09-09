@@ -44,33 +44,15 @@ export function HeroSection({
     <section ref={sectionRef} id="hero" className="relative min-h-screen flex items-center pl-6 md:pl-28 pr-6 md:pr-12 overflow-hidden pt-14">
       <AnimatedNoise opacity={0.03} />
 
-      {/* Gradient glow — uses c1, c3, c5 */}
+      {/* White vignette over the dotted bg — keeps dots visible but lifts text contrast */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background: `
-            radial-gradient(ellipse 80% 60% at 15% 50%, rgba(27, 73, 101, 0.10) 0%, transparent 70%),
-            radial-gradient(ellipse 60% 50% at 75% 25%, rgba(42, 143, 156, 0.07) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 40% at 50% 85%, rgba(79, 189, 186, 0.05) 0%, transparent 50%)
+            radial-gradient(ellipse 55% 70% at 30% 50%, rgba(255,255,255,0.72) 0%, transparent 75%),
+            radial-gradient(ellipse 80% 60% at 15% 50%, rgba(27, 73, 101, 0.08) 0%, transparent 70%),
+            radial-gradient(ellipse 60% 50% at 75% 25%, rgba(42, 143, 156, 0.05) 0%, transparent 60%)
           `,
-        }}
-      />
-
-      {/* Left vertical label — c4 */}
-      <div className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2">
-        <span
-          className="font-mono text-[10px] uppercase tracking-[0.3em] -rotate-90 origin-left block whitespace-nowrap"
-          style={{ color: "#3AAFA9" }}
-        >
-          SIGNAL
-        </span>
-      </div>
-
-      {/* Left accent line — c1 → c3 → c5 full gradient */}
-      <div
-        className="absolute left-0 top-[15%] w-[2px] h-[40%] opacity-40"
-        style={{
-          background: "linear-gradient(to bottom, transparent, #1B4965, #2A8F9C, #4FBDBA, transparent)",
         }}
       />
 
@@ -93,9 +75,9 @@ export function HeroSection({
           AI powered clinical intelligence platform
         </h2>
 
-        <p className="mt-12 max-w-md font-mono text-sm leading-relaxed" style={{ color: "#3d6070" }}>
-          <span style={{ color: "#3AAFA9", fontWeight: 600 }}>{moleculeCount.toLocaleString()} molecules.</span>{" "}
-          Access the dashboard with Auth0—Universal Login, SSO, and social connections. Built for teams that need audited access and optional billing-ready flows.
+        <p className="mt-12 max-w-md font-mono text-sm leading-relaxed" style={{ color: "#1B4965" }}>
+          <span style={{ color: "#2A8F9C", fontWeight: 600 }}>{moleculeCount.toLocaleString()} molecules</span>{" "}
+          across 40,715+ trials in 17 countries. The intelligence platform for pharma teams that need to move faster than the market.
         </p>
 
         <div className="mt-16 flex flex-wrap items-center gap-6 md:gap-8">
