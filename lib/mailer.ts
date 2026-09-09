@@ -34,7 +34,7 @@ function getTransporter() {
 }
 
 export async function sendContactNotification(data: ContactPayload) {
-  const to = process.env.CONTACT_TO_EMAIL || "shubham.sharma@coherentmarketinsights.com"
+  const to = process.env.CONTACT_TO_EMAIL || "raj@coherentmarketinsights.com, monica@coherentmarketinsights.com, mohit.s@coherentmarketinsights.com"
   const from = process.env.CONTACT_FROM_EMAIL || process.env.SMTP_USER!
 
   const t = getTransporter()

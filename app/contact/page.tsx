@@ -171,18 +171,6 @@ export default function ContactPage() {
                 </span>
               </div>
 
-              {!turnstileWidgetEnabled && (
-                <p
-                  className="mb-4 font-mono text-[11px] leading-relaxed"
-                  style={{ color: "#B45309", borderBottom: "1px solid rgba(180,83,9,0.25)", paddingBottom: 10 }}
-                >
-                  Set{" "}
-                  <code style={{ fontSize: 10 }}>NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY</code> for production CAPTCHA,
-                  or in local dev enable{" "}
-                  <code style={{ fontSize: 10 }}>CONTACT_SKIP_TURNSTILE=true</code> (never in production) to omit the widget.
-                  Cloudflare publishes always-pass widget keys for non-prod testing.
-                </p>
-              )}
 
               {submitted ? (
                 <div className="py-16 text-center">
