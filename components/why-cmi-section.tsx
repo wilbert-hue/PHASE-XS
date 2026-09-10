@@ -169,7 +169,7 @@ export function WhyCmiSection() {
             {/* Description */}
             <p
               className="font-mono text-[11px] leading-relaxed max-w-[240px]"
-              style={{ color: "#3d6070" }}
+              style={{ color: "#1B4965" }}
             >
               {stat.description}
             </p>

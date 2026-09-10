@@ -12,7 +12,7 @@ const coverageAreas = [
   {
     title: "Oncology",
     medium: "Largest Segment",
-    description: "Leukemia, lymphoma, melanoma, and solid tumors â€” spanning checkpoint inhibitors, ADCs, and CAR-T therapies.",
+    description: "Leukemia, lymphoma, melanoma, and solid tumors — spanning checkpoint inhibitors, ADCs, and CAR-T therapies.",
     span: "col-span-2 row-span-2",
     accent: "#1B4965",
     accentLight: "rgba(27, 73, 101, 0.06)",
@@ -20,7 +20,7 @@ const coverageAreas = [
   {
     title: "Technology Mix",
     medium: "Sample Distribution",
-    description: "Illustrative spread of biologic modalities across tracked trials â€” actual counts withheld.",
+    description: "Illustrative spread of biologic modalities across tracked trials — actual counts withheld.",
     span: "col-span-1 row-span-1",
     accent: "#1E6080",
     accentLight: "rgba(30, 96, 128, 0.05)",
@@ -45,7 +45,7 @@ const coverageAreas = [
   {
     title: "Trial Phases",
     medium: "Sample Distribution",
-    description: "Illustrative breakdown of ongoing biologic trials by phase â€” actual values withheld.",
+    description: "Illustrative breakdown of ongoing biologic trials by phase — actual values withheld.",
     span: "col-span-1 row-span-1",
     accent: "#3AAFA9",
     accentLight: "rgba(58, 175, 169, 0.06)",
@@ -54,7 +54,7 @@ const coverageAreas = [
   {
     title: "Biosimilars",
     medium: "Market Access",
-    description: "Follow-on biologics entering the US market â€” tracking approval timelines, pricing, and competitive dynamics.",
+    description: "Follow-on biologics entering the US market — tracking approval timelines, pricing, and competitive dynamics.",
     span: "col-span-2 row-span-1",
     accent: "#4FBDBA",
     accentLight: "rgba(79, 189, 186, 0.06)",
@@ -142,11 +142,11 @@ export function WorkSection() {
       {/* Section header */}
       <div ref={headerRef} className="mb-16 flex items-end justify-between">
         <div>
-          {/* Label â€” c5 */}
-          <span key={`label-${slide}`} className="font-mono text-[10px] uppercase tracking-[0.3em] transition-opacity duration-500" style={{ color: "#4FBDBA" }}>
+          {/* Label — c5 */}
+          <span key={`label-${slide}`} className="font-mono text-sm uppercase tracking-[0.3em] transition-opacity duration-500" style={{ color: "#4FBDBA" }}>
             {slideHeadings[slide].label}
           </span>
-          {/* Heading â€” c2 */}
+          {/* Heading — c2 */}
           <h2
             key={`title-${slide}`}
             className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight transition-opacity duration-500"
@@ -155,7 +155,7 @@ export function WorkSection() {
             {slideHeadings[slide].title}
           </h2>
         </div>
-        <p key={`desc-${slide}`} className="hidden md:block max-w-xs font-mono text-xs text-right leading-relaxed transition-opacity duration-500" style={{ color: "#3d6070" }}>
+        <p key={`desc-${slide}`} className="hidden md:block max-w-xs font-mono text-xs text-right leading-relaxed transition-opacity duration-500" style={{ color: "#1B4965" }}>
           {slideHeadings[slide].description}
         </p>
       </div>
@@ -192,7 +192,7 @@ function CoverageCarousel({
           className="flex transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${slide * 100}%)` }}
         >
-          {/* Slide 1 â€” asymmetric grid */}
+          {/* Slide 1 — asymmetric grid */}
           <div className="w-full shrink-0">
             <div
               ref={gridRef}
@@ -210,7 +210,7 @@ function CoverageCarousel({
             </div>
           </div>
 
-          {/* Slide 2 â€” chart comparison */}
+          {/* Slide 2 — chart comparison */}
           <div className="w-full shrink-0 pl-4 md:pl-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <TrialsOverTimeCard />
@@ -305,12 +305,12 @@ function TrialsOverTimeCard() {
         {[0, 65, 130, 195, 260].map(v => (
           <g key={v}>
             <line x1={pad.l} x2={w - pad.r} y1={y(v)} y2={y(v)} stroke="rgba(192,212,220,0.35)" strokeDasharray="2 3" />
-            <text x={pad.l - 6} y={y(v) + 3} textAnchor="end" fontSize="9" fill="#3d6070" fontFamily="monospace">{v}</text>
+            <text x={pad.l - 6} y={y(v) + 3} textAnchor="end" fontSize="9" fill="#1B4965" fontFamily="monospace">{v}</text>
           </g>
         ))}
         {/* x labels */}
         {[1997, 2000, 2003, 2006, 2009, 2012, 2015, 2018, 2021, 2024, 2027].map(yr => (
-          <text key={yr} x={x(yr)} y={h - 8} textAnchor="middle" fontSize="9" fill="#3d6070" fontFamily="monospace">{yr}</text>
+          <text key={yr} x={x(yr)} y={h - 8} textAnchor="middle" fontSize="9" fill="#1B4965" fontFamily="monospace">{yr}</text>
         ))}
         <path d={area} fill={`${accent}22`} />
         <path d={line} fill="none" stroke={accent} strokeWidth="1.8" />
@@ -318,8 +318,8 @@ function TrialsOverTimeCard() {
         <line x1={x(2009)} x2={x(2009)} y1={pad.t} y2={pad.t + ih} stroke={accent} strokeOpacity="0.3" />
       </svg>
 
-      <p className="mt-2 font-mono text-[10px]" style={{ color: "#3d6070" }}>
-        Highlight â€” 2009 Â· count: 92
+      <p className="mt-2 font-mono text-[10px]" style={{ color: "#1B4965" }}>
+        Highlight — 2009 · count: 92
       </p>
     </article>
   )
@@ -363,7 +363,7 @@ function EnrollmentByPhaseCard() {
         {[0, 150000, 300000, 450000, 600000].map(v => (
           <g key={v}>
             <line x1={pad.l} x2={w - pad.r} y1={y(v)} y2={y(v)} stroke="rgba(192,212,220,0.35)" strokeDasharray="2 3" />
-            <text x={pad.l - 6} y={y(v) + 3} textAnchor="end" fontSize="9" fill="#3d6070" fontFamily="monospace">
+            <text x={pad.l - 6} y={y(v) + 3} textAnchor="end" fontSize="9" fill="#1B4965" fontFamily="monospace">
               {v.toLocaleString()}
             </text>
           </g>
@@ -382,7 +382,7 @@ function EnrollmentByPhaseCard() {
                 y={h - 20}
                 textAnchor="end"
                 fontSize="8"
-                fill="#3d6070"
+                fill="#1B4965"
                 fontFamily="monospace"
                 transform={`rotate(-30 ${bx + barW / 2} ${h - 20})`}
               >
@@ -393,8 +393,8 @@ function EnrollmentByPhaseCard() {
         })}
       </svg>
 
-      <p className="mt-2 font-mono text-[10px]" style={{ color: "#3d6070" }}>
-        Highlight â€” Phase 2 Â· value: 75,699
+      <p className="mt-2 font-mono text-[10px]" style={{ color: "#1B4965" }}>
+        Highlight — Phase 2 · value: 75,699
       </p>
     </article>
   )
@@ -470,7 +470,7 @@ function CoverageCard({
       <div className="relative z-10">
         <span
           className="font-mono text-[10px] uppercase tracking-widest transition-colors duration-300"
-          style={{ color: isActive ? area.accent : "#3d6070" }}
+          style={{ color: isActive ? area.accent : "#1B4965" }}
         >
           {area.medium}
         </span>
@@ -488,7 +488,7 @@ function CoverageCard({
             "font-mono text-xs leading-relaxed transition-all duration-500 max-w-[280px]",
             isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
           )}
-          style={{ color: "#3d6070" }}
+          style={{ color: "#1B4965" }}
         >
           {area.description}
         </p>
@@ -501,7 +501,7 @@ function CoverageCard({
         {String(index + 1).padStart(2, "0")}
       </span>
 
-      {/* Corner accent â€” uses card color */}
+      {/* Corner accent — uses card color */}
       <div
         className={cn(
           "absolute top-0 right-0 w-12 h-12 transition-all duration-500",
@@ -581,7 +581,7 @@ function GraphSnippetCard({
             return el
           })}
         </svg>
-        <div className="ml-2 flex flex-col gap-[2px] font-mono text-[8px]" style={{ color: "#3d6070" }}>
+        <div className="ml-2 flex flex-col gap-[2px] font-mono text-[8px]" style={{ color: "#1B4965" }}>
           {segments.slice(0, 4).map((s, i) => (
             <div key={i} className="flex items-center gap-1">
               <span className="inline-block w-1.5 h-1.5" style={{ background: s.color }} />
@@ -593,7 +593,7 @@ function GraphSnippetCard({
         </div>
       </div>
 
-      <p className="relative z-10 font-mono text-[9px] leading-snug opacity-70" style={{ color: "#3d6070" }}>
+      <p className="relative z-10 font-mono text-[9px] leading-snug opacity-70" style={{ color: "#1B4965" }}>
         Illustrative sample
       </p>
 
@@ -645,7 +645,7 @@ function BarGraphSnippetCard({
 
       <div className="relative z-10 mt-2 flex-1 flex flex-col justify-center gap-[3px]">
         {bars.map((b, i) => (
-          <div key={i} className="flex items-center gap-1 font-mono text-[8px]" style={{ color: "#3d6070" }}>
+          <div key={i} className="flex items-center gap-1 font-mono text-[8px]" style={{ color: "#1B4965" }}>
             <span className="w-[62px] text-right truncate shrink-0">{b.label}</span>
             <div className="flex-1 h-1.5 bg-[rgba(192,212,220,0.3)] relative">
               <div
@@ -658,7 +658,7 @@ function BarGraphSnippetCard({
         ))}
       </div>
 
-      <p className="relative z-10 mt-2 font-mono text-[9px] leading-snug opacity-70" style={{ color: "#3d6070" }}>
+      <p className="relative z-10 mt-2 font-mono text-[9px] leading-snug opacity-70" style={{ color: "#1B4965" }}>
         Illustrative sample
       </p>
 

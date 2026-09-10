@@ -47,7 +47,7 @@ export function CmiVentureBanner() {
           rel="noopener noreferrer"
           className="hidden sm:inline font-mono text-[10px] uppercase tracking-widest text-white/60 hover:text-white transition-colors duration-200"
         >
-          coherentmarketinsights.com â†’
+          coherentmarketinsights.com →
         </a>
       </div>
     </div>

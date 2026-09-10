@@ -13,7 +13,7 @@ const metrics = [
   {
     date: "Phase 3",
     title: "707K+ Enrolled",
-    note: "Total participants enrolled across all tracked trials â€” the largest segment in late-stage studies.",
+    note: "Total participants enrolled across all tracked trials — the largest segment in late-stage studies.",
     accent: "#0D9488",
     accentLight: "rgba(13, 148, 136, 0.1)",
   },
@@ -34,7 +34,7 @@ const metrics = [
   {
     date: "92.3%",
     title: "Adherence Rate",
-    note: "Average patient compliance across all tracked trials â€” a key indicator of protocol feasibility.",
+    note: "Average patient compliance across all tracked trials — a key indicator of protocol feasibility.",
     accent: "#0D9488",
     accentLight: "rgba(13, 148, 136, 0.1)",
   },
@@ -127,7 +127,7 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
 
   return (
     <section id="metrics" ref={sectionRef} className="relative py-32 px-4 sm:px-6 lg:px-12 xl:px-20">
-      {/* Cursor â€” c3 */}
+      {/* Cursor — c3 */}
       <div
         ref={cursorRef}
         className={cn(
@@ -140,14 +140,14 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
 
       {/* Section header */}
       <div ref={headerRef} className="mb-16">
-        {/* Label â€” c4 */}
+        {/* Label — c4 */}
         <span
           className="font-mono text-sm uppercase tracking-[0.3em]"
           style={{ color: "#3AAFA9" }}
         >
           01 / Key Metrics
         </span>
-        {/* Heading â€” c1 */}
+        {/* Heading — c1 */}
         <h2
           className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight"
           style={{ color: "#1B4965" }}
@@ -170,7 +170,7 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
         ))}
       </div>
 
-      {/* Diagram-style scope block â€” hub + bracketed lists (see dataset breadth at a glance) */}
+      {/* Diagram-style scope block — hub + bracketed lists (see dataset breadth at a glance) */}
       <DatasetScopeDiagram coverage={coverage} />
     </section>
   )
@@ -196,7 +196,7 @@ function scopeDiagramRowsFromCoverage(coverage: DatasetCoverageStats): {
       },
       right: {
         title: "Phases",
-        items: ["Early Phase 1", "Phase 1 â€“ 4", "Combined Phases"],
+        items: ["Early Phase 1", "Phase 1 – 4", "Combined Phases"],
       },
     },
     {
@@ -208,7 +208,7 @@ function scopeDiagramRowsFromCoverage(coverage: DatasetCoverageStats): {
       },
       right: {
         title: "Region",
-        items: ["17 Countries", "US Â· UK Â· IN Â· AU", "EU Â· APAC Â· LATAM"],
+        items: ["17 Countries", "US · UK · IN · AU", "EU · APAC · LATAM"],
       },
     },
   ]
@@ -412,7 +412,7 @@ function MetricCard({
           }}
         />
 
-        <p className="font-mono text-xs leading-relaxed relative" style={{ color: "#3d6070" }}>{metric.note}</p>
+        <p className="font-mono text-xs leading-relaxed relative" style={{ color: "#1B4965" }}>{metric.note}</p>
 
         <div className="absolute bottom-0 right-0 w-6 h-6 overflow-hidden">
           <div className="absolute bottom-0 right-0 w-8 h-8 bg-background rotate-45 translate-x-4 translate-y-4 border-t border-l border-border/30" />

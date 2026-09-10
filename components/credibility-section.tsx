@@ -110,7 +110,7 @@ export function CredibilitySection() {
             >
               Credibility & Certifications
             </h4>
-            <p className="font-mono text-xs md:text-sm leading-relaxed mt-2 max-w-[320px]" style={{ color: "#3d6070" }}>
+            <p className="font-mono text-xs md:text-sm leading-relaxed mt-2 max-w-[320px]" style={{ color: "#1B4965" }}>
               Trusted Insights, Certified Excellence! Coherent Market Insights is a certified data advisory and business consulting firm recognized by global institutes.
             </p>
           </div>

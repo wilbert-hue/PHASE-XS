@@ -54,7 +54,7 @@ export function ClienteleSection() {
   return (
     <section ref={sectionRef} className="relative py-20 md:py-24 px-4 sm:px-6 lg:px-12 xl:px-20">
       <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
-        {/* Left â€” text */}
+        {/* Left — text */}
         <div ref={leftRef} className="md:w-[40%] flex-shrink-0">
           {/* Heading with decorative lines */}
           <div className="flex items-center gap-3 mb-5">
@@ -74,7 +74,7 @@ export function ClienteleSection() {
             />
           </div>
 
-          <p className="font-mono text-sm leading-relaxed mb-8" style={{ color: "#3d6070" }}>
+          <p className="font-mono text-sm leading-relaxed mb-8" style={{ color: "#1B4965" }}>
             Created billion dollars of revenue impact on thousands of clients.
           </p>
 
@@ -103,7 +103,7 @@ export function ClienteleSection() {
           </a>
         </div>
 
-        {/* Right â€” client logo grid */}
+        {/* Right — client logo grid */}
         <div ref={rightRef} className="md:w-[60%] relative">
           {/* Ambient glow */}
           <div
