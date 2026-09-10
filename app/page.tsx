@@ -36,19 +36,19 @@ export default async function Page() {
         <PageSection page="landing" variant="coverage">
           <WorkSection />
         </PageSection>
-        <PageSection page="landing" variant="principles">
-          <PrinciplesSection />
-        </PageSection>
         <PageSection page="landing" variant="credibility">
           <CredibilitySection />
         </PageSection>
+        <PageSection page="landing" variant="principles">
+          <PrinciplesSection />
+        </PageSection>
+        <CmiVentureBanner />
         <PageSection page="landing" variant="clientele">
           <ClienteleSection />
         </PageSection>
         <PageSection page="landing" variant="platform">
           <WhyCmiSection />
         </PageSection>
-        <CmiVentureBanner />
         <PageSection page="landing" variant="keystats">
           <KeyStatsSection />
         </PageSection>
