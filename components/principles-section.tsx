@@ -119,7 +119,7 @@ export function PrinciplesSection() {
           >
             {/* Number label — each principle's accent */}
             <span
-              className="font-mono text-[10px] uppercase tracking-[0.3em] mb-4"
+              className="font-mono text-sm uppercase tracking-[0.3em] mb-4"
               style={{ color: principle.accent }}
             >
               {principle.number} / {principle.titleParts[0].text.split(" ")[0]}
