@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Turnstile } from "@marsidev/react-turnstile"
 import { AnimatedNoise } from "@/components/animated-noise"
 import { BitmapChevron } from "@/components/bitmap-chevron"
@@ -33,16 +33,8 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
   const [agreed, setAgreed] = useState(true)
   const [submitting, setSubmitting] = useState(false)
-  const [offices, setOffices] = useState<{ label: string; address: string; phone: string }[]>([])
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [turnstileResetKey, setTurnstileResetKey] = useState(0)
-
-  useEffect(() => {
-    fetch("/api/offices")
-      .then((r) => r.json())
-      .then((d) => setOffices(d.offices || []))
-      .catch(() => {})
-  }, [])
 
   const turnstileWidgetEnabled = turnstileSiteKey.length > 0
 
@@ -134,9 +126,9 @@ export default function ContactPage() {
           Fill the form and our team will reach out with tailored insights for your project.
         </p>
 
-        <div className="mt-12 grid gap-10 md:grid-cols-3">
+        <div className="mt-12">
           {/* Form */}
-          <div className="md:col-span-2">
+          <div>
             <div
               className="relative p-8"
               style={{
@@ -268,34 +260,6 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Offices */}
-          <aside
-            className="relative p-6"
-            style={{
-              border: "1px solid rgba(42, 143, 156, 0.3)",
-              background: "rgba(27, 73, 101, 0.04)",
-            }}
-          >
-            <span className="absolute -top-px -left-px w-3 h-3 border-l-2 border-t-2" style={{ borderColor: "#3AAFA9" }} />
-            <span className="absolute -top-px -right-px w-3 h-3 border-r-2 border-t-2" style={{ borderColor: "#3AAFA9" }} />
-            <span className="absolute -bottom-px -left-px w-3 h-3 border-l-2 border-b-2" style={{ borderColor: "#3AAFA9" }} />
-            <span className="absolute -bottom-px -right-px w-3 h-3 border-r-2 border-b-2" style={{ borderColor: "#3AAFA9" }} />
-
-            <h3 className="font-[var(--font-bebas)] text-2xl tracking-wide mb-4" style={{ color: "#1B4965" }}>
-              OUR OFFICES
-            </h3>
-            <p className="font-mono text-[11px] mb-6" style={{ color: "#3AAFA9" }}>
-              sales@coherentmarketinsights.com
-            </p>
-
-            <div className="space-y-5 font-mono text-[11px] leading-relaxed" style={{ color: "#3d6070" }}>
-              {offices.length === 0 ? (
-                <p style={{ color: "#3AAFA9" }}>Loading offices...</p>
-              ) : (
-                offices.map((o) => <Office key={o.label} label={o.label} addr={o.address} tel={o.phone} />)
-              )}
-            </div>
-          </aside>
         </div>
       </div>
 
@@ -316,12 +280,3 @@ function Field({ label, name, type = "text", required }: { label: string; name: 
   )
 }
 
-function Office({ label, addr, tel }: { label: string; addr: string; tel: string }) {
-  return (
-    <div>
-      <p className="uppercase tracking-widest text-[10px]" style={{ color: "#1E6080" }}>{label}</p>
-      {addr && <p className="mt-1">{addr}</p>}
-      <p className="mt-1" style={{ color: "#2A8F9C" }}>{tel}</p>
-    </div>
-  )
-}

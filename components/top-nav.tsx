@@ -38,7 +38,13 @@ export function TopNav() {
   }, [])
 
   const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
+    const el = document.getElementById(id)
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" })
+    } else {
+      // Not on home page — navigate there with the anchor
+      window.location.href = `/#${id}`
+    }
     setMenuOpen(false)
   }
 
