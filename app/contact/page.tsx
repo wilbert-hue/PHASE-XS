@@ -1,8 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
-import { Turnstile } from "@marsidev/react-turnstile"
+import { useRef, useState } from "react"
+import ReCAPTCHA from "react-google-recaptcha"
 import { AnimatedNoise } from "@/components/animated-noise"
 import { BitmapChevron } from "@/components/bitmap-chevron"
 import { ScrambleTextOnHover } from "@/components/scramble-text"
@@ -13,7 +13,7 @@ const countries = [
   "France", "Japan", "China", "Singapore", "United Arab Emirates", "Other",
 ]
 
-const turnstileSiteKey = (process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || "").trim()
+const recaptchaSiteKey = (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "").trim()
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
@@ -32,16 +32,16 @@ export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
   const [agreed, setAgreed] = useState(true)
   const [submitting, setSubmitting] = useState(false)
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
-  const [turnstileResetKey, setTurnstileResetKey] = useState(0)
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
 
-  const turnstileWidgetEnabled = turnstileSiteKey.length > 0
+  const recaptchaEnabled = recaptchaSiteKey.length > 0
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!agreed) return alert("Please acknowledge the Privacy Policy.")
-    if (turnstileWidgetEnabled && !turnstileToken) {
-      return alert("Complete the verification challenge before submitting.")
+    if (recaptchaEnabled && !recaptchaToken) {
+      return alert("Please complete the reCAPTCHA verification.")
     }
 
     const form = e.currentTarget
@@ -54,7 +54,7 @@ export default function ContactPage() {
       country: fd.get("country"),
       contact: fd.get("contact"),
       requirements: fd.get("requirements"),
-      cfTurnstileResponse: turnstileWidgetEnabled ? turnstileToken ?? "" : "",
+      recaptchaToken: recaptchaEnabled ? recaptchaToken ?? "" : "",
     }
 
     setSubmitting(true)
@@ -70,8 +70,8 @@ export default function ContactPage() {
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Submission failed"
       alert(message)
-      setTurnstileToken(null)
-      setTurnstileResetKey((k) => k + 1)
+      recaptchaRef.current?.reset()
+      setRecaptchaToken(null)
     } finally {
       setSubmitting(false)
     }
@@ -107,6 +107,11 @@ export default function ContactPage() {
           </div>
         </Link>
 
+        {/* Center label */}
+        <span className="hidden sm:block font-mono text-[10px] uppercase tracking-[0.25em] absolute left-1/2 -translate-x-1/2" style={{ color: "rgba(42,143,156,0.5)" }}>
+          Inquiry Portal
+        </span>
+
         {/* Coherent Market Insights logo */}
         <a
           href="https://www.coherentmarketinsights.com"
@@ -115,7 +120,7 @@ export default function ContactPage() {
           className="shrink-0 opacity-90 hover:opacity-100 transition-opacity"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/image.png" alt="Coherent Market Insights" className="h-7 sm:h-8 w-auto" />
+          <img src="/image.png" alt="Coherent Market Insights" className="h-9 sm:h-11 w-auto" />
         </a>
       </div>
     </header>
@@ -241,20 +246,21 @@ export default function ContactPage() {
                     />
                   </div>
 
-                  {turnstileWidgetEnabled ? (
+                  {recaptchaEnabled && (
                     <div className="space-y-2">
                       <span className="block font-mono text-[10px] uppercase tracking-widest" style={{ color: "#3AAFA9" }}>
                         Verification
                       </span>
-                      <Turnstile
-                        key={turnstileResetKey}
-                        siteKey={turnstileSiteKey}
-                        onSuccess={(t) => setTurnstileToken(t)}
-                        onExpire={() => setTurnstileToken(null)}
-                        onError={() => setTurnstileToken(null)}
+                      <ReCAPTCHA
+                        ref={recaptchaRef}
+                        sitekey={recaptchaSiteKey}
+                        onChange={(token) => setRecaptchaToken(token)}
+                        onExpired={() => setRecaptchaToken(null)}
+                        onErrored={() => setRecaptchaToken(null)}
+                        theme="light"
                       />
                     </div>
-                  ) : null}
+                  )}
 
                   <label className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest" style={{ color: "#3d6070" }}>
                     <input
@@ -270,7 +276,7 @@ export default function ContactPage() {
                   <div className="flex items-center gap-8 pt-2">
                     <button
                       type="submit"
-                      disabled={submitting || (turnstileWidgetEnabled && !turnstileToken)}
+                      disabled={submitting || (recaptchaEnabled && !recaptchaToken)}
                       className="group inline-flex items-center gap-3 px-6 py-3 font-mono text-xs uppercase tracking-widest text-white transition-all duration-300 hover:shadow-lg disabled:opacity-45 disabled:pointer-events-none"
                       style={{
                         background: "linear-gradient(135deg, #1B4965, #1E6080)",

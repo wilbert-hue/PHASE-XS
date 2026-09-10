@@ -3,9 +3,6 @@ import { sendContactNotification } from "@/lib/mailer"
 import {
   getClientIp,
   normalizeContactEmail,
-  shouldSkipTurnstileVerification,
-  turnstileSecretConfigured,
-  verifyTurnstileToken,
 } from "@/lib/contact-protection"
 
 export async function POST(req: Request) {
@@ -19,7 +16,7 @@ export async function POST(req: Request) {
       country,
       contact,
       requirements,
-      cfTurnstileResponse,
+      recaptchaToken,
     } = body || {}
 
     if (!fullName || !email || !company || !jobTitle || !country || !contact) {
@@ -34,13 +31,20 @@ export async function POST(req: Request) {
 
     const clientIp = getClientIp(req)
 
-    // Turnstile: only verify if a secret key is configured. If none is set,
-    // skip CAPTCHA silently so the form still works without Cloudflare.
-    if (turnstileSecretConfigured() && !shouldSkipTurnstileVerification()) {
-      const captcha = typeof cfTurnstileResponse === "string" ? cfTurnstileResponse : undefined
-      const turnstile = await verifyTurnstileToken(captcha, clientIp)
-      if (!turnstile.ok) {
-        return NextResponse.json({ error: turnstile.reason }, { status: 400 })
+    // Verify reCAPTCHA if secret key is configured
+    const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY?.trim()
+    if (recaptchaSecret) {
+      if (!recaptchaToken || typeof recaptchaToken !== "string") {
+        return NextResponse.json({ error: "Please complete the reCAPTCHA verification." }, { status: 400 })
+      }
+      const verifyRes = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ secret: recaptchaSecret, response: recaptchaToken, remoteip: clientIp }),
+      })
+      const verifyData = await verifyRes.json() as { success: boolean; "error-codes"?: string[] }
+      if (!verifyData.success) {
+        return NextResponse.json({ error: "reCAPTCHA verification failed. Please try again." }, { status: 400 })
       }
     }
 
