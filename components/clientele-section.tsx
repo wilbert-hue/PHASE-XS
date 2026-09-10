@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useRef, useEffect } from "react"
 import gsap from "gsap"
@@ -52,9 +52,9 @@ export function ClienteleSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative py-20 md:py-24 px-6 md:px-16">
+    <section ref={sectionRef} className="relative py-20 md:py-24 px-4 sm:px-6 lg:px-12 xl:px-20">
       <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
-        {/* Left — text */}
+        {/* Left â€” text */}
         <div ref={leftRef} className="md:w-[40%] flex-shrink-0">
           {/* Heading with decorative lines */}
           <div className="flex items-center gap-3 mb-5">
@@ -103,7 +103,7 @@ export function ClienteleSection() {
           </a>
         </div>
 
-        {/* Right — client logo grid */}
+        {/* Right â€” client logo grid */}
         <div ref={rightRef} className="md:w-[60%] relative">
           {/* Ambient glow */}
           <div
@@ -209,3 +209,4 @@ export function ClienteleSection() {
     </section>
   )
 }
+

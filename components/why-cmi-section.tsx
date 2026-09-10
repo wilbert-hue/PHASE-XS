@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useRef, useEffect } from "react"
 import gsap from "gsap"
@@ -113,7 +113,7 @@ export function WhyCmiSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative py-20 md:py-24 px-6 md:px-16">
+    <section ref={sectionRef} className="relative py-20 md:py-24 px-4 sm:px-6 lg:px-12 xl:px-20">
       {/* Header with decorative lines */}
       <div ref={headerRef} className="flex items-center justify-center gap-4 mb-14 md:mb-16">
         <div
@@ -179,3 +179,4 @@ export function WhyCmiSection() {
     </section>
   )
 }
+

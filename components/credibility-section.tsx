@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useRef, useEffect } from "react"
 import gsap from "gsap"
@@ -80,7 +80,7 @@ export function CredibilitySection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative py-16 md:py-20 px-6 md:px-16">
+    <section ref={sectionRef} className="relative py-16 md:py-20 px-4 sm:px-6 lg:px-12 xl:px-20">
       <div
         ref={cardRef}
         className="flex flex-col lg:flex-row items-stretch overflow-hidden"
@@ -153,3 +153,4 @@ export function CredibilitySection() {
     </section>
   )
 }
+

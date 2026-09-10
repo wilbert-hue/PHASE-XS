@@ -52,11 +52,16 @@ export function TopNav() {
         boxShadow: scrolled ? "0 2px 16px rgba(27,73,101,0.06)" : "none",
       }}
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-10 h-14 flex items-center justify-between">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-20 h-12 sm:h-14 lg:h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <button onClick={() => scrollTo("hero")} className="flex items-center gap-2 shrink-0 group">
-          <svg width="24" height="24" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+        <button onClick={() => scrollTo("hero")} className="flex items-center gap-2 sm:gap-3 shrink-0 group">
+          <svg
+            viewBox="0 0 44 44"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="shrink-0 w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7"
+          >
             <circle cx="22" cy="22" r="19" stroke="#2A8F9C" strokeWidth="1.3" strokeDasharray="3 2.5"/>
             <circle cx="22" cy="22" r="11" stroke="#2A8F9C" strokeWidth="1" opacity="0.4"/>
             <line x1="22" y1="2"  x2="22" y2="9"  stroke="#2A8F9C" strokeWidth="1.6" strokeLinecap="round"/>
@@ -66,22 +71,28 @@ export function TopNav() {
             <circle cx="22" cy="22" r="2.5" fill="#2A8F9C"/>
           </svg>
           <div className="flex flex-col leading-none">
-            <span className="font-[var(--font-bebas)] text-[18px] tracking-[0.1em] whitespace-nowrap" style={{ color: "#1B4965" }}>
+            <span
+              className="font-[var(--font-bebas)] tracking-[0.1em] whitespace-nowrap text-base sm:text-lg lg:text-xl xl:text-2xl"
+              style={{ color: "#1B4965" }}
+            >
               PHASE-XS
             </span>
-            <span className="font-mono text-[7px] tracking-[0.22em] uppercase whitespace-nowrap" style={{ color: "#2A8F9C" }}>
+            <span
+              className="font-mono tracking-[0.22em] uppercase whitespace-nowrap text-[7px] sm:text-[8px] lg:text-[9px]"
+              style={{ color: "#2A8F9C" }}
+            >
               Clinical Intelligence
             </span>
           </div>
         </button>
 
-        {/* Desktop nav links */}
-        <nav className="hidden md:flex items-center gap-8">
+        {/* Desktop nav links — hidden on small/medium, visible from lg */}
+        <nav className="hidden lg:flex items-center gap-5 xl:gap-8">
           {navItems.map(({ id, label }) => (
             <button
               key={id}
               onClick={() => scrollTo(id)}
-              className="font-mono text-[11px] uppercase tracking-widest transition-colors duration-200"
+              className="font-mono text-xs xl:text-[13px] uppercase tracking-widest transition-colors duration-200"
               style={{ color: active === id ? "#1B4965" : "#3d6070" }}
             >
               {label}
@@ -90,10 +101,10 @@ export function TopNav() {
         </nav>
 
         {/* CTA */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-3 xl:gap-4">
           <Link
             href={AUTH0_LOGIN_HREF}
-            className="font-mono text-[11px] uppercase tracking-widest transition-colors duration-200"
+            className="font-mono text-xs xl:text-[13px] uppercase tracking-widest transition-colors duration-200"
             style={{ color: "#3d6070" }}
             onMouseOver={(e) => (e.currentTarget.style.color = "#1B4965")}
             onMouseOut={(e) => (e.currentTarget.style.color = "#3d6070")}
@@ -102,7 +113,7 @@ export function TopNav() {
           </Link>
           <Link
             href="/contact"
-            className="font-mono text-[11px] uppercase tracking-widest px-4 py-2 text-white transition-all duration-200"
+            className="font-mono text-xs xl:text-[13px] uppercase tracking-widest px-3 xl:px-4 py-2 text-white transition-all duration-200"
             style={{
               background: "linear-gradient(135deg, #1B4965, #2A8F9C)",
               border: "1px solid rgba(42,143,156,0.3)",
@@ -114,10 +125,11 @@ export function TopNav() {
           </Link>
         </div>
 
-        {/* Mobile hamburger */}
+        {/* Hamburger — shown below lg */}
         <button
-          className="md:hidden flex flex-col gap-1.5 p-1"
+          className="lg:hidden flex flex-col gap-[5px] p-1"
           onClick={() => setMenuOpen((o) => !o)}
+          aria-label="Toggle menu"
         >
           <span className="block w-5 h-px transition-all duration-200" style={{ background: "#1B4965", transform: menuOpen ? "rotate(45deg) translate(2px,2px)" : "none" }} />
           <span className="block w-5 h-px transition-all duration-200" style={{ background: "#1B4965", opacity: menuOpen ? 0 : 1 }} />
@@ -125,10 +137,10 @@ export function TopNav() {
         </button>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile/tablet menu */}
       {menuOpen && (
         <div
-          className="md:hidden px-6 pb-5 pt-2 flex flex-col gap-4"
+          className="lg:hidden px-4 sm:px-6 pb-5 pt-2 flex flex-col gap-4"
           style={{ borderTop: "1px solid rgba(42,143,156,0.15)", background: "rgba(240,245,247,0.97)" }}
         >
           {navItems.map(({ id, label }) => (

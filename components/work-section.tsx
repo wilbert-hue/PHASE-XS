@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useState, useRef, useEffect, useCallback } from "react"
 import { cn } from "@/lib/utils"
@@ -12,7 +12,7 @@ const coverageAreas = [
   {
     title: "Oncology",
     medium: "Largest Segment",
-    description: "Leukemia, lymphoma, melanoma, and solid tumors — spanning checkpoint inhibitors, ADCs, and CAR-T therapies.",
+    description: "Leukemia, lymphoma, melanoma, and solid tumors â€” spanning checkpoint inhibitors, ADCs, and CAR-T therapies.",
     span: "col-span-2 row-span-2",
     accent: "#1B4965",
     accentLight: "rgba(27, 73, 101, 0.06)",
@@ -20,7 +20,7 @@ const coverageAreas = [
   {
     title: "Technology Mix",
     medium: "Sample Distribution",
-    description: "Illustrative spread of biologic modalities across tracked trials — actual counts withheld.",
+    description: "Illustrative spread of biologic modalities across tracked trials â€” actual counts withheld.",
     span: "col-span-1 row-span-1",
     accent: "#1E6080",
     accentLight: "rgba(30, 96, 128, 0.05)",
@@ -45,7 +45,7 @@ const coverageAreas = [
   {
     title: "Trial Phases",
     medium: "Sample Distribution",
-    description: "Illustrative breakdown of ongoing biologic trials by phase — actual values withheld.",
+    description: "Illustrative breakdown of ongoing biologic trials by phase â€” actual values withheld.",
     span: "col-span-1 row-span-1",
     accent: "#3AAFA9",
     accentLight: "rgba(58, 175, 169, 0.06)",
@@ -54,7 +54,7 @@ const coverageAreas = [
   {
     title: "Biosimilars",
     medium: "Market Access",
-    description: "Follow-on biologics entering the US market — tracking approval timelines, pricing, and competitive dynamics.",
+    description: "Follow-on biologics entering the US market â€” tracking approval timelines, pricing, and competitive dynamics.",
     span: "col-span-2 row-span-1",
     accent: "#4FBDBA",
     accentLight: "rgba(79, 189, 186, 0.06)",
@@ -138,15 +138,15 @@ export function WorkSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="coverage" className="relative py-32 px-6 md:px-16">
+    <section ref={sectionRef} id="coverage" className="relative py-32 px-4 sm:px-6 lg:px-12 xl:px-20">
       {/* Section header */}
       <div ref={headerRef} className="mb-16 flex items-end justify-between">
         <div>
-          {/* Label — c5 */}
+          {/* Label â€” c5 */}
           <span key={`label-${slide}`} className="font-mono text-[10px] uppercase tracking-[0.3em] transition-opacity duration-500" style={{ color: "#4FBDBA" }}>
             {slideHeadings[slide].label}
           </span>
-          {/* Heading — c2 */}
+          {/* Heading â€” c2 */}
           <h2
             key={`title-${slide}`}
             className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight transition-opacity duration-500"
@@ -192,7 +192,7 @@ function CoverageCarousel({
           className="flex transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${slide * 100}%)` }}
         >
-          {/* Slide 1 — asymmetric grid */}
+          {/* Slide 1 â€” asymmetric grid */}
           <div className="w-full shrink-0">
             <div
               ref={gridRef}
@@ -210,7 +210,7 @@ function CoverageCarousel({
             </div>
           </div>
 
-          {/* Slide 2 — chart comparison */}
+          {/* Slide 2 â€” chart comparison */}
           <div className="w-full shrink-0 pl-4 md:pl-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <TrialsOverTimeCard />
@@ -319,7 +319,7 @@ function TrialsOverTimeCard() {
       </svg>
 
       <p className="mt-2 font-mono text-[10px]" style={{ color: "#3d6070" }}>
-        Highlight — 2009 · count: 92
+        Highlight â€” 2009 Â· count: 92
       </p>
     </article>
   )
@@ -394,7 +394,7 @@ function EnrollmentByPhaseCard() {
       </svg>
 
       <p className="mt-2 font-mono text-[10px]" style={{ color: "#3d6070" }}>
-        Highlight — Phase 2 · value: 75,699
+        Highlight â€” Phase 2 Â· value: 75,699
       </p>
     </article>
   )
@@ -501,7 +501,7 @@ function CoverageCard({
         {String(index + 1).padStart(2, "0")}
       </span>
 
-      {/* Corner accent — uses card color */}
+      {/* Corner accent â€” uses card color */}
       <div
         className={cn(
           "absolute top-0 right-0 w-12 h-12 transition-all duration-500",
@@ -668,3 +668,4 @@ function BarGraphSnippetCard({
     </article>
   )
 }
+

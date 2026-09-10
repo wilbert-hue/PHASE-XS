@@ -1,9 +1,9 @@
-"use client"
+﻿"use client"
 
 export function CmiVentureBanner() {
   return (
     <div
-      className="relative overflow-hidden py-5 px-6 md:px-16"
+      className="relative overflow-hidden py-5 px-4 sm:px-6 lg:px-12 xl:px-20"
       style={{
         background: "linear-gradient(135deg, #1B4965 0%, #1E6080 50%, #2A8F9C 100%)",
         borderTop: "1px solid rgba(79,189,186,0.2)",
@@ -47,9 +47,10 @@ export function CmiVentureBanner() {
           rel="noopener noreferrer"
           className="hidden sm:inline font-mono text-[10px] uppercase tracking-widest text-white/60 hover:text-white transition-colors duration-200"
         >
-          coherentmarketinsights.com →
+          coherentmarketinsights.com â†’
         </a>
       </div>
     </div>
   )
 }
+

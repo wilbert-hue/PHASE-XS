@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { useRef, useEffect } from "react"
 import { HighlightText } from "@/components/highlight-text"
@@ -19,7 +19,7 @@ export function PrinciplesSection() {
         { text: "EVIDENCE", highlight: true },
         { text: " DRIVEN", highlight: false },
       ],
-      description: "Every insight is grounded in real clinical data — 3,049 trials, rigorously sourced and continuously validated.",
+      description: "Every insight is grounded in real clinical data â€” 3,049 trials, rigorously sourced and continuously validated.",
       align: "left",
       accent: "#1B4965",
     },
@@ -39,7 +39,7 @@ export function PrinciplesSection() {
         { text: "REAL-TIME ", highlight: false },
         { text: "SIGNALS", highlight: true },
       ],
-      description: "Competitive intelligence across sponsors, technologies, and therapeutic areas — filterable, sortable, actionable.",
+      description: "Competitive intelligence across sponsors, technologies, and therapeutic areas â€” filterable, sortable, actionable.",
       align: "left",
       accent: "#2A8F9C",
     },
@@ -92,14 +92,14 @@ export function PrinciplesSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="platform" className="relative py-32 px-6 md:px-16">
+    <section ref={sectionRef} id="platform" className="relative py-32 px-4 sm:px-6 lg:px-12 xl:px-20">
       {/* Section header */}
       <div ref={headerRef} className="mb-24">
-        {/* Label — c3 */}
+        {/* Label â€” c3 */}
         <span className="font-mono text-[10px] uppercase tracking-[0.3em]" style={{ color: "#2A8F9C" }}>
           03 / Platform
         </span>
-        {/* Heading — c1 */}
+        {/* Heading â€” c1 */}
         <h2
           className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight"
           style={{ color: "#1B4965" }}
@@ -117,7 +117,7 @@ export function PrinciplesSection() {
               principle.align === "right" ? "items-end text-right" : "items-start text-left"
             }`}
           >
-            {/* Number label — each principle's accent */}
+            {/* Number label â€” each principle's accent */}
             <span
               className="font-mono text-[10px] uppercase tracking-[0.3em] mb-4"
               style={{ color: principle.accent }}
@@ -141,7 +141,7 @@ export function PrinciplesSection() {
               {principle.description}
             </p>
 
-            {/* Divider line — each principle's accent */}
+            {/* Divider line â€” each principle's accent */}
             <div
               className={`mt-8 h-[1px] w-24 md:w-48 ${principle.align === "right" ? "mr-0" : "ml-0"}`}
               style={{
@@ -154,3 +154,4 @@ export function PrinciplesSection() {
     </section>
   )
 }
+

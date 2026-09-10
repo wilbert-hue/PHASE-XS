@@ -41,7 +41,7 @@ export function HeroSection({
   }, [])
 
   return (
-    <section ref={sectionRef} id="hero" className="relative min-h-screen flex items-center px-6 md:px-16 overflow-hidden pt-14">
+    <section ref={sectionRef} id="hero" className="relative min-h-screen flex items-center px-4 sm:px-6 lg:px-12 xl:px-20 overflow-hidden pt-12 sm:pt-14 lg:pt-16">
       <AnimatedNoise opacity={0.03} />
 
       {/* White vignette over the dotted bg — keeps dots visible but lifts text contrast */}
