@@ -162,7 +162,7 @@ export function ClienteleSection() {
             <div
               key={c.name}
               title={c.name}
-              className="group relative flex items-center justify-center px-6 py-8 md:py-10 transition-all duration-300 hover:shadow-[inset_0_0_0_1px_rgba(42,143,156,0.5)]"
+              className="group relative flex items-center justify-center px-3 py-6 md:py-8 transition-all duration-300 hover:shadow-[inset_0_0_0_1px_rgba(42,143,156,0.5)]"
               style={{
                 background:
                   "linear-gradient(135deg, #f6fbfc 0%, #eaf3f6 100%)",
@@ -180,7 +180,7 @@ export function ClienteleSection() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={c.src} alt={`${c.name} logo`} className="max-h-10 md:max-h-12 w-auto object-contain" loading="lazy" />
               ) : (
-                <span className="font-[var(--font-bebas)] text-2xl md:text-3xl tracking-wide" style={{ color: "#1B4965" }}>
+                <span className="font-[var(--font-bebas)] text-lg md:text-2xl tracking-wide text-center leading-tight" style={{ color: "#1B4965" }}>
                   {c.wordmark}
                 </span>
               )}
@@ -189,7 +189,7 @@ export function ClienteleSection() {
           {/* Bristol Myers Squibb */}
           <div
             title="Bristol Myers Squibb"
-            className="group relative flex items-center justify-center px-6 py-8 md:py-10 transition-all duration-300 hover:shadow-[inset_0_0_0_1px_rgba(42,143,156,0.5)]"
+            className="group relative flex items-center justify-center px-3 py-6 md:py-8 transition-all duration-300 hover:shadow-[inset_0_0_0_1px_rgba(42,143,156,0.5)]"
               style={{
                 background:
                   "linear-gradient(135deg, #f6fbfc 0%, #eaf3f6 100%)",

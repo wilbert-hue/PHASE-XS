@@ -13,6 +13,7 @@ const certifications = [
     label: "860519526",
     width: 80,
     height: 70,
+    maxH: 64,
   },
   {
     src: "https://www.coherentmarketinsights.com/newfootimg/esomar2026.avif",
@@ -20,6 +21,7 @@ const certifications = [
     label: "",
     width: 180,
     height: 68,
+    maxH: 88,
   },
   {
     src: "https://www.coherentmarketinsights.com/images/iso-9001--NewUpda.webp",
@@ -27,6 +29,7 @@ const certifications = [
     label: "9001:2015",
     width: 72,
     height: 72,
+    maxH: 64,
   },
   {
     src: "https://www.coherentmarketinsights.com/images/iso-27001--NewUpda.webp",
@@ -34,6 +37,7 @@ const certifications = [
     label: "27001:2022",
     width: 72,
     height: 72,
+    maxH: 64,
   },
   {
     src: "https://www.coherentmarketinsights.com/images/clutupdatednewupdsma.webp",
@@ -41,6 +45,7 @@ const certifications = [
     label: "",
     width: 130,
     height: 65,
+    maxH: 60,
   },
   {
     src: "https://www.coherentmarketinsights.com/images/Trustpilot-27.webp",
@@ -48,6 +53,7 @@ const certifications = [
     label: "",
     width: 140,
     height: 80,
+    maxH: 70,
   },
 ]
 
@@ -138,8 +144,8 @@ export function CredibilitySection() {
                 width={cert.width}
                 height={cert.height}
                 loading="lazy"
-                className="object-contain"
-                style={{ maxHeight: "60px" }}
+                className="object-contain w-full"
+                style={{ maxHeight: `${cert.maxH}px` }}
               />
               {cert.label && (
                 <span className="font-mono text-[10px] mt-1.5" style={{ color: "#1B4965" }}>
