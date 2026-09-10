@@ -6,7 +6,6 @@ import { Turnstile } from "@marsidev/react-turnstile"
 import { AnimatedNoise } from "@/components/animated-noise"
 import { BitmapChevron } from "@/components/bitmap-chevron"
 import { ScrambleTextOnHover } from "@/components/scramble-text"
-import { TopNav } from "@/components/top-nav"
 import { Footer } from "@/components/footer"
 
 const countries = [
@@ -80,7 +79,55 @@ export default function ContactPage() {
 
   return (
     <>
-    <TopNav />
+    {/* Minimal contact page header — logo only, no nav links */}
+    <header
+      className="fixed top-0 left-0 right-0 z-50"
+      style={{
+        background: "rgba(240,245,247,0.92)",
+        backdropFilter: "blur(12px)",
+        borderBottom: "1px solid rgba(42,143,156,0.18)",
+        boxShadow: "0 2px 16px rgba(27,73,101,0.06)",
+      }}
+    >
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-20 h-14 sm:h-16 flex items-center justify-between">
+        {/* PHASE-XS logo */}
+        <Link href="/" className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 w-6 h-6 sm:w-7 sm:h-7">
+            <circle cx="22" cy="22" r="19" stroke="#2A8F9C" strokeWidth="1.3" strokeDasharray="3 2.5"/>
+            <circle cx="22" cy="22" r="11" stroke="#2A8F9C" strokeWidth="1" opacity="0.4"/>
+            <line x1="22" y1="2"  x2="22" y2="9"  stroke="#2A8F9C" strokeWidth="1.6" strokeLinecap="round"/>
+            <line x1="22" y1="35" x2="22" y2="42" stroke="#2A8F9C" strokeWidth="1.6" strokeLinecap="round"/>
+            <line x1="2"  y1="22" x2="9"  y2="22" stroke="#2A8F9C" strokeWidth="1.6" strokeLinecap="round"/>
+            <line x1="35" y1="22" x2="42" y2="22" stroke="#2A8F9C" strokeWidth="1.6" strokeLinecap="round"/>
+            <circle cx="22" cy="22" r="2.5" fill="#2A8F9C"/>
+          </svg>
+          <div className="flex flex-col leading-none">
+            <span className="font-[var(--font-bebas)] tracking-[0.1em] text-lg sm:text-xl" style={{ color: "#1B4965" }}>PHASE-XS</span>
+            <span className="font-mono tracking-[0.22em] uppercase text-[7px] sm:text-[8px]" style={{ color: "#2A8F9C" }}>Clinical Intelligence</span>
+          </div>
+        </Link>
+
+        {/* Coherent Market Insights logo */}
+        <a
+          href="https://www.coherentmarketinsights.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 sm:gap-3 shrink-0 group"
+        >
+          <div className="flex flex-col items-end leading-none">
+            <span className="font-[var(--font-bebas)] tracking-[0.08em] text-base sm:text-lg" style={{ color: "#1B4965" }}>COHERENT</span>
+            <span className="font-mono tracking-[0.15em] uppercase text-[7px] sm:text-[8px]" style={{ color: "#2A8F9C" }}>Market Insights</span>
+          </div>
+          <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 w-6 h-6 sm:w-7 sm:h-7 opacity-80 group-hover:opacity-100 transition-opacity">
+            <rect x="3" y="3" width="38" height="38" rx="4" stroke="#2A8F9C" strokeWidth="1.3"/>
+            <line x1="22" y1="3" x2="22" y2="41" stroke="#2A8F9C" strokeWidth="0.8" opacity="0.35"/>
+            <line x1="3" y1="22" x2="41" y2="22" stroke="#2A8F9C" strokeWidth="0.8" opacity="0.35"/>
+            <circle cx="22" cy="22" r="7" stroke="#2A8F9C" strokeWidth="1.2"/>
+            <circle cx="22" cy="22" r="2.5" fill="#2A8F9C"/>
+          </svg>
+        </a>
+      </div>
+    </header>
     <main className="relative min-h-screen overflow-hidden px-4 sm:px-6 lg:px-12 xl:px-20 pt-24 sm:pt-28 pb-16">
       <AnimatedNoise opacity={0.03} />
 
