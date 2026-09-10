@@ -52,9 +52,6 @@ export default async function Page() {
         <PageSection page="landing" variant="keystats">
           <KeyStatsSection />
         </PageSection>
-        <PageSection page="landing" variant="colophon">
-          <ColophonSection />
-        </PageSection>
         <Footer />
       </div>
     </main>

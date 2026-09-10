@@ -6,6 +6,8 @@ import { Turnstile } from "@marsidev/react-turnstile"
 import { AnimatedNoise } from "@/components/animated-noise"
 import { BitmapChevron } from "@/components/bitmap-chevron"
 import { ScrambleTextOnHover } from "@/components/scramble-text"
+import { TopNav } from "@/components/top-nav"
+import { Footer } from "@/components/footer"
 
 const countries = [
   "United States", "United Kingdom", "India", "Australia", "Canada", "Germany",
@@ -85,7 +87,9 @@ export default function ContactPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden pl-6 md:pl-28 pr-6 md:pr-12 py-16">
+    <>
+    <TopNav />
+    <main className="relative min-h-screen overflow-hidden px-4 sm:px-6 lg:px-12 xl:px-20 pt-24 sm:pt-28 pb-16">
       <AnimatedNoise opacity={0.03} />
 
       {/* Gradient glow */}
@@ -100,23 +104,6 @@ export default function ContactPage() {
         }}
       />
 
-      {/* Left vertical label */}
-      <div className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2">
-        <span
-          className="font-mono text-[10px] uppercase tracking-[0.3em] -rotate-90 origin-left block whitespace-nowrap"
-          style={{ color: "#3AAFA9" }}
-        >
-          CONTACT
-        </span>
-      </div>
-
-      {/* Left accent line */}
-      <div
-        className="absolute left-0 top-[15%] w-[2px] h-[40%] opacity-40"
-        style={{
-          background: "linear-gradient(to bottom, transparent, #1B4965, #2A8F9C, #4FBDBA, transparent)",
-        }}
-      />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Breadcrumb */}
@@ -312,20 +299,9 @@ export default function ContactPage() {
         </div>
       </div>
 
-      {/* Floating tag */}
-      <div className="absolute bottom-8 right-8 md:bottom-12 md:right-12 z-10">
-        <div
-          className="px-4 py-2 font-mono text-[10px] uppercase tracking-widest"
-          style={{
-            border: "1px solid rgba(42, 143, 156, 0.3)",
-            color: "#1E6080",
-            background: "rgba(27, 73, 101, 0.04)",
-          }}
-        >
-          v.01 / Secure Channel
-        </div>
-      </div>
     </main>
+    <Footer />
+    </>
   )
 }
 
