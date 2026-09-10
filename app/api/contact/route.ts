@@ -32,10 +32,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid email" }, { status: 400 })
     }
 
+    const clientIp = getClientIp(req)
+
     // Turnstile: only verify if a secret key is configured. If none is set,
     // skip CAPTCHA silently so the form still works without Cloudflare.
     if (turnstileSecretConfigured() && !shouldSkipTurnstileVerification()) {
-      const clientIp = getClientIp(req)
       const captcha = typeof cfTurnstileResponse === "string" ? cfTurnstileResponse : undefined
       const turnstile = await verifyTurnstileToken(captcha, clientIp)
       if (!turnstile.ok) {
@@ -51,11 +52,13 @@ export async function POST(req: Request) {
       country: String(country).slice(0, 100),
       contact: String(contact).slice(0, 50),
       requirements: String(requirements || ""),
+      ip: clientIp,
     })
 
     return NextResponse.json({ ok: true })
   } catch (err) {
-    console.error("[api/contact] error:", err)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error("[api/contact] error:", msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }

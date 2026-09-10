@@ -8,6 +8,7 @@ type ContactPayload = {
   country: string
   contact: string
   requirements?: string
+  ip?: string
 }
 
 function getTransporter() {
@@ -49,6 +50,7 @@ export async function sendContactNotification(data: ContactPayload) {
           <tr><td style="padding:8px 0;font-weight:bold;">Country</td><td>${escape(data.country)}</td></tr>
           <tr><td style="padding:8px 0;font-weight:bold;">Contact Number</td><td>${escape(data.contact)}</td></tr>
           <tr><td style="padding:8px 0;font-weight:bold;vertical-align:top;">Requirements</td><td style="white-space:pre-wrap;">${escape(data.requirements || "—")}</td></tr>
+          <tr><td style="padding:8px 0;font-weight:bold;color:#3d6070;">IP Address</td><td style="color:#3d6070;">${escape(data.ip || "unknown")}</td></tr>
         </table>
         <p style="margin-top:20px;font-size:12px;color:#3d6070;">Submitted at ${new Date().toISOString()}</p>
       </div>
@@ -126,7 +128,7 @@ export async function sendContactNotification(data: ContactPayload) {
         `New PHASE-XS contact request\n\n` +
         `Name: ${data.fullName}\nEmail: ${data.email}\nCompany: ${data.company}\n` +
         `Job Title: ${data.jobTitle}\nCountry: ${data.country}\nContact: ${data.contact}\n\n` +
-        `Requirements:\n${data.requirements || "—"}`,
+        `Requirements:\n${data.requirements || "—"}\n\nIP Address: ${data.ip || "unknown"}`,
     }),
     // Confirmation to the submitter
     t.sendMail({
