@@ -113,7 +113,7 @@ export function WhyCmiSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative py-20 md:py-24 pl-6 md:pl-28 pr-6 md:pr-12">
+    <section ref={sectionRef} className="relative py-20 md:py-24 px-6 md:px-16">
       {/* Header with decorative lines */}
       <div ref={headerRef} className="flex items-center justify-center gap-4 mb-14 md:mb-16">
         <div

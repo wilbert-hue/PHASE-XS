@@ -157,7 +157,7 @@ export function Footer() {
                   <p className="font-mono text-[10px] uppercase tracking-widest font-medium text-white">
                     {contact.region}
                   </p>
-                  <p className="font-mono text-[10px] mt-0.5 text-white/50">
+                  <p className="font-mono text-[10px] mt-0.5 text-white/80">
                     {contact.number}
                   </p>
                 </div>
@@ -201,7 +201,7 @@ export function Footer() {
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
-                    <p className="font-mono text-[11px] leading-relaxed text-white/45">
+                    <p className="font-mono text-[11px] leading-relaxed text-white/80">
                       {office.address}
                     </p>
                   </div>
@@ -220,7 +220,7 @@ export function Footer() {
                 <li key={i}>
                   <a
                     href={link.href}
-                    className="font-mono text-[11px] transition-colors duration-200 text-white/45"
+                    className="font-mono text-[11px] transition-colors duration-200 text-white/80"
                     onMouseOver={(e) => (e.currentTarget.style.color = "#4FBDBA")}
                     onMouseOut={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.45)")}
                   >
@@ -263,7 +263,7 @@ export function Footer() {
                 <li key={i}>
                   <a
                     href={link.href}
-                    className="font-mono text-[11px] transition-colors duration-200 text-white/45"
+                    className="font-mono text-[11px] transition-colors duration-200 text-white/80"
                     onMouseOver={(e) => (e.currentTarget.style.color = "#4FBDBA")}
                     onMouseOut={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.45)")}
                   >
@@ -280,7 +280,7 @@ export function Footer() {
               </h5>
               <a
                 href="tel:+917262891127"
-                className="font-mono text-[11px] inline-flex items-center gap-1.5 transition-colors duration-200 text-white/45"
+                className="font-mono text-[11px] inline-flex items-center gap-1.5 transition-colors duration-200 text-white/80"
                 onMouseOver={(e) => (e.currentTarget.style.color = "#4FBDBA")}
                 onMouseOut={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.45)")}
               >
@@ -360,7 +360,7 @@ export function Footer() {
 
       {/* Bottom bar */}
       <div className="px-6 md:px-12 lg:px-20 py-4 flex flex-col md:flex-row items-center justify-between gap-2">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-white/30">
+        <p className="font-mono text-[10px] uppercase tracking-widest text-white/80">
           © 2026 Coherent Market Insights. All Rights Reserved.
         </p>
         <p className="font-mono text-[10px]" style={{ color: "#2A8F9C" }}>

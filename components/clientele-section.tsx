@@ -52,7 +52,7 @@ export function ClienteleSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative py-20 md:py-24 pl-6 md:pl-28 pr-6 md:pr-12">
+    <section ref={sectionRef} className="relative py-20 md:py-24 px-6 md:px-16">
       <div className="flex flex-col md:flex-row items-center gap-12 md:gap-16">
         {/* Left — text */}
         <div ref={leftRef} className="md:w-[40%] flex-shrink-0">

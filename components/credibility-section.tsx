@@ -80,7 +80,7 @@ export function CredibilitySection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative py-16 md:py-20 pl-6 md:pl-28 pr-6 md:pr-12">
+    <section ref={sectionRef} className="relative py-16 md:py-20 px-6 md:px-16">
       <div
         ref={cardRef}
         className="flex flex-col lg:flex-row items-stretch overflow-hidden"

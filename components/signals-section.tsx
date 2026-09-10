@@ -14,22 +14,22 @@ const metrics = [
     date: "Phase 3",
     title: "707K+ Enrolled",
     note: "Total participants enrolled across all tracked trials — the largest segment in late-stage studies.",
-    accent: "#2563EB",
-    accentLight: "rgba(37, 99, 235, 0.1)",
+    accent: "#0D9488",
+    accentLight: "rgba(13, 148, 136, 0.1)",
   },
   {
     date: "Oncology",
     title: "Top Indication",
     note: "Leukemia, lymphoma, and solid tumors dominate the trial landscape with 40%+ of all studies.",
-    accent: "#BE123C",
-    accentLight: "rgba(190, 18, 60, 0.09)",
+    accent: "#0D9488",
+    accentLight: "rgba(13, 148, 136, 0.1)",
   },
   {
     date: "mAb",
     title: "Leading Tech",
     note: "Monoclonal antibodies represent the dominant technology platform across all phases.",
-    accent: "#6D28D9",
-    accentLight: "rgba(109, 40, 217, 0.1)",
+    accent: "#0D9488",
+    accentLight: "rgba(13, 148, 136, 0.1)",
   },
   {
     date: "92.3%",
@@ -126,7 +126,7 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
   }, [])
 
   return (
-    <section id="metrics" ref={sectionRef} className="relative py-32 pl-6 md:pl-28">
+    <section id="metrics" ref={sectionRef} className="relative py-32 px-6 md:px-16">
       {/* Cursor — c3 */}
       <div
         ref={cursorRef}
@@ -139,10 +139,10 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
       />
 
       {/* Section header */}
-      <div ref={headerRef} className="mb-16 pr-6 md:pr-12">
+      <div ref={headerRef} className="mb-16">
         {/* Label — c4 */}
         <span
-          className="font-mono text-[10px] uppercase tracking-[0.3em]"
+          className="font-mono text-sm uppercase tracking-[0.3em]"
           style={{ color: "#3AAFA9" }}
         >
           01 / Key Metrics
@@ -189,9 +189,9 @@ function scopeDiagramRowsFromCoverage(coverage: DatasetCoverageStats): {
       left: {
         title: "Coverage",
         items: [
-          `${coverage.trials.toLocaleString()} Trials`,
-          `${coverage.molecules.toLocaleString()} Molecules`,
-          `${coverage.indications.toLocaleString()} Indications`,
+          "40,000+ Trials",
+          `${coverage.molecules.toLocaleString()}+ Molecules`,
+          `${coverage.indications.toLocaleString()}+ Indications`,
         ],
       },
       right: {
@@ -208,7 +208,7 @@ function scopeDiagramRowsFromCoverage(coverage: DatasetCoverageStats): {
       },
       right: {
         title: "Region",
-        items: ["United States", "India", "United Kingdom", "Global Collaborators"],
+        items: ["17 Countries", "US · UK · IN · AU", "EU · APAC · LATAM"],
       },
     },
   ]
@@ -218,7 +218,7 @@ function DatasetScopeDiagram({ coverage }: { coverage: DatasetCoverageStats }) {
   const scopeDiagramRows = scopeDiagramRowsFromCoverage(coverage)
   return (
     <div
-      className="mt-24 mr-6 md:mr-12 relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#0f2d3f] via-[#0a2230] to-[#051820] p-6 sm:p-8 md:p-10 shadow-[0_24px_60px_-16px_rgba(0,0,0,0.5)]"
+      className="mt-24 relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#0f2d3f] via-[#0a2230] to-[#051820] p-6 sm:p-8 md:p-10 shadow-[0_24px_60px_-16px_rgba(0,0,0,0.5)]"
       aria-label="Dataset scope overview"
     >
       <div

@@ -5,6 +5,7 @@ import { loadTrialsForMarketing } from "@/lib/trials-for-marketing"
 import { WorkSection } from "@/components/work-section"
 import { PrinciplesSection } from "@/components/principles-section"
 import { WhyCmiSection } from "@/components/why-cmi-section"
+import { CmiVentureBanner } from "@/components/cmi-venture-banner"
 import { KeyStatsSection } from "@/components/key-stats-section"
 import { CredibilitySection } from "@/components/credibility-section"
 import { ClienteleSection } from "@/components/clientele-section"
@@ -47,6 +48,7 @@ export default async function Page() {
         <PageSection page="landing" variant="platform">
           <WhyCmiSection />
         </PageSection>
+        <CmiVentureBanner />
         <PageSection page="landing" variant="keystats">
           <KeyStatsSection />
         </PageSection>

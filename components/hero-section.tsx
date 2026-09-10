@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 import { AUTH0_LOGIN_HREF, AUTH0_SIGNUP_HREF } from "@/lib/auth0-routes"
 import { ScrambleTextOnHover } from "@/components/scramble-text"
-import { SplitFlapPhaseXsNctBack, SplitFlapMuteToggle, SplitFlapAudioProvider } from "@/components/split-flap-text"
+import { SplitFlapPhaseXsNctBack, SplitFlapAudioProvider } from "@/components/split-flap-text"
 import { AnimatedNoise } from "@/components/animated-noise"
 import { BitmapChevron } from "@/components/bitmap-chevron"
 import gsap from "gsap"
@@ -61,9 +61,6 @@ export function HeroSection({
         <SplitFlapAudioProvider>
           <div className="relative">
             <SplitFlapPhaseXsNctBack speed={80} />
-            <div className="mt-4">
-              <SplitFlapMuteToggle />
-            </div>
           </div>
         </SplitFlapAudioProvider>
 
@@ -75,9 +72,9 @@ export function HeroSection({
           AI powered clinical intelligence platform
         </h2>
 
-        <p className="mt-12 max-w-md font-mono text-sm leading-relaxed" style={{ color: "#1B4965" }}>
-          <span style={{ color: "#2A8F9C", fontWeight: 600 }}>{moleculeCount.toLocaleString()} molecules</span>{" "}
-          across 40,715+ trials in 17 countries. The intelligence platform for pharma teams that need to move faster than the market.
+        <p className="mt-12 max-w-md font-mono text-sm leading-relaxed" style={{ color: "#0c1b24" }}>
+          <span style={{ color: "#2A8F9C", fontWeight: 600 }}>1000+ molecules</span>{" "}
+          across 40,000+ trials in 15+ countries. The intelligence platform for pharma teams that need to move faster than the market.
         </p>
 
         <div className="mt-16 flex flex-wrap items-center gap-6 md:gap-8">
@@ -127,19 +124,6 @@ export function HeroSection({
         </div>
       </div>
 
-      {/* Floating info tag — c3 border, c2 text, c1 bg tint */}
-      <div className="absolute bottom-8 right-8 md:bottom-12 md:right-12 z-10">
-        <div
-          className="px-4 py-2 font-mono text-[10px] uppercase tracking-widest"
-          style={{
-            border: "1px solid rgba(42, 143, 156, 0.3)",
-            color: "#1E6080",
-            background: "rgba(27, 73, 101, 0.04)",
-          }}
-        >
-          v.01 / {trialCount.toLocaleString()} US Biologics Trials
-        </div>
-      </div>
     </section>
   )
 }

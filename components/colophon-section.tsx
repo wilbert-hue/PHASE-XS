@@ -70,7 +70,7 @@ export function ColophonSection() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative py-12 pl-6 md:pl-28 pr-6 md:pr-12"
+      className="relative py-12 px-6 md:px-16"
       style={{ borderTop: "1px solid rgba(192, 212, 220, 0.3)" }}
     >
       {/* Bottom copyright — gradient divider c1 → c5 */}

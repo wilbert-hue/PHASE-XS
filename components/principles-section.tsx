@@ -92,7 +92,7 @@ export function PrinciplesSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="platform" className="relative py-32 pl-6 md:pl-28 pr-6 md:pr-12">
+    <section ref={sectionRef} id="platform" className="relative py-32 px-6 md:px-16">
       {/* Section header */}
       <div ref={headerRef} className="mb-24">
         {/* Label — c3 */}
