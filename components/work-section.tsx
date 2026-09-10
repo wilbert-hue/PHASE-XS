@@ -95,63 +95,44 @@ export function WorkSection() {
   const headerRef = useRef<HTMLDivElement>(null)
   const gridRef = useRef<HTMLDivElement>(null)
   const [slide, setSlide] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const SLIDES = 2
+  const INTERVAL = 5000
 
   useEffect(() => {
     if (!sectionRef.current || !headerRef.current || !gridRef.current) return
-
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        headerRef.current,
-        { x: -60, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: headerRef.current,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
-          },
-        },
-      )
-
+      gsap.fromTo(headerRef.current, { x: -60, opacity: 0 }, {
+        x: 0, opacity: 1, duration: 1, ease: "power3.out",
+        scrollTrigger: { trigger: headerRef.current, start: "top 90%", toggleActions: "play none none reverse" },
+      })
       const cards = gridRef.current?.querySelectorAll("article")
       if (cards && cards.length > 0) {
         gsap.set(cards, { y: 60, opacity: 0 })
         gsap.to(cards, {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: gridRef.current,
-            start: "top 90%",
-            toggleActions: "play none none reverse",
-          },
+          y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out",
+          scrollTrigger: { trigger: gridRef.current, start: "top 90%", toggleActions: "play none none reverse" },
         })
       }
     }, sectionRef)
-
     return () => ctx.revert()
   }, [])
 
+  // Auto-advance
+  useEffect(() => {
+    if (isPaused) return
+    const id = setInterval(() => setSlide(s => (s + 1) % SLIDES), INTERVAL)
+    return () => clearInterval(id)
+  }, [isPaused, SLIDES])
+
   return (
     <section ref={sectionRef} id="coverage" className="relative py-32 px-4 sm:px-6 lg:px-12 xl:px-20">
-      {/* Section header */}
       <div ref={headerRef} className="mb-16 flex items-end justify-between">
         <div>
-          {/* Label — c5 */}
           <span key={`label-${slide}`} className="font-mono text-sm uppercase tracking-[0.3em] transition-opacity duration-500" style={{ color: "#4FBDBA" }}>
             {slideHeadings[slide].label}
           </span>
-          {/* Heading — c2 */}
-          <h2
-            key={`title-${slide}`}
-            className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight transition-opacity duration-500"
-            style={{ color: "#1E6080" }}
-          >
+          <h2 key={`title-${slide}`} className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight transition-opacity duration-500" style={{ color: "#1E6080" }}>
             {slideHeadings[slide].title}
           </h2>
         </div>
@@ -159,9 +140,14 @@ export function WorkSection() {
           {slideHeadings[slide].description}
         </p>
       </div>
-
-      {/* Carousel */}
-      <CoverageCarousel gridRef={gridRef} slide={slide} setSlide={setSlide} />
+      <CoverageCarousel
+        gridRef={gridRef}
+        slide={slide}
+        setSlide={setSlide}
+        isPaused={isPaused}
+        setIsPaused={setIsPaused}
+        slides={SLIDES}
+      />
     </section>
   )
 }
@@ -170,33 +156,56 @@ function CoverageCarousel({
   gridRef,
   slide,
   setSlide,
+  isPaused,
+  setIsPaused,
+  slides,
 }: {
   gridRef: React.RefObject<HTMLDivElement | null>
   slide: number
   setSlide: React.Dispatch<React.SetStateAction<number>>
+  isPaused: boolean
+  setIsPaused: (v: boolean) => void
+  slides: number
 }) {
-  const slides = 2
-  const goNext = useCallback(
-    () => setSlide(s => (s + 1) % slides),
-    [setSlide, slides],
-  )
-  const goPrev = useCallback(
-    () => setSlide(s => (s - 1 + slides) % slides),
-    [setSlide, slides],
-  )
+  const goNext = useCallback(() => setSlide(s => (s + 1) % slides), [setSlide, slides])
+  const goPrev = useCallback(() => setSlide(s => (s - 1 + slides) % slides), [setSlide, slides])
+
+  const handleManual = (fn: () => void) => {
+    fn()
+    setIsPaused(true)
+    setTimeout(() => setIsPaused(false), 8000)
+  }
 
   return (
     <div className="relative">
+      {/* Auto-advance progress bar */}
+      <div className="h-[2px] mb-4 overflow-hidden rounded-full" style={{ background: "rgba(30,96,128,0.12)" }}>
+        {!isPaused && (
+          <div
+            key={`${slide}-progress`}
+            className="h-full rounded-full"
+            style={{
+              background: "linear-gradient(to right, #1B4965, #2A8F9C)",
+              animation: "slideProgress 5s linear forwards",
+            }}
+          />
+        )}
+      </div>
+
+      <style>{`@keyframes slideProgress { from { width: 0% } to { width: 100% } }`}</style>
+
       <div className="overflow-hidden">
         <div
           className="flex transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${slide * 100}%)` }}
         >
-          {/* Slide 1 — asymmetric grid */}
+          {/* Slide 1 — therapeutic areas grid */}
           <div className="w-full shrink-0">
             <div
               ref={gridRef}
               className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 auto-rows-[180px] md:auto-rows-[200px]"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
             >
               {coverageAreas.map((area, index) =>
                 (area as { type?: string }).type === "graph" ? (
@@ -210,21 +219,23 @@ function CoverageCarousel({
             </div>
           </div>
 
-          {/* Slide 2 — chart comparison */}
-          <div className="w-full shrink-0 pl-4 md:pl-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          {/* Slide 2 — 4 analytics charts */}
+          <div className="w-full shrink-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               <TrialsOverTimeCard />
               <EnrollmentByPhaseCard />
+              <TopIndicationsCard />
+              <TrialsByCountryCard />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Manual navigation: arrows + dot indicators (no auto-advance) */}
+      {/* Navigation */}
       <div className="mt-6 flex items-center justify-center gap-3 sm:gap-5">
         <button
           type="button"
-          onClick={goPrev}
+          onClick={() => handleManual(goPrev)}
           aria-label="Previous slide"
           className="inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-md border border-[#1E6080]/40 bg-background/80 text-[#1E6080] shadow-sm transition hover:border-[#1E6080] hover:bg-[#1E6080]/10"
         >
@@ -235,7 +246,7 @@ function CoverageCarousel({
             <button
               key={i}
               type="button"
-              onClick={() => setSlide(i)}
+              onClick={() => handleManual(() => setSlide(i))}
               aria-label={slide === i ? `Slide ${i + 1} (current)` : `Go to slide ${i + 1}`}
               className="h-[2px] transition-all duration-300"
               style={{
@@ -247,13 +258,20 @@ function CoverageCarousel({
         </div>
         <button
           type="button"
-          onClick={goNext}
+          onClick={() => handleManual(goNext)}
           aria-label="Next slide"
           className="inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-md border border-[#1E6080]/40 bg-background/80 text-[#1E6080] shadow-sm transition hover:border-[#1E6080] hover:bg-[#1E6080]/10"
         >
           <ChevronRight className="h-5 w-5" />
         </button>
       </div>
+
+      {/* Pause indicator */}
+      {isPaused && (
+        <p className="text-center mt-2 font-mono text-[10px] uppercase tracking-widest" style={{ color: "#3AAFA9" }}>
+          ⏸ Paused
+        </p>
+      )}
     </div>
   )
 }
@@ -395,6 +413,95 @@ function EnrollmentByPhaseCard() {
 
       <p className="mt-2 font-mono text-[10px]" style={{ color: "#1B4965" }}>
         Highlight — Phase 2 · value: 75,699
+      </p>
+    </article>
+  )
+}
+
+function TopIndicationsCard() {
+  const accent = "#3AAFA9"
+  const bars = [
+    { label: "Oncology", value: 1420, pct: 100 },
+    { label: "Immunology", value: 640, pct: 45 },
+    { label: "Neurology", value: 410, pct: 29 },
+    { label: "Rare Disease", value: 310, pct: 22 },
+    { label: "Cardiovascular", value: 265, pct: 19 },
+    { label: "Infectious Dis.", value: 210, pct: 15 },
+  ]
+  return (
+    <article
+      className="relative border p-5 overflow-hidden"
+      style={{ borderColor: "rgba(192, 212, 220, 0.4)", background: "rgba(58, 175, 169, 0.04)", minHeight: 280 }}
+    >
+      <div className="absolute top-0 left-0 h-[2px] w-full" style={{ background: `linear-gradient(to right, ${accent}, transparent)` }} />
+      <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: accent }}>Indications</span>
+      <h3 className="mt-1 font-[var(--font-bebas)] text-2xl md:text-3xl tracking-tight" style={{ color: accent }}>
+        Top Therapeutic Areas
+      </h3>
+      <div className="mt-4 space-y-2.5">
+        {bars.map((b, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <span className="font-mono text-[9px] w-24 shrink-0 text-right" style={{ color: "#1B4965" }}>{b.label}</span>
+            <div className="flex-1 h-2 rounded-sm overflow-hidden" style={{ background: "rgba(192,212,220,0.25)" }}>
+              <div
+                className="h-full rounded-sm"
+                style={{
+                  width: `${b.pct}%`,
+                  background: `linear-gradient(to right, #1B4965, ${accent})`,
+                }}
+              />
+            </div>
+            <span className="font-mono text-[9px] w-10 shrink-0" style={{ color: "#1B4965" }}>{b.value}</span>
+          </div>
+        ))}
+      </div>
+      <p className="mt-3 font-mono text-[9px] opacity-60" style={{ color: "#1B4965" }}>Illustrative · trial counts by indication</p>
+    </article>
+  )
+}
+
+function TrialsByCountryCard() {
+  const accent = "#1E6080"
+  const data = [
+    { country: "US", trials: 18200, flag: "🇺🇸" },
+    { country: "UK", trials: 4100, flag: "🇬🇧" },
+    { country: "India", trials: 3900, flag: "🇮🇳" },
+    { country: "Australia", trials: 2800, flag: "🇦🇺" },
+    { country: "Germany", trials: 2400, flag: "🇩🇪" },
+    { country: "France", trials: 1900, flag: "🇫🇷" },
+    { country: "Others", trials: 6900, flag: "🌐" },
+  ]
+  const max = Math.max(...data.map(d => d.trials))
+  const total = data.reduce((s, d) => s + d.trials, 0)
+  return (
+    <article
+      className="relative border p-5 overflow-hidden"
+      style={{ borderColor: "rgba(192, 212, 220, 0.4)", background: "rgba(30, 96, 128, 0.04)", minHeight: 280 }}
+    >
+      <div className="absolute top-0 left-0 h-[2px] w-full" style={{ background: `linear-gradient(to right, ${accent}, transparent)` }} />
+      <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: accent }}>Geography</span>
+      <h3 className="mt-1 font-[var(--font-bebas)] text-2xl md:text-3xl tracking-tight" style={{ color: accent }}>
+        Trials by Country
+      </h3>
+      <div className="mt-4 space-y-2">
+        {data.map((d, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <span className="text-sm w-5 shrink-0">{d.flag}</span>
+            <span className="font-mono text-[9px] w-16 shrink-0" style={{ color: "#1B4965" }}>{d.country}</span>
+            <div className="flex-1 h-1.5 rounded-sm overflow-hidden" style={{ background: "rgba(192,212,220,0.25)" }}>
+              <div
+                className="h-full rounded-sm"
+                style={{ width: `${(d.trials / max) * 100}%`, background: accent }}
+              />
+            </div>
+            <span className="font-mono text-[9px] w-12 shrink-0 text-right" style={{ color: "#1B4965" }}>
+              {d.trials.toLocaleString()}
+            </span>
+          </div>
+        ))}
+      </div>
+      <p className="mt-2 font-mono text-[9px] opacity-60" style={{ color: "#1B4965" }}>
+        Total: {total.toLocaleString()} · Illustrative sample
       </p>
     </article>
   )
