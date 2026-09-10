@@ -112,19 +112,10 @@ export default function ContactPage() {
           href="https://www.coherentmarketinsights.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 sm:gap-3 shrink-0 group"
+          className="shrink-0 opacity-90 hover:opacity-100 transition-opacity"
         >
-          <div className="flex flex-col items-end leading-none">
-            <span className="font-[var(--font-bebas)] tracking-[0.08em] text-base sm:text-lg" style={{ color: "#1B4965" }}>COHERENT</span>
-            <span className="font-mono tracking-[0.15em] uppercase text-[7px] sm:text-[8px]" style={{ color: "#2A8F9C" }}>Market Insights</span>
-          </div>
-          <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 w-6 h-6 sm:w-7 sm:h-7 opacity-80 group-hover:opacity-100 transition-opacity">
-            <rect x="3" y="3" width="38" height="38" rx="4" stroke="#2A8F9C" strokeWidth="1.3"/>
-            <line x1="22" y1="3" x2="22" y2="41" stroke="#2A8F9C" strokeWidth="0.8" opacity="0.35"/>
-            <line x1="3" y1="22" x2="41" y2="22" stroke="#2A8F9C" strokeWidth="0.8" opacity="0.35"/>
-            <circle cx="22" cy="22" r="7" stroke="#2A8F9C" strokeWidth="1.2"/>
-            <circle cx="22" cy="22" r="2.5" fill="#2A8F9C"/>
-          </svg>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/image.png" alt="Coherent Market Insights" className="h-7 sm:h-8 w-auto" />
         </a>
       </div>
     </header>
