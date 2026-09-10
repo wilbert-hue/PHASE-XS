@@ -143,7 +143,7 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
         {/* Label — c4 */}
         <span
           className="font-mono text-sm uppercase tracking-[0.3em]"
-          style={{ color: "#3AAFA9" }}
+          style={{ color: "#1B4965" }}
         >
           01 / Key Metrics
         </span>

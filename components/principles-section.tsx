@@ -96,7 +96,7 @@ export function PrinciplesSection() {
       {/* Section header */}
       <div ref={headerRef} className="mb-24">
         {/* Label — c3 */}
-        <span className="font-mono text-sm uppercase tracking-[0.3em]" style={{ color: "#2A8F9C" }}>
+        <span className="font-mono text-sm uppercase tracking-[0.3em]" style={{ color: "#1B4965" }}>
           03 / Platform
         </span>
         {/* Heading — c1 */}

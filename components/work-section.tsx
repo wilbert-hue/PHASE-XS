@@ -129,7 +129,7 @@ export function WorkSection() {
     <section ref={sectionRef} id="coverage" className="relative py-32 px-4 sm:px-6 lg:px-12 xl:px-20">
       <div ref={headerRef} className="mb-16 flex items-end justify-between">
         <div>
-          <span key={`label-${slide}`} className="font-mono text-sm uppercase tracking-[0.3em] transition-opacity duration-500" style={{ color: "#4FBDBA" }}>
+          <span key={`label-${slide}`} className="font-mono text-sm uppercase tracking-[0.3em] transition-opacity duration-500" style={{ color: "#1B4965" }}>
             {slideHeadings[slide].label}
           </span>
           <h2 key={`title-${slide}`} className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight transition-opacity duration-500" style={{ color: "#1E6080" }}>

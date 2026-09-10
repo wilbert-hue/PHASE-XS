@@ -98,21 +98,6 @@ export function HeroSection({
             <BitmapChevron className="transition-transform duration-[400ms] ease-in-out group-hover:rotate-45" />
           </a>
           <a
-            href={AUTH0_SIGNUP_HREF}
-            className="font-mono text-xs uppercase tracking-widest transition-colors duration-200 border border-[rgba(42,143,156,0.35)] px-4 py-2.5 rounded"
-            style={{ color: "#1B4965" }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.color = "#2A8F9C"
-              e.currentTarget.style.borderColor = "rgba(58, 175, 169, 0.6)"
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.color = "#1B4965"
-              e.currentTarget.style.borderColor = "rgba(42, 143, 156, 0.35)"
-            }}
-          >
-            Create account
-          </a>
-          <a
             href="#metrics"
             className="font-mono text-xs uppercase tracking-widest transition-colors duration-200"
             style={{ color: "#3AAFA9" }}
