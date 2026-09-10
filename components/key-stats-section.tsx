@@ -71,7 +71,7 @@ export function KeyStatsSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative flex flex-col lg:flex-row overflow-hidden">
+    <section ref={sectionRef} className="relative flex flex-col lg:flex-row overflow-hidden mt-16 md:mt-24">
       {/* Left — Key Stats (dark blue) */}
       <div
         className="relative flex-1 py-10 md:py-14 px-6 md:px-12 overflow-hidden"
