@@ -122,9 +122,9 @@ export function CredibilitySection() {
           </div>
         </div>
 
-        {/* Certification logos grid */}
+        {/* Certification logos */}
         <div
-          className="flex-1 grid grid-cols-3 md:grid-cols-6"
+          className="flex-1 flex flex-wrap"
           style={{ borderLeft: "1px solid rgba(27, 73, 101, 0.10)" }}
         >
           {certifications.map((cert, i) => (
@@ -132,8 +132,9 @@ export function CredibilitySection() {
               key={i}
               className="flex flex-col items-center justify-center py-5 md:py-6 px-3 transition-all duration-200 hover:bg-white/50"
               style={{
+                flex: cert.alt === "ESOMAR" ? "2 1 0" : "1 1 0",
+                minWidth: cert.alt === "ESOMAR" ? 160 : 80,
                 borderLeft: i > 0 ? "1px solid rgba(27, 73, 101, 0.08)" : "none",
-                borderTop: i >= 3 ? "1px solid rgba(27, 73, 101, 0.08)" : "none",
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -144,8 +145,8 @@ export function CredibilitySection() {
                 width={cert.width}
                 height={cert.height}
                 loading="lazy"
-                className="object-contain w-full"
-                style={{ maxHeight: `${cert.maxH}px` }}
+                className="object-contain max-w-full"
+                style={{ height: `${cert.maxH}px` }}
               />
               {cert.label && (
                 <span className="font-mono text-[10px] mt-1.5" style={{ color: "#1B4965" }}>
