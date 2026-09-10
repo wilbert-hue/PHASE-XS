@@ -173,7 +173,7 @@ export function SplitFlapText(props: SplitFlapTextProps) {
 const DIGITS = "0123456789".split("")
 
 /** One intro beat: NCT + live digits (no empty “dot” tiles), then title scramble. */
-const INTRO_HOLD_MS = 3600
+const INTRO_HOLD_MS = 2000
 
 const TILE_FONT = "clamp(4rem, 15vw, 14rem)"
 
