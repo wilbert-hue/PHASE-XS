@@ -116,13 +116,13 @@ const COUNTRY_CODES = [
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
-  padding: "12px 14px",
-  background: "rgba(240, 245, 247, 0.4)",
-  border: "1px solid rgba(42, 143, 156, 0.3)",
+  padding: "11px 14px",
+  background: "#ffffff",
+  border: "1px solid rgba(27, 73, 101, 0.25)",
   color: "#1B4965",
   fontFamily: "var(--font-mono, monospace)",
-  fontSize: "12px",
-  letterSpacing: "0.05em",
+  fontSize: "13px",
+  letterSpacing: "0.03em",
   outline: "none",
   borderRadius: 0,
 }
@@ -279,9 +279,9 @@ export default function ContactPage() {
             <div
               className="relative p-8"
               style={{
-                background: "rgba(240, 245, 247, 0.6)",
-                border: "1px solid rgba(42, 143, 156, 0.3)",
-                backdropFilter: "blur(4px)",
+                background: "rgba(225, 235, 240, 0.85)",
+                border: "1px solid rgba(27, 73, 101, 0.2)",
+                backdropFilter: "blur(8px)",
               }}
             >
               {/* Corner ticks */}
@@ -324,7 +324,7 @@ export default function ContactPage() {
                     <Field label="Business Email" name="email" type="email" required />
                     <Field label="Job Title" name="jobTitle" required />
                     <div>
-                      <label className="block font-mono text-[10px] uppercase tracking-widest mb-1" style={{ color: "#3AAFA9" }}>
+                      <label className="block font-mono text-xs uppercase tracking-wider mb-1.5" style={{ color: "#1B4965" }}>
                         Country Code *
                       </label>
                       <select required name="countryCode" defaultValue="" style={inputStyle}>
@@ -338,7 +338,7 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <label className="block font-mono text-[10px] uppercase tracking-widest mb-1" style={{ color: "#3AAFA9" }}>
+                    <label className="block font-mono text-xs uppercase tracking-wider mb-1.5" style={{ color: "#1B4965" }}>
                       Research Requirements
                     </label>
                     <textarea
@@ -351,21 +351,23 @@ export default function ContactPage() {
 
                   {recaptchaEnabled && (
                     <div className="space-y-2">
-                      <span className="block font-mono text-[10px] uppercase tracking-widest" style={{ color: "#3AAFA9" }}>
+                      <span className="block font-mono text-xs uppercase tracking-wider" style={{ color: "#1B4965" }}>
                         Verification
                       </span>
-                      <ReCAPTCHA
-                        ref={recaptchaRef}
-                        sitekey={recaptchaSiteKey}
-                        onChange={(token) => setRecaptchaToken(token)}
-                        onExpired={() => setRecaptchaToken(null)}
-                        onErrored={() => setRecaptchaToken(null)}
-                        theme="light"
-                      />
+                      <div style={{ transform: "scale(0.82)", transformOrigin: "left top", height: 62 }}>
+                        <ReCAPTCHA
+                          ref={recaptchaRef}
+                          sitekey={recaptchaSiteKey}
+                          onChange={(token) => setRecaptchaToken(token)}
+                          onExpired={() => setRecaptchaToken(null)}
+                          onErrored={() => setRecaptchaToken(null)}
+                          theme="light"
+                        />
+                      </div>
                     </div>
                   )}
 
-                  <label className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-widest" style={{ color: "#3d6070" }}>
+                  <label className="flex items-center gap-3 font-mono text-xs uppercase tracking-wider" style={{ color: "#1B4965" }}>
                     <input
                       type="checkbox"
                       checked={agreed}
@@ -373,7 +375,7 @@ export default function ContactPage() {
                       style={{ accentColor: "#2A8F9C" }}
                     />
                     I acknowledge the{" "}
-                    <a href="#" className="underline" style={{ color: "#3AAFA9" }}>Privacy Policy</a>
+                    <a href="#" className="underline" style={{ color: "#2A8F9C" }}>Privacy Policy</a>
                   </label>
 
                   <div className="flex items-center gap-8 pt-2">
@@ -398,7 +400,7 @@ export default function ContactPage() {
                       <ScrambleTextOnHover text={submitting ? "Submitting..." : "Submit Request"} as="span" duration={0.6} />
                       <BitmapChevron className="transition-transform duration-[400ms] ease-in-out group-hover:rotate-45" />
                     </button>
-                    <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: "#3d6070" }}>
+                    <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: "#1E6080" }}>
                       Encrypted / Confidential
                     </span>
                   </div>
@@ -419,7 +421,7 @@ export default function ContactPage() {
 function Field({ label, name, type = "text", required, placeholder }: { label: string; name: string; type?: string; required?: boolean; placeholder?: string }) {
   return (
     <div>
-      <label className="block font-mono text-[10px] uppercase tracking-widest mb-1" style={{ color: "#3AAFA9" }}>
+      <label className="block font-mono text-xs uppercase tracking-wider mb-1.5" style={{ color: "#1B4965" }}>
         {label} {required && "*"}
       </label>
       <input required={required} type={type} name={name} placeholder={placeholder} style={inputStyle} />
