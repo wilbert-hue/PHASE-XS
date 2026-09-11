@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer"
-import path from "path"
 
 type ContactPayload = {
   fullName: string
@@ -68,9 +67,9 @@ export async function sendContactNotification(data: ContactPayload) {
           <td bgcolor="#1B4965" style="background:#1B4965;padding:24px 32px;">
             <table cellpadding="0" cellspacing="0" border="0">
               <tr>
-                <!-- Icon: CID-embedded PNG — renders in all clients including Outlook desktop -->
+                <!-- Icon: hosted PNG — Gmail/Yahoo/web clients load immediately; Outlook shows after "allow images" -->
                 <td width="52" valign="middle" style="padding-right:14px;">
-                  <img src="cid:phasexs-logo" width="40" height="40" alt="[*]" style="display:block;width:40px;height:40px;" />
+                  <img src="https://phasexs.com/phase-xs-icon.png" width="40" height="40" alt="&#x2295;" style="display:block;width:40px;height:40px;" />
                 </td>
                 <!-- PHASE-XS + subtitle -->
                 <td valign="middle">
@@ -154,13 +153,6 @@ export async function sendContactNotification(data: ContactPayload) {
       to: data.email,
       subject: `We received your inquiry — PHASE-XS`,
       html: confirmationHtml,
-      attachments: [
-        {
-          filename: "phase-xs-icon.png",
-          path: path.join(process.cwd(), "public", "phase-xs-icon.png"),
-          cid: "phasexs-logo",
-        },
-      ],
       text:
         `Hi ${data.fullName},\n\n` +
         `Thank you for your interest in PHASE-XS, the clinical intelligence platform built to accelerate drug development decisions with precision-grade trial data.\n\n` +
