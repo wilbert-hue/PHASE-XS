@@ -8,12 +8,111 @@ import { BitmapChevron } from "@/components/bitmap-chevron"
 import { ScrambleTextOnHover } from "@/components/scramble-text"
 import { Footer } from "@/components/footer"
 
-const countries = [
-  "United States", "United Kingdom", "India", "Australia", "Canada", "Germany",
-  "France", "Japan", "China", "Singapore", "United Arab Emirates", "Other",
-]
-
 const recaptchaSiteKey = (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "").trim()
+
+const PERSONAL_DOMAINS = new Set([
+  "gmail.com","googlemail.com","yahoo.com","yahoo.co.in","yahoo.co.uk","yahoo.com.au",
+  "hotmail.com","hotmail.co.uk","hotmail.fr","hotmail.de","hotmail.es","hotmail.it",
+  "outlook.com","outlook.in","outlook.co.uk","live.com","live.in","live.co.uk",
+  "msn.com","icloud.com","me.com","mac.com","aol.com","protonmail.com","proton.me",
+  "yandex.com","yandex.ru","mail.ru","inbox.ru","list.ru","bk.ru","rambler.ru",
+  "zoho.com","gmx.com","gmx.de","gmx.net","web.de","t-online.de",
+  "rediffmail.com","in.com","sify.com","fastmail.com","fastmail.fm",
+  "tutanota.com","tutamail.com","tuta.io","cock.li","dispostable.com",
+  "mailinator.com","guerrillamail.com","tempmail.com","throwam.com","sharklasers.com",
+])
+
+function isPersonalEmail(email: string): boolean {
+  const domain = email.split("@")[1]?.toLowerCase() || ""
+  return PERSONAL_DOMAINS.has(domain)
+}
+
+const COUNTRY_CODES = [
+  { code: "+93", name: "Afghanistan" },
+  { code: "+355", name: "Albania" },
+  { code: "+213", name: "Algeria" },
+  { code: "+54", name: "Argentina" },
+  { code: "+374", name: "Armenia" },
+  { code: "+61", name: "Australia" },
+  { code: "+43", name: "Austria" },
+  { code: "+994", name: "Azerbaijan" },
+  { code: "+973", name: "Bahrain" },
+  { code: "+880", name: "Bangladesh" },
+  { code: "+375", name: "Belarus" },
+  { code: "+32", name: "Belgium" },
+  { code: "+55", name: "Brazil" },
+  { code: "+1", name: "Canada / USA" },
+  { code: "+56", name: "Chile" },
+  { code: "+86", name: "China" },
+  { code: "+57", name: "Colombia" },
+  { code: "+506", name: "Costa Rica" },
+  { code: "+385", name: "Croatia" },
+  { code: "+357", name: "Cyprus" },
+  { code: "+420", name: "Czech Republic" },
+  { code: "+45", name: "Denmark" },
+  { code: "+20", name: "Egypt" },
+  { code: "+372", name: "Estonia" },
+  { code: "+358", name: "Finland" },
+  { code: "+33", name: "France" },
+  { code: "+995", name: "Georgia" },
+  { code: "+49", name: "Germany" },
+  { code: "+233", name: "Ghana" },
+  { code: "+30", name: "Greece" },
+  { code: "+852", name: "Hong Kong" },
+  { code: "+36", name: "Hungary" },
+  { code: "+354", name: "Iceland" },
+  { code: "+91", name: "India" },
+  { code: "+62", name: "Indonesia" },
+  { code: "+98", name: "Iran" },
+  { code: "+353", name: "Ireland" },
+  { code: "+972", name: "Israel" },
+  { code: "+39", name: "Italy" },
+  { code: "+81", name: "Japan" },
+  { code: "+962", name: "Jordan" },
+  { code: "+7", name: "Kazakhstan / Russia" },
+  { code: "+254", name: "Kenya" },
+  { code: "+82", name: "South Korea" },
+  { code: "+965", name: "Kuwait" },
+  { code: "+371", name: "Latvia" },
+  { code: "+961", name: "Lebanon" },
+  { code: "+370", name: "Lithuania" },
+  { code: "+352", name: "Luxembourg" },
+  { code: "+60", name: "Malaysia" },
+  { code: "+960", name: "Maldives" },
+  { code: "+356", name: "Malta" },
+  { code: "+52", name: "Mexico" },
+  { code: "+31", name: "Netherlands" },
+  { code: "+64", name: "New Zealand" },
+  { code: "+234", name: "Nigeria" },
+  { code: "+47", name: "Norway" },
+  { code: "+968", name: "Oman" },
+  { code: "+92", name: "Pakistan" },
+  { code: "+507", name: "Panama" },
+  { code: "+51", name: "Peru" },
+  { code: "+63", name: "Philippines" },
+  { code: "+48", name: "Poland" },
+  { code: "+351", name: "Portugal" },
+  { code: "+974", name: "Qatar" },
+  { code: "+40", name: "Romania" },
+  { code: "+966", name: "Saudi Arabia" },
+  { code: "+65", name: "Singapore" },
+  { code: "+421", name: "Slovakia" },
+  { code: "+27", name: "South Africa" },
+  { code: "+34", name: "Spain" },
+  { code: "+94", name: "Sri Lanka" },
+  { code: "+46", name: "Sweden" },
+  { code: "+41", name: "Switzerland" },
+  { code: "+886", name: "Taiwan" },
+  { code: "+66", name: "Thailand" },
+  { code: "+216", name: "Tunisia" },
+  { code: "+90", name: "Turkey" },
+  { code: "+380", name: "Ukraine" },
+  { code: "+971", name: "UAE" },
+  { code: "+44", name: "United Kingdom" },
+  { code: "+598", name: "Uruguay" },
+  { code: "+998", name: "Uzbekistan" },
+  { code: "+84", name: "Vietnam" },
+]
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
@@ -46,12 +145,17 @@ export default function ContactPage() {
 
     const form = e.currentTarget
     const fd = new FormData(form)
+
+    const rawEmail = String(fd.get("email") || "")
+    if (isPersonalEmail(rawEmail)) {
+      return alert("Please use your business email address. Personal email providers (Gmail, Yahoo, Outlook, etc.) are not accepted.")
+    }
+
     const payload = {
       fullName: fd.get("fullName"),
       email: fd.get("email"),
-      company: fd.get("company"),
       jobTitle: fd.get("jobTitle"),
-      country: fd.get("country"),
+      countryCode: fd.get("countryCode"),
       contact: fd.get("contact"),
       requirements: fd.get("requirements"),
       recaptchaToken: recaptchaEnabled ? recaptchaToken ?? "" : "",
@@ -218,20 +322,19 @@ export default function ContactPage() {
                   <div className="grid gap-5 md:grid-cols-2">
                     <Field label="Full Name" name="fullName" required />
                     <Field label="Business Email" name="email" type="email" required />
-                    <Field label="Company" name="company" required />
                     <Field label="Job Title" name="jobTitle" required />
                     <div>
                       <label className="block font-mono text-[10px] uppercase tracking-widest mb-1" style={{ color: "#3AAFA9" }}>
-                        Country *
+                        Country Code *
                       </label>
-                      <select required name="country" defaultValue="" style={inputStyle}>
-                        <option value="" disabled>— Select —</option>
-                        {countries.map((c) => (
-                          <option key={c} value={c}>{c}</option>
+                      <select required name="countryCode" defaultValue="" style={inputStyle}>
+                        <option value="" disabled>— Select Country Code —</option>
+                        {COUNTRY_CODES.map((c) => (
+                          <option key={c.code + c.name} value={c.code}>{c.code} — {c.name}</option>
                         ))}
                       </select>
                     </div>
-                    <Field label="Contact Number" name="contact" required />
+                    <Field label="Contact Number" name="contact" placeholder="9876543210" required />
                   </div>
 
                   <div>
@@ -313,13 +416,13 @@ export default function ContactPage() {
   )
 }
 
-function Field({ label, name, type = "text", required }: { label: string; name: string; type?: string; required?: boolean }) {
+function Field({ label, name, type = "text", required, placeholder }: { label: string; name: string; type?: string; required?: boolean; placeholder?: string }) {
   return (
     <div>
       <label className="block font-mono text-[10px] uppercase tracking-widest mb-1" style={{ color: "#3AAFA9" }}>
         {label} {required && "*"}
       </label>
-      <input required={required} type={type} name={name} style={inputStyle} />
+      <input required={required} type={type} name={name} placeholder={placeholder} style={inputStyle} />
     </div>
   )
 }

@@ -61,7 +61,7 @@ export function TopNav() {
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-12 xl:px-20 h-12 sm:h-14 lg:h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <button onClick={() => scrollTo("hero")} className="flex items-center gap-2 sm:gap-3 shrink-0 group">
+        <button onClick={() => scrollTo("hero")} className="flex items-center gap-1.5 shrink-0 group">
           <svg
             viewBox="0 0 44 44"
             fill="none"
@@ -76,7 +76,7 @@ export function TopNav() {
             <line x1="35" y1="22" x2="42" y2="22" stroke="#2A8F9C" strokeWidth="1.6" strokeLinecap="round"/>
             <circle cx="22" cy="22" r="2.5" fill="#2A8F9C"/>
           </svg>
-          <div className="flex flex-col leading-none">
+          <div className="flex flex-col items-start leading-none">
             <span
               className="font-[var(--font-bebas)] tracking-[0.1em] whitespace-nowrap text-base sm:text-lg lg:text-xl xl:text-2xl"
               style={{ color: "#1B4965" }}
