@@ -57,6 +57,67 @@ const certifications = [
   },
 ]
 
+function EsomarBadge() {
+  return (
+    <div
+      title="ESOMAR Individual Member 2026"
+      style={{
+        display: "inline-flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 0,
+        userSelect: "none",
+      }}
+    >
+      {/* Top stripe — ESOMAR wordmark */}
+      <div
+        style={{
+          background: "#003478",
+          padding: "5px 12px 4px",
+          lineHeight: 1,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "Arial, sans-serif",
+            fontWeight: 900,
+            fontSize: 15,
+            letterSpacing: "0.06em",
+            color: "#ffffff",
+            textTransform: "uppercase",
+          }}
+        >
+          esomar
+        </span>
+      </div>
+      {/* Bottom stripe — year + member type */}
+      <div
+        style={{
+          background: "#F5C400",
+          padding: "3px 12px 3px",
+          lineHeight: 1,
+          width: "100%",
+          textAlign: "center",
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "Arial, sans-serif",
+            fontWeight: 700,
+            fontSize: 8,
+            letterSpacing: "0.08em",
+            color: "#003478",
+            textTransform: "uppercase",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Individual · 2026
+        </span>
+      </div>
+    </div>
+  )
+}
+
 export function CredibilitySection() {
   const sectionRef = useRef<HTMLElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
@@ -132,26 +193,32 @@ export function CredibilitySection() {
               key={i}
               className="flex flex-col items-center justify-center py-5 md:py-6 px-3 transition-all duration-200 hover:bg-white/50"
               style={{
-                flex: cert.alt === "ESOMAR" ? "2 1 0" : "1 1 0",
-                minWidth: cert.alt === "ESOMAR" ? 160 : 80,
+                flex: "1 1 0",
+                minWidth: 80,
                 borderLeft: i > 0 ? "1px solid rgba(27, 73, 101, 0.08)" : "none",
               }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={cert.src}
-                alt={cert.alt}
-                title={cert.alt}
-                width={cert.width}
-                height={cert.height}
-                loading="lazy"
-                className="object-contain max-w-full"
-                style={{ height: `${cert.maxH}px` }}
-              />
-              {cert.label && (
-                <span className="font-mono text-[10px] mt-1.5" style={{ color: "#1B4965" }}>
-                  {cert.label}
-                </span>
+              {cert.alt === "ESOMAR" ? (
+                <EsomarBadge />
+              ) : (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={cert.src}
+                    alt={cert.alt}
+                    title={cert.alt}
+                    width={cert.width}
+                    height={cert.height}
+                    loading="lazy"
+                    className="object-contain max-w-full"
+                    style={{ height: `${cert.maxH}px` }}
+                  />
+                  {cert.label && (
+                    <span className="font-mono text-[10px] mt-1.5" style={{ color: "#1B4965" }}>
+                      {cert.label}
+                    </span>
+                  )}
+                </>
               )}
             </div>
           ))}

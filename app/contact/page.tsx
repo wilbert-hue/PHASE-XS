@@ -212,7 +212,7 @@ export default function ContactPage() {
         </Link>
 
         {/* Center label */}
-        <span className="hidden sm:block font-mono text-[10px] uppercase tracking-[0.25em] absolute left-1/2 -translate-x-1/2" style={{ color: "rgba(42,143,156,0.5)" }}>
+        <span className="hidden sm:block font-mono text-[10px] uppercase tracking-[0.25em] absolute left-1/2 -translate-x-1/2" style={{ color: "#1B4965" }}>
           Inquiry Portal
         </span>
 

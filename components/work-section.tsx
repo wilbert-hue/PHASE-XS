@@ -225,7 +225,7 @@ function CoverageCarousel({
               <TrialsOverTimeCard />
               <EnrollmentByPhaseCard />
               <TopIndicationsCard />
-              <TrialsByCountryCard />
+              <TrialsByCountryDoughnutCard />
             </div>
           </div>
         </div>
@@ -460,19 +460,35 @@ function TopIndicationsCard() {
   )
 }
 
-function TrialsByCountryCard() {
+function TrialsByCountryDoughnutCard() {
   const accent = "#1E6080"
   const data = [
-    { country: "US", trials: 18200, flag: "🇺🇸" },
-    { country: "UK", trials: 4100, flag: "🇬🇧" },
-    { country: "India", trials: 3900, flag: "🇮🇳" },
-    { country: "Australia", trials: 2800, flag: "🇦🇺" },
-    { country: "Germany", trials: 2400, flag: "🇩🇪" },
-    { country: "France", trials: 1900, flag: "🇫🇷" },
-    { country: "Others", trials: 6900, flag: "🌐" },
+    { label: "US",        value: 18200, color: "#1B4965" },
+    { label: "UK",        value: 4100,  color: "#1E6080" },
+    { label: "India",     value: 3900,  color: "#2A8F9C" },
+    { label: "Australia", value: 2800,  color: "#3AAFA9" },
+    { label: "Germany",   value: 2400,  color: "#4FBDBA" },
+    { label: "France",    value: 1900,  color: "#5ECFCC" },
+    { label: "Others",    value: 6900,  color: "rgba(27,73,101,0.35)" },
   ]
-  const max = Math.max(...data.map(d => d.trials))
-  const total = data.reduce((s, d) => s + d.trials, 0)
+  const total = data.reduce((s, d) => s + d.value, 0)
+
+  // SVG donut via stroke-dasharray on a circle
+  const R = 54       // donut radius
+  const cx = 80
+  const cy = 80
+  const circ = 2 * Math.PI * R
+  const gap = 1.5    // small gap between segments in px of arc
+  let cumulativePct = 0
+
+  const segments = data.map((d) => {
+    const pct = d.value / total
+    const dashLen = Math.max(0, pct * circ - gap)
+    const dashOffset = -(cumulativePct * circ)
+    cumulativePct += pct
+    return { ...d, dashLen, dashOffset, pct }
+  })
+
   return (
     <article
       className="relative border p-5 overflow-hidden"
@@ -483,24 +499,65 @@ function TrialsByCountryCard() {
       <h3 className="mt-1 font-[var(--font-bebas)] text-2xl md:text-3xl tracking-tight" style={{ color: accent }}>
         Trials by Country
       </h3>
-      <div className="mt-4 space-y-2">
-        {data.map((d, i) => (
-          <div key={i} className="flex items-center gap-2">
-            <span className="text-sm w-5 shrink-0">{d.flag}</span>
-            <span className="font-mono text-[9px] w-16 shrink-0" style={{ color: "#1B4965" }}>{d.country}</span>
-            <div className="flex-1 h-1.5 rounded-sm overflow-hidden" style={{ background: "rgba(192,212,220,0.25)" }}>
-              <div
-                className="h-full rounded-sm"
-                style={{ width: `${(d.trials / max) * 100}%`, background: accent }}
-              />
+
+      <div className="mt-4 flex items-center gap-5">
+        {/* Donut */}
+        <svg viewBox="0 0 160 160" className="w-[130px] h-[130px] shrink-0 -rotate-90">
+          {/* Track */}
+          <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(192,212,220,0.2)" strokeWidth="20" />
+          {segments.map((s, i) => (
+            <circle
+              key={i}
+              cx={cx}
+              cy={cy}
+              r={R}
+              fill="none"
+              stroke={s.color}
+              strokeWidth="20"
+              strokeDasharray={`${s.dashLen} ${circ - s.dashLen}`}
+              strokeDashoffset={s.dashOffset}
+            />
+          ))}
+          {/* Centre label — rotate back to read correctly */}
+          <text
+            x={cx} y={cy - 6}
+            textAnchor="middle"
+            fontSize="13"
+            fontWeight="700"
+            fill="#1B4965"
+            fontFamily="monospace"
+            transform={`rotate(90 ${cx} ${cy})`}
+          >
+            {(total / 1000).toFixed(0)}K
+          </text>
+          <text
+            x={cx} y={cy + 9}
+            textAnchor="middle"
+            fontSize="7"
+            fill="#1B4965"
+            fontFamily="monospace"
+            opacity="0.6"
+            transform={`rotate(90 ${cx} ${cy})`}
+          >
+            TRIALS
+          </text>
+        </svg>
+
+        {/* Legend */}
+        <div className="flex flex-col gap-1.5 font-mono text-[9px] min-w-0">
+          {data.map((d, i) => (
+            <div key={i} className="flex items-center gap-1.5">
+              <span className="inline-block w-2 h-2 shrink-0 rounded-sm" style={{ background: d.color }} />
+              <span className="truncate" style={{ color: "#1B4965" }}>{d.label}</span>
+              <span className="ml-auto pl-2 tabular-nums opacity-70" style={{ color: "#1B4965" }}>
+                {Math.round(d.value / total * 100)}%
+              </span>
             </div>
-            <span className="font-mono text-[9px] w-12 shrink-0 text-right" style={{ color: "#1B4965" }}>
-              {d.trials.toLocaleString()}
-            </span>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-      <p className="mt-2 font-mono text-[9px] opacity-60" style={{ color: "#1B4965" }}>
+
+      <p className="mt-3 font-mono text-[9px] opacity-60" style={{ color: "#1B4965" }}>
         Total: {total.toLocaleString()} · Illustrative sample
       </p>
     </article>
@@ -547,7 +604,7 @@ function CoverageCard({
     <article
       ref={cardRef}
       className={cn(
-        "group relative border p-5 flex flex-col justify-between transition-all duration-500 cursor-pointer overflow-hidden",
+        "group relative border p-5 flex flex-col transition-all duration-500 cursor-pointer overflow-hidden",
         area.span,
       )}
       style={{
@@ -574,6 +631,7 @@ function CoverageCard({
         }}
       />
 
+      {/* Eyebrow + title */}
       <div className="relative z-10">
         <span
           className="font-mono text-[10px] uppercase tracking-widest transition-colors duration-300"
@@ -582,20 +640,18 @@ function CoverageCard({
           {area.medium}
         </span>
         <h3
-          className="mt-3 font-[var(--font-bebas)] text-2xl md:text-4xl tracking-tight transition-colors duration-300"
+          className="mt-2 font-[var(--font-bebas)] text-2xl md:text-4xl tracking-tight transition-colors duration-300"
           style={{ color: isActive ? area.accent : "#0c1b24" }}
         >
           {area.title}
         </h3>
       </div>
 
-      <div className="relative z-10">
+      {/* Description — directly below title, always visible */}
+      <div className="relative z-10 mt-3">
         <p
-          className={cn(
-            "font-mono text-xs leading-relaxed transition-all duration-500 max-w-[280px]",
-            isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
-          )}
-          style={{ color: "#1B4965" }}
+          className="font-mono text-xs leading-relaxed max-w-[280px]"
+          style={{ color: "#1B4965", opacity: isActive ? 1 : 0.7 }}
         >
           {area.description}
         </p>
@@ -608,7 +664,7 @@ function CoverageCard({
         {String(index + 1).padStart(2, "0")}
       </span>
 
-      {/* Corner accent — uses card color */}
+      {/* Corner accent */}
       <div
         className={cn(
           "absolute top-0 right-0 w-12 h-12 transition-all duration-500",

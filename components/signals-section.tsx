@@ -2,7 +2,7 @@
 
 import type { DatasetCoverageStats } from "@/app/dashboard/trial-types"
 import { useRef, useState, useEffect } from "react"
-import { BarChart3, Globe2, type LucideIcon } from "lucide-react"
+import { Database, Layers, Cpu, Globe2, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -176,177 +176,169 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
   )
 }
 
-function scopeDiagramRowsFromCoverage(coverage: DatasetCoverageStats): {
-  hub: string
-  Icon: LucideIcon
-  left: { title: string; items: string[] }
-  right: { title: string; items: string[] }
-}[] {
-  return [
+function DatasetScopeDiagram({ coverage }: { coverage: DatasetCoverageStats }) {
+  const categories: { Icon: LucideIcon; title: string; items: string[] }[] = [
     {
-      hub: "TRIAL\nLANDSCAPE",
-      Icon: BarChart3,
-      left: {
-        title: "Coverage",
-        items: [
-          "40,000+ Trials",
-          `${coverage.molecules.toLocaleString()}+ Molecules`,
-          `${coverage.indications.toLocaleString()}+ Indications`,
-        ],
-      },
-      right: {
-        title: "Phases",
-        items: ["Early Phase 1", "Phase 1 – 4", "Combined Phases"],
-      },
+      Icon: Database,
+      title: "Coverage",
+      items: [
+        `40,000+ Trials`,
+        `${coverage.molecules.toLocaleString()}+ Molecules`,
+        `${coverage.indications.toLocaleString()}+ Indications`,
+      ],
     },
     {
-      hub: "MODALITY\n& REGION",
+      Icon: Layers,
+      title: "Trial Phases",
+      items: ["Early Phase 1", "Phase 1 – 4", "Combined Phases"],
+    },
+    {
+      Icon: Cpu,
+      title: "Technologies",
+      items: ["Monoclonal Antibodies", "CAR-T / Cell Therapy", "ADCs & Biosimilars"],
+    },
+    {
       Icon: Globe2,
-      left: {
-        title: "Technologies",
-        items: ["Monoclonal Antibodies", "CAR-T / Cell Therapy", "ADCs & Biosimilars"],
-      },
-      right: {
-        title: "Region",
-        items: ["17 Countries", "US · UK · IN · AU", "EU · APAC · LATAM"],
-      },
+      title: "Regions",
+      items: ["17 Countries", "US · UK · IN", "EU · APAC · LATAM"],
     },
   ]
-}
 
-function DatasetScopeDiagram({ coverage }: { coverage: DatasetCoverageStats }) {
-  const scopeDiagramRows = scopeDiagramRowsFromCoverage(coverage)
+  const heroStats = [
+    { value: "40,000+", label: "Clinical Trials" },
+    { value: `${coverage.molecules.toLocaleString()}+`, label: "Drug Molecules" },
+    { value: `${coverage.indications.toLocaleString()}+`, label: "Indications" },
+    { value: "17", label: "Countries" },
+  ]
+
   return (
     <div
-      className="mt-24 relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#0f2d3f] via-[#0a2230] to-[#051820] p-6 sm:p-8 md:p-10 shadow-[0_24px_60px_-16px_rgba(0,0,0,0.5)]"
+      className="mt-24 relative overflow-hidden"
+      style={{
+        background: "linear-gradient(160deg, #0b2030 0%, #0d2840 55%, #07161f 100%)",
+        border: "1px solid rgba(79,189,186,0.18)",
+      }}
       aria-label="Dataset scope overview"
     >
-      <div
-        className="absolute top-3 left-4 h-1.5 w-1.5 rounded-full bg-[#4FBDBA] shadow-[0_0_10px_#4FBDBA80]"
-        aria-hidden
-      />
-      <p className="text-center font-mono text-sm sm:text-base md:text-lg font-medium uppercase tracking-[0.28em] text-[#9ee5ed] mb-8 md:mb-10">
-        Dataset scope
-      </p>
+      {/* Corner ticks */}
+      <span className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2" style={{ borderColor: "#4FBDBA" }} />
+      <span className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2" style={{ borderColor: "#4FBDBA" }} />
+      <span className="absolute bottom-0 left-0 w-4 h-4 border-l-2 border-b-2" style={{ borderColor: "#4FBDBA" }} />
+      <span className="absolute bottom-0 right-0 w-4 h-4 border-r-2 border-b-2" style={{ borderColor: "#4FBDBA" }} />
 
-      {scopeDiagramRows.map((row, i) => (
-        <div key={row.hub}>
-          {i > 0 && (
-            <div className="my-8 md:my-10 border-t border-dashed border-white/18" role="separator" />
-          )}
-          <ScopeHubRow
-            hub={row.hub}
-            Icon={row.Icon}
-            left={row.left}
-            right={row.right}
-          />
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function ScopeHubRow({
-  hub,
-  Icon,
-  left,
-  right,
-}: {
-  hub: string
-  Icon: LucideIcon
-  left: { title: string; items: string[] }
-  right: { title: string; items: string[] }
-}) {
-  return (
-    <div className="relative max-w-5xl mx-auto">
-      {/* horizontal spine + nodes (desktop) */}
+      {/* Subtle grid texture */}
       <div
-        className="pointer-events-none hidden md:block absolute left-[8%] right-[8%] top-[calc(50%-0.5px)] h-px bg-white/10 z-0"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none hidden md:block absolute left-[8%] top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-white/50 ring-1 ring-white/20 z-[1]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none hidden md:block absolute right-[8%] top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-white/50 ring-1 ring-white/20 z-[1]"
-        aria-hidden
+        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage: "linear-gradient(rgba(79,189,186,1) 1px, transparent 1px), linear-gradient(90deg, rgba(79,189,186,1) 1px, transparent 1px)",
+          backgroundSize: "48px 48px",
+        }}
       />
 
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-[1fr_9.5rem_1fr] gap-8 md:gap-0 md:items-center">
-        <div className="order-2 md:order-1 min-w-0 md:pr-6">
-          <ScopeList
-            side="left"
-            title={left.title}
-            items={left.items}
-          />
-        </div>
-
-        <div className="order-1 md:order-2 flex justify-center md:px-1">
-          <div className="relative w-[8.25rem] h-[8.25rem] sm:w-[8.75rem] sm:h-[8.75rem] rounded-full border-2 border-white/32 bg-gradient-to-b from-white/[0.14] to-white/[0.04] flex flex-col items-center justify-center text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_0_0_1px_rgba(79,189,186,0.12)]">
-            <Icon className="h-7 w-7 sm:h-8 sm:w-8 text-[#a8e6ef] mb-1" strokeWidth={1.35} aria-hidden />
-            <span className="font-[var(--font-bebas)] text-xs sm:text-base leading-tight tracking-wide text-white/95 px-1 whitespace-pre-line max-w-[7rem]">
-              {hub}
-            </span>
-          </div>
-        </div>
-
-        <div className="order-3 min-w-0 md:pl-6">
-          <ScopeList
-            side="right"
-            title={right.title}
-            items={right.items}
-          />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function ScopeList({
-  side,
-  title,
-  items,
-}: {
-  side: "left" | "right"
-  title: string
-  items: string[]
-}) {
-  return (
-    <div
-      className={cn(
-        "rounded-xl border border-white/10 bg-white/[0.04] p-4 sm:p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]",
-        side === "left" && "md:text-right md:rounded-r-md",
-        side === "right" && "md:rounded-l-md",
-      )}
-    >
-      <p
-        className={cn(
-          "font-mono text-sm sm:text-base font-semibold uppercase tracking-[0.22em] mb-3.5 text-[#7edeea]",
-          side === "left" && "md:text-right",
-        )}
+      {/* Header bar */}
+      <div
+        className="relative flex items-center justify-between px-6 sm:px-8 py-4"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
       >
-        {title}
-      </p>
-      <ul className="space-y-2.5 list-none p-0 m-0">
-        {items.map(item => (
-          <li
-            key={item}
-            className={cn(
-              "font-mono text-xs sm:text-sm text-white/86 leading-relaxed",
-              "flex items-start gap-2.5",
-              side === "left" && "md:flex-row-reverse md:justify-end",
-            )}
+        <div className="flex items-center gap-3">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#4FBDBA] shadow-[0_0_8px_#4FBDBA]" />
+          <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-[#4FBDBA]">Dataset Scope</span>
+        </div>
+        <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.25)" }}>
+          Verified · Live Data
+        </span>
+      </div>
+
+      {/* Hero stats row */}
+      <div
+        className="relative grid grid-cols-2 sm:grid-cols-4"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+      >
+        {heroStats.map((stat, i) => (
+          <div
+            key={stat.label}
+            className="px-6 sm:px-8 py-7 sm:py-8"
+            style={{ borderRight: i < 3 ? "1px solid rgba(255,255,255,0.06)" : "none" }}
           >
-            <span
-              className="mt-[0.4rem] h-1.5 w-1.5 shrink-0 bg-white/90"
-              style={{ transform: "rotate(45deg)" }}
-              aria-hidden
-            />
-            <span className="min-w-0">{item}</span>
-          </li>
+            <div
+              className="font-[var(--font-bebas)] text-4xl sm:text-5xl leading-none tracking-wide"
+              style={{ color: "#ffffff" }}
+            >
+              {stat.value}
+            </div>
+            <div
+              className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em]"
+              style={{ color: "rgba(79,189,186,0.7)" }}
+            >
+              {stat.label}
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
+
+      {/* Category panels */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        {categories.map((cat, i) => (
+          <div
+            key={cat.title}
+            className="px-6 sm:px-7 py-7 group transition-colors duration-300 hover:bg-white/[0.03]"
+            style={{
+              borderRight: i < 3 ? "1px solid rgba(255,255,255,0.06)" : "none",
+            }}
+          >
+            {/* Category header */}
+            <div className="flex items-center gap-2.5 mb-5">
+              <div
+                className="flex items-center justify-center w-7 h-7 shrink-0"
+                style={{
+                  background: "rgba(79,189,186,0.12)",
+                  border: "1px solid rgba(79,189,186,0.25)",
+                }}
+              >
+                <cat.Icon className="w-3.5 h-3.5" style={{ color: "#4FBDBA" }} strokeWidth={1.5} />
+              </div>
+              <span className="font-mono text-[11px] uppercase tracking-[0.22em] font-semibold" style={{ color: "#4FBDBA" }}>
+                {cat.title}
+              </span>
+            </div>
+
+            {/* Accent divider */}
+            <div
+              className="mb-5 h-px w-full group-hover:opacity-100 transition-opacity duration-300"
+              style={{ background: "linear-gradient(to right, rgba(79,189,186,0.4), transparent)" }}
+            />
+
+            {/* Items */}
+            <ul className="space-y-3">
+              {cat.items.map(item => (
+                <li key={item} className="flex items-start gap-2.5">
+                  <span
+                    className="mt-[5px] h-1 w-1 shrink-0"
+                    style={{ background: "#4FBDBA", transform: "rotate(45deg)" }}
+                  />
+                  <span className="font-mono text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom accent strip */}
+      <div
+        className="px-6 sm:px-8 py-3 flex items-center gap-4"
+        style={{ borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(0,0,0,0.15)" }}
+      >
+        <span className="font-mono text-[10px] uppercase tracking-[0.25em]" style={{ color: "rgba(79,189,186,0.5)" }}>
+          Coverage
+        </span>
+        <div className="h-px flex-1" style={{ background: "rgba(79,189,186,0.12)" }} />
+        <span className="font-mono text-[10px]" style={{ color: "rgba(255,255,255,0.35)" }}>
+          US · UK · IN · AU · DE · FR · JP · CN · SG · AU · BR · ES · IT · NL · SE · CA · CH
+        </span>
+      </div>
     </div>
   )
 }
@@ -360,70 +352,67 @@ function MetricCard({
 }) {
   return (
     <article
-      className={cn(
-        "group relative flex-shrink-0 w-80",
-        "transition-transform duration-500 ease-out",
-        "hover:-translate-y-2",
-      )}
+      className="group relative flex-shrink-0 w-72 transition-transform duration-500 ease-out hover:-translate-y-1.5"
     >
-      <div className="relative bg-card/90 border border-border/60 md:border-t md:border-l md:border-r-0 md:border-b-0 p-8 overflow-hidden shadow-md shadow-[rgba(15,30,50,0.08)]">
-        {/* Top accent bar */}
-        <div
-          className="absolute top-0 left-0 right-0 h-[2px]"
-          style={{
-            background: `linear-gradient(to right, ${metric.accent}, transparent)`,
-          }}
-        />
-
-        {/* Hover background glow */}
+      {/* Card */}
+      <div
+        className="relative overflow-hidden h-full"
+        style={{
+          background: "rgba(240,247,250,0.85)",
+          border: "1px solid rgba(27,73,101,0.14)",
+          borderTop: `2px solid ${metric.accent}`,
+        }}
+      >
+        {/* Hover glow */}
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{
-            background: `radial-gradient(ellipse at 30% 20%, ${metric.accentLight} 0%, transparent 70%)`,
-          }}
+          style={{ background: `radial-gradient(ellipse at 20% 0%, ${metric.accentLight} 0%, transparent 65%)` }}
         />
 
-        <div className="flex items-baseline justify-between mb-8 relative">
-          <span
-            className="font-mono text-[10px] uppercase tracking-[0.3em]"
-            style={{ color: metric.accent }}
+        <div className="relative p-6">
+          {/* Index + category tag row */}
+          <div className="flex items-center justify-between mb-3">
+            <span
+              className="font-mono text-[10px] uppercase tracking-[0.3em] tabular-nums"
+              style={{ color: metric.accent }}
+            >
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span
+              className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5"
+              style={{
+                color: metric.accent,
+                background: metric.accentLight,
+                border: `1px solid ${metric.accent}33`,
+              }}
+            >
+              {metric.date}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h3
+            className="font-[var(--font-bebas)] text-3xl tracking-tight leading-none mb-3"
+            style={{ color: "#1B4965" }}
           >
-            No. {String(index + 1).padStart(2, "0")}
-          </span>
-          <time
-            className="font-mono text-[10px] font-medium"
-            style={{ color: metric.accent, opacity: 0.7 }}
-          >
-            {metric.date}
-          </time>
+            {metric.title}
+          </h3>
+
+          {/* Accent rule */}
+          <div
+            className="h-px mb-4 group-hover:opacity-100 transition-all duration-500"
+            style={{ background: `linear-gradient(to right, ${metric.accent}, transparent)`, opacity: 0.5 }}
+          />
+
+          {/* Note */}
+          <p className="font-mono text-[11px] leading-relaxed" style={{ color: "#3d6070" }}>
+            {metric.note}
+          </p>
         </div>
 
-        <h3
-          className="font-[var(--font-bebas)] text-4xl tracking-tight mb-4 transition-colors duration-300"
-          style={{ color: metric.accent }}
-        >
-          {metric.title}
-        </h3>
-
-        <div
-          className="w-12 h-[2px] mb-6 group-hover:w-full transition-all duration-500"
-          style={{
-            background: `linear-gradient(to right, ${metric.accent}, transparent)`,
-          }}
-        />
-
-        <p className="font-mono text-xs leading-relaxed relative" style={{ color: "#1B4965" }}>{metric.note}</p>
-
-        <div className="absolute bottom-0 right-0 w-6 h-6 overflow-hidden">
-          <div className="absolute bottom-0 right-0 w-8 h-8 bg-background rotate-45 translate-x-4 translate-y-4 border-t border-l border-border/30" />
-        </div>
+        {/* Bottom-right corner tick */}
+        <span className="absolute bottom-0 right-0 w-3 h-3 border-r border-b" style={{ borderColor: metric.accent + "66" }} />
       </div>
-
-      {/* Hover shadow */}
-      <div
-        className="absolute inset-0 -z-10 translate-x-1 translate-y-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{ background: metric.accentLight }}
-      />
     </article>
   )
 }

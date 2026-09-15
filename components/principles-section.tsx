@@ -137,7 +137,7 @@ export function PrinciplesSection() {
               )}
             </h3>
 
-            <p className="mt-6 max-w-md font-mono text-sm leading-relaxed" style={{ color: "#1B4965" }}>
+            <p className="mt-6 max-w-md font-mono text-sm leading-relaxed" style={{ color: "#000000" }}>
               {principle.description}
             </p>
 

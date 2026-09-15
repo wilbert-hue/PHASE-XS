@@ -28,6 +28,15 @@ export default async function Page() {
       <ContactTab />
       <AnimatedBackground />
 
+      {/* Left + right white edge fade over the dot canvas */}
+      <div
+        className="fixed inset-0 z-[1] pointer-events-none"
+        style={{
+          background: "linear-gradient(to right, white 0%, transparent 12%, transparent 88%, white 100%)",
+        }}
+        aria-hidden="true"
+      />
+
       <div className="relative z-10">
         <HeroSection trialCount={coverage.trials} moleculeCount={coverage.molecules} />
         <PageSection page="landing" variant="metrics">
