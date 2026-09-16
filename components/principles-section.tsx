@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useRef, useEffect } from "react"
 import { HighlightText } from "@/components/highlight-text"
@@ -7,53 +7,53 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 gsap.registerPlugin(ScrollTrigger)
 
+const principles = [
+  {
+    number: "01",
+    titleParts: [
+      { text: "EVIDENCE", highlight: true },
+      { text: " DRIVEN", highlight: false },
+    ],
+    description: "Every insight is grounded in real clinical data — 3,049 trials, rigorously sourced and continuously validated.",
+    align: "left",
+    accent: "#1B4965",
+  },
+  {
+    number: "02",
+    titleParts: [
+      { text: "MOLECULE", highlight: true },
+      { text: " TO MARKET", highlight: false },
+    ],
+    description: "Track the full lifecycle from early-phase discovery through approval, pricing, and post-market surveillance.",
+    align: "right",
+    accent: "#1E6080",
+  },
+  {
+    number: "03",
+    titleParts: [
+      { text: "REAL-TIME ", highlight: false },
+      { text: "SIGNALS", highlight: true },
+    ],
+    description: "Competitive intelligence across sponsors, technologies, and therapeutic areas — filterable, sortable, actionable.",
+    align: "left",
+    accent: "#2A8F9C",
+  },
+  {
+    number: "04",
+    titleParts: [
+      { text: "PRECISION ", highlight: false },
+      { text: "ANALYTICS", highlight: true },
+    ],
+    description: "Enrollment forecasts, adherence tracking, and pricing intelligence across 1,246 unique molecules and 1,085 indications.",
+    align: "right",
+    accent: "#3AAFA9",
+  },
+]
+
 export function PrinciplesSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
   const principlesRef = useRef<HTMLDivElement>(null)
-
-  const principles = [
-    {
-      number: "01",
-      titleParts: [
-        { text: "EVIDENCE", highlight: true },
-        { text: " DRIVEN", highlight: false },
-      ],
-      description: "Every insight is grounded in real clinical data — 3,049 trials, rigorously sourced and continuously validated.",
-      align: "left",
-      accent: "#1B4965",
-    },
-    {
-      number: "02",
-      titleParts: [
-        { text: "MOLECULE", highlight: true },
-        { text: " TO MARKET", highlight: false },
-      ],
-      description: "Track the full lifecycle from early-phase discovery through approval, pricing, and post-market surveillance.",
-      align: "right",
-      accent: "#1E6080",
-    },
-    {
-      number: "03",
-      titleParts: [
-        { text: "REAL-TIME ", highlight: false },
-        { text: "SIGNALS", highlight: true },
-      ],
-      description: "Competitive intelligence across sponsors, technologies, and therapeutic areas — filterable, sortable, actionable.",
-      align: "left",
-      accent: "#2A8F9C",
-    },
-    {
-      number: "04",
-      titleParts: [
-        { text: "PRECISION ", highlight: false },
-        { text: "ANALYTICS", highlight: true },
-      ],
-      description: "Enrollment forecasts, adherence tracking, and pricing intelligence across 1,246 unique molecules and 1,085 indications.",
-      align: "right",
-      accent: "#3AAFA9",
-    },
-  ]
 
   useEffect(() => {
     if (!sectionRef.current || !headerRef.current || !principlesRef.current) return
@@ -93,13 +93,10 @@ export function PrinciplesSection() {
 
   return (
     <section ref={sectionRef} id="platform" className="relative py-32 px-4 sm:px-6 lg:px-12 xl:px-20">
-      {/* Section header */}
       <div ref={headerRef} className="mb-24">
-        {/* Label — c3 */}
         <span className="font-mono text-sm uppercase tracking-[0.3em]" style={{ color: "#1B4965" }}>
           03 / Platform
         </span>
-        {/* Heading — c1 */}
         <h2
           className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight"
           style={{ color: "#1B4965" }}
@@ -108,16 +105,14 @@ export function PrinciplesSection() {
         </h2>
       </div>
 
-      {/* Staggered principles */}
       <div ref={principlesRef} className="space-y-24 md:space-y-32">
-        {principles.map((principle, index) => (
+        {principles.map((principle) => (
           <article
-            key={index}
+            key={principle.number}
             className={`flex flex-col ${
               principle.align === "right" ? "items-end text-right" : "items-start text-left"
             }`}
           >
-            {/* Number label — each principle's accent */}
             <span
               className="font-mono text-sm uppercase tracking-[0.3em] mb-4"
               style={{ color: principle.accent }}
@@ -141,7 +136,6 @@ export function PrinciplesSection() {
               {principle.description}
             </p>
 
-            {/* Divider line — each principle's accent */}
             <div
               className={`mt-8 h-[1px] w-24 md:w-48 ${principle.align === "right" ? "mr-0" : "ml-0"}`}
               style={{
@@ -154,4 +148,3 @@ export function PrinciplesSection() {
     </section>
   )
 }
-

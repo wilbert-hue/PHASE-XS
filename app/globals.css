@@ -153,3 +153,8 @@
   background: #1B4965;
   color: #f0f5f7;
 }
+
+@keyframes slideProgress {
+  from { width: 0% }
+  to   { width: 100% }
+}

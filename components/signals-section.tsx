@@ -9,42 +9,44 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 gsap.registerPlugin(ScrollTrigger)
 
+const SIGNAL_ACCENT = "#0D9488"
+const SIGNAL_ACCENT_LIGHT = "rgba(13, 148, 136, 0.1)"
+
 const metrics = [
   {
     date: "Phase 3",
     title: "707K+ Enrolled",
     note: "Total participants enrolled across all tracked trials — the largest segment in late-stage studies.",
-    accent: "#0D9488",
-    accentLight: "rgba(13, 148, 136, 0.1)",
+    accent: SIGNAL_ACCENT,
+    accentLight: SIGNAL_ACCENT_LIGHT,
   },
   {
     date: "Oncology",
     title: "Top Indication",
     note: "Leukemia, lymphoma, and solid tumors dominate the trial landscape with 40%+ of all studies.",
-    accent: "#0D9488",
-    accentLight: "rgba(13, 148, 136, 0.1)",
+    accent: SIGNAL_ACCENT,
+    accentLight: SIGNAL_ACCENT_LIGHT,
   },
   {
     date: "mAb",
     title: "Leading Tech",
     note: "Monoclonal antibodies represent the dominant technology platform across all phases.",
-    accent: "#0D9488",
-    accentLight: "rgba(13, 148, 136, 0.1)",
+    accent: SIGNAL_ACCENT,
+    accentLight: SIGNAL_ACCENT_LIGHT,
   },
   {
     date: "92.3%",
     title: "Adherence Rate",
     note: "Average patient compliance across all tracked trials — a key indicator of protocol feasibility.",
-    accent: "#0D9488",
-    accentLight: "rgba(13, 148, 136, 0.1)",
+    accent: SIGNAL_ACCENT,
+    accentLight: SIGNAL_ACCENT_LIGHT,
   },
 ]
 
 export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats }) {
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
-  const cardsRef = useRef<HTMLDivElement>(null)
   const cursorRef = useRef<HTMLDivElement>(null)
   const [isHovering, setIsHovering] = useState(false)
 
@@ -82,7 +84,7 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
   }, [])
 
   useEffect(() => {
-    if (!sectionRef.current || !headerRef.current || !cardsRef.current) return
+    if (!sectionRef.current || !headerRef.current || !listRef.current) return
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -101,7 +103,7 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
         },
       )
 
-      const cards = cardsRef.current?.querySelectorAll("article")
+      const cards = listRef.current?.querySelectorAll("article")
       if (cards) {
         gsap.fromTo(
           cards,
@@ -113,7 +115,7 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
             stagger: 0.2,
             ease: "power3.out",
             scrollTrigger: {
-              trigger: cardsRef.current,
+              trigger: listRef.current,
               start: "top 90%",
               toggleActions: "play none none reverse",
             },
@@ -158,15 +160,12 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
 
       {/* Horizontal scroll container */}
       <div
-        ref={(el) => {
-          scrollRef.current = el
-          cardsRef.current = el
-        }}
+        ref={listRef}
         className="flex gap-8 overflow-x-auto pb-8 pr-12 scrollbar-hide"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {metrics.map((metric, index) => (
-          <MetricCard key={index} metric={metric} index={index} />
+          <MetricCard key={metric.title} metric={metric} index={index} />
         ))}
       </div>
 
@@ -182,7 +181,7 @@ function DatasetScopeDiagram({ coverage }: { coverage: DatasetCoverageStats }) {
       Icon: Database,
       title: "Coverage",
       items: [
-        `40,000+ Trials`,
+        `${coverage.trials.toLocaleString()}+ Trials`,
         `${coverage.molecules.toLocaleString()}+ Molecules`,
         `${coverage.indications.toLocaleString()}+ Indications`,
       ],
@@ -205,7 +204,7 @@ function DatasetScopeDiagram({ coverage }: { coverage: DatasetCoverageStats }) {
   ]
 
   const heroStats = [
-    { value: "40,000+", label: "Clinical Trials" },
+    { value: `${coverage.trials.toLocaleString()}+`, label: "Clinical Trials" },
     { value: `${coverage.molecules.toLocaleString()}+`, label: "Drug Molecules" },
     { value: `${coverage.indications.toLocaleString()}+`, label: "Indications" },
     { value: "17", label: "Countries" },
@@ -336,7 +335,7 @@ function DatasetScopeDiagram({ coverage }: { coverage: DatasetCoverageStats }) {
         </span>
         <div className="h-px flex-1" style={{ background: "rgba(79,189,186,0.12)" }} />
         <span className="font-mono text-[10px]" style={{ color: "rgba(255,255,255,0.35)" }}>
-          US · UK · IN · AU · DE · FR · JP · CN · SG · AU · BR · ES · IT · NL · SE · CA · CH
+          US · UK · IN · DE · FR · JP · CN · SG · AU · BR · ES · IT · NL · SE · CA · CH · NZ
         </span>
       </div>
     </div>

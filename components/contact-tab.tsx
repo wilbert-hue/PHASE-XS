@@ -26,7 +26,7 @@ export function ContactTab() {
       style={{
         opacity: hidden ? 0 : 1,
         pointerEvents: hidden ? "none" : "auto",
-        transition: "opacity 300ms, transform 300ms",
+        transition: "opacity 300ms",
       }}
     >
       <div

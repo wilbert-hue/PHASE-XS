@@ -86,11 +86,10 @@ export function AnimatedBackground() {
       for (let i = 0; i < dots.length; i++) {
         const a = dots[i]
         // Only check right neighbor and below neighbor for efficiency
-        const col = (i % cols) // approximate
         const rightIdx = i + 1
         const belowIdx = i + cols
 
-        if (rightIdx < dots.length && (i + 1) % (cols + 1) !== 0) {
+        if (rightIdx < dots.length && (i + 1) % cols !== 0) {
           const b = dots[rightIdx]
           const dx = a.x - b.x
           const dy = a.y - b.y

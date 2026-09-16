@@ -142,9 +142,9 @@ export function Footer() {
 
           {/* Numbers */}
           <div className="flex-1 grid grid-cols-2 md:grid-cols-4">
-            {contactNumbers.map((contact, i) => (
+            {contactNumbers.map((contact) => (
               <div
-                key={i}
+                key={contact.region}
                 className="flex items-center gap-3 px-4 md:px-5 py-4"
                 style={{
                   borderLeft: "1px solid rgba(255, 255, 255, 0.1)",
@@ -183,7 +183,7 @@ export function Footer() {
               onMouseOver={(e) => (e.currentTarget.style.color = "#fff")}
               onMouseOut={(e) => (e.currentTarget.style.color = "#4FBDBA")}
             >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4FBDBA" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="4" width="20" height="16" rx="2" />
                 <path d="M22 7l-10 7L2 7" />
               </svg>
@@ -191,8 +191,8 @@ export function Footer() {
             </a>
 
             <div className="mt-5 space-y-4">
-              {offices.map((office, i) => (
-                <div key={i}>
+              {offices.map((office) => (
+                <div key={office.title}>
                   <h6 className="font-mono text-[11px] font-medium mb-1 text-white">
                     {office.title}
                   </h6>
@@ -216,8 +216,8 @@ export function Footer() {
               Menu
             </h5>
             <ul className="space-y-2">
-              {menuLinks.map((link, i) => (
-                <li key={i}>
+              {menuLinks.map((link) => (
+                <li key={link.label}>
                   <a
                     href={link.href}
                     className="font-mono text-[11px] transition-colors duration-200 text-white/80"
@@ -237,8 +237,8 @@ export function Footer() {
               Reader Club
             </h5>
             <ul className="space-y-2">
-              {readerClubLinks.map((link, i) => (
-                <li key={i}>
+              {readerClubLinks.map((link) => (
+                <li key={link.label}>
                   <a
                     href={link.href}
                     className="font-mono text-[11px] transition-colors duration-200"
@@ -259,8 +259,8 @@ export function Footer() {
               Help
             </h5>
             <ul className="space-y-2">
-              {helpLinks.map((link, i) => (
-                <li key={i}>
+              {helpLinks.map((link) => (
+                <li key={link.label}>
                   <a
                     href={link.href}
                     className="font-mono text-[11px] transition-colors duration-200 text-white/80"
@@ -284,7 +284,7 @@ export function Footer() {
                 onMouseOver={(e) => (e.currentTarget.style.color = "#4FBDBA")}
                 onMouseOut={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.45)")}
               >
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#3AAFA9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
                 </svg>
                 +91-7262891127
@@ -297,9 +297,9 @@ export function Footer() {
                 Connect With Us
               </h5>
               <div className="flex gap-1.5">
-                {socialLinks.map((social, i) => (
+                {socialLinks.map((social) => (
                   <a
-                    key={i}
+                    key={social.label}
                     href={social.href}
                     aria-label={social.label}
                     className="w-8 h-8 flex items-center justify-center transition-all duration-200"
@@ -331,9 +331,9 @@ export function Footer() {
                 Secure Payment By
               </h5>
               <div className="flex items-center gap-1.5">
-                {["VISA", "DISCOVER", "MasterCard", "AMEX"].map((card, i) => (
+                {["VISA", "DISCOVER", "MasterCard", "AMEX"].map((card) => (
                   <div
-                    key={i}
+                    key={card}
                     className="px-2 py-1 font-mono text-[9px] font-medium tracking-wide"
                     style={{
                       border: "1px solid rgba(79, 189, 186, 0.15)",

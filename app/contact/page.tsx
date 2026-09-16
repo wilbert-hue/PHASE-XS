@@ -7,20 +7,9 @@ import { AnimatedNoise } from "@/components/animated-noise"
 import { BitmapChevron } from "@/components/bitmap-chevron"
 import { ScrambleTextOnHover } from "@/components/scramble-text"
 import { Footer } from "@/components/footer"
+import { PERSONAL_DOMAINS } from "@/lib/personal-domains"
 
 const recaptchaSiteKey = (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "").trim()
-
-const PERSONAL_DOMAINS = new Set([
-  "gmail.com","googlemail.com","yahoo.com","yahoo.co.in","yahoo.co.uk","yahoo.com.au",
-  "hotmail.com","hotmail.co.uk","hotmail.fr","hotmail.de","hotmail.es","hotmail.it",
-  "outlook.com","outlook.in","outlook.co.uk","live.com","live.in","live.co.uk",
-  "msn.com","icloud.com","me.com","mac.com","aol.com","protonmail.com","proton.me",
-  "yandex.com","yandex.ru","mail.ru","inbox.ru","list.ru","bk.ru","rambler.ru",
-  "zoho.com","gmx.com","gmx.de","gmx.net","web.de","t-online.de",
-  "rediffmail.com","in.com","sify.com","fastmail.com","fastmail.fm",
-  "tutanota.com","tutamail.com","tuta.io","cock.li","dispostable.com",
-  "mailinator.com","guerrillamail.com","tempmail.com","throwam.com","sharklasers.com",
-])
 
 function isPersonalEmail(email: string): boolean {
   const domain = email.split("@")[1]?.toLowerCase() || ""

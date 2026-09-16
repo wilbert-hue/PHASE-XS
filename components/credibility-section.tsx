@@ -15,14 +15,7 @@ const certifications = [
     height: 70,
     maxH: 64,
   },
-  {
-    src: "https://www.coherentmarketinsights.com/newfootimg/esomar2026.avif",
-    alt: "ESOMAR",
-    label: "",
-    width: 180,
-    height: 68,
-    maxH: 88,
-  },
+  { alt: "ESOMAR", src: "", label: "", width: 0, height: 0, maxH: 0 },
   {
     src: "https://www.coherentmarketinsights.com/images/iso-9001--NewUpda.webp",
     alt: "ISO 9001:2015",
@@ -188,9 +181,9 @@ export function CredibilitySection() {
           className="flex-1 flex flex-wrap"
           style={{ borderLeft: "1px solid rgba(27, 73, 101, 0.10)" }}
         >
-          {certifications.map((cert, i) => (
+          {certifications.map((cert) => (
             <div
-              key={i}
+              key={cert.alt}
               className="flex flex-col items-center justify-center py-5 md:py-6 px-3 transition-all duration-200 hover:bg-white/50"
               style={{
                 flex: "1 1 0",

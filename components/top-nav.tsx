@@ -112,8 +112,8 @@ export function TopNav() {
             href={AUTH0_LOGIN_HREF}
             className="font-mono text-xs xl:text-[13px] uppercase tracking-widest transition-colors duration-200"
             style={{ color: "#3d6070" }}
-            onMouseOver={(e) => (e.currentTarget.style.color = "#1B4965")}
-            onMouseOut={(e) => (e.currentTarget.style.color = "#3d6070")}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#1B4965")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#3d6070")}
           >
             Sign In
           </Link>
@@ -124,8 +124,8 @@ export function TopNav() {
               background: "linear-gradient(135deg, #1B4965, #2A8F9C)",
               border: "1px solid rgba(42,143,156,0.3)",
             }}
-            onMouseOver={(e) => { (e.currentTarget as HTMLElement).style.background = "linear-gradient(135deg, #2A8F9C, #3AAFA9)" }}
-            onMouseOut={(e) => { (e.currentTarget as HTMLElement).style.background = "linear-gradient(135deg, #1B4965, #2A8F9C)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "linear-gradient(135deg, #2A8F9C, #3AAFA9)" }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "linear-gradient(135deg, #1B4965, #2A8F9C)" }}
           >
             Get Access
           </Link>

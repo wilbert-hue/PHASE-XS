@@ -2,6 +2,8 @@
 
 import Link from "next/link"
 
+const TICK_BORDER = "rgba(79,189,186,0.5)"
+
 export function CmiVentureBanner() {
   return (
     <div
@@ -26,10 +28,10 @@ export function CmiVentureBanner() {
         style={{ background: "radial-gradient(ellipse 70% 100% at 50% 50%, rgba(79,189,186,0.07) 0%, transparent 70%)" }}
       />
       {/* Corner ticks */}
-      <span className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2" style={{ borderColor: "rgba(79,189,186,0.5)" }} />
-      <span className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2" style={{ borderColor: "rgba(79,189,186,0.5)" }} />
-      <span className="absolute bottom-0 left-0 w-4 h-4 border-l-2 border-b-2" style={{ borderColor: "rgba(79,189,186,0.5)" }} />
-      <span className="absolute bottom-0 right-0 w-4 h-4 border-r-2 border-b-2" style={{ borderColor: "rgba(79,189,186,0.5)" }} />
+      <span className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2" style={{ borderColor: TICK_BORDER }} />
+      <span className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2" style={{ borderColor: TICK_BORDER }} />
+      <span className="absolute bottom-0 left-0 w-4 h-4 border-l-2 border-b-2" style={{ borderColor: TICK_BORDER }} />
+      <span className="absolute bottom-0 right-0 w-4 h-4 border-r-2 border-b-2" style={{ borderColor: TICK_BORDER }} />
 
       <div className="relative px-6 sm:px-10 lg:px-16 xl:px-20 py-10 md:py-12">
 
@@ -77,11 +79,11 @@ export function CmiVentureBanner() {
                 background: "rgba(79,189,186,0.15)",
                 border: "1px solid rgba(79,189,186,0.5)",
               }}
-              onMouseOver={(e) => {
+              onMouseEnter={(e) => {
                 e.currentTarget.style.background = "rgba(79,189,186,0.28)"
                 e.currentTarget.style.borderColor = "#4FBDBA"
               }}
-              onMouseOut={(e) => {
+              onMouseLeave={(e) => {
                 e.currentTarget.style.background = "rgba(79,189,186,0.15)"
                 e.currentTarget.style.borderColor = "rgba(79,189,186,0.5)"
               }}

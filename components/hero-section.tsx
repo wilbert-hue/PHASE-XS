@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { AUTH0_LOGIN_HREF, AUTH0_SIGNUP_HREF } from "@/lib/auth0-routes"
+import { AUTH0_LOGIN_HREF } from "@/lib/auth0-routes"
 import { ScrambleTextOnHover } from "@/components/scramble-text"
 import { SplitFlapPhaseXsNctBack, SplitFlapAudioProvider } from "@/components/split-flap-text"
 import { AnimatedNoise } from "@/components/animated-noise"
@@ -73,8 +73,8 @@ export function HeroSection({
         </h2>
 
         <p className="mt-12 max-w-md font-mono text-sm leading-relaxed" style={{ color: "#0c1b24" }}>
-          <span style={{ color: "#2A8F9C", fontWeight: 600 }}>1000+ molecules</span>{" "}
-          across 40,000+ trials in 17 countries. The intelligence platform for pharma teams that need to move faster than the market.
+          <span style={{ color: "#2A8F9C", fontWeight: 600 }}>{moleculeCount.toLocaleString()}+ molecules</span>{" "}
+          across {trialCount.toLocaleString()}+ trials in 17 countries. The intelligence platform for pharma teams that need to move faster than the market.
         </p>
 
         <div className="mt-16 flex flex-wrap items-center gap-6 md:gap-8">
@@ -85,11 +85,11 @@ export function HeroSection({
               background: "linear-gradient(135deg, #1B4965, #1E6080)",
               border: "1px solid rgba(42, 143, 156, 0.3)",
             }}
-            onMouseOver={(e) => {
+            onMouseEnter={(e) => {
               e.currentTarget.style.background = "linear-gradient(135deg, #1E6080, #2A8F9C)"
               e.currentTarget.style.borderColor = "rgba(58, 175, 169, 0.5)"
             }}
-            onMouseOut={(e) => {
+            onMouseLeave={(e) => {
               e.currentTarget.style.background = "linear-gradient(135deg, #1B4965, #1E6080)"
               e.currentTarget.style.borderColor = "rgba(42, 143, 156, 0.3)"
             }}
@@ -101,8 +101,8 @@ export function HeroSection({
             href="#metrics"
             className="font-mono text-xs uppercase tracking-widest transition-colors duration-200"
             style={{ color: "#3AAFA9" }}
-            onMouseOver={(e) => (e.currentTarget.style.color = "#1B4965")}
-            onMouseOut={(e) => (e.currentTarget.style.color = "#3AAFA9")}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#1B4965")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#3AAFA9")}
           >
             Key metrics
           </a>

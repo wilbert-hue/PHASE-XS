@@ -61,6 +61,7 @@ export default async function Page() {
         <PageSection page="landing" variant="keystats">
           <KeyStatsSection />
         </PageSection>
+        <ColophonSection />
         <Footer />
       </div>
     </main>

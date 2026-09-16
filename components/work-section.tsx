@@ -8,7 +8,20 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 gsap.registerPlugin(ScrollTrigger)
 
-const coverageAreas = [
+const SLIDES = 2
+const INTERVAL = 5000
+
+type CoverageArea = {
+  title: string
+  medium: string
+  description: string
+  span: string
+  accent: string
+  accentLight: string
+  type?: "graph" | "bargraph"
+}
+
+const coverageAreas: CoverageArea[] = [
   {
     title: "Oncology",
     medium: "Largest Segment",
@@ -24,7 +37,7 @@ const coverageAreas = [
     span: "col-span-1 row-span-1",
     accent: "#1E6080",
     accentLight: "rgba(30, 96, 128, 0.05)",
-    type: "bargraph" as const,
+    type: "bargraph",
   },
   {
     title: "Immunology",
@@ -49,7 +62,7 @@ const coverageAreas = [
     span: "col-span-1 row-span-1",
     accent: "#3AAFA9",
     accentLight: "rgba(58, 175, 169, 0.06)",
-    type: "graph" as const,
+    type: "graph",
   },
   {
     title: "Biosimilars",
@@ -96,8 +109,6 @@ export function WorkSection() {
   const gridRef = useRef<HTMLDivElement>(null)
   const [slide, setSlide] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
-  const SLIDES = 2
-  const INTERVAL = 5000
 
   useEffect(() => {
     if (!sectionRef.current || !headerRef.current || !gridRef.current) return
@@ -169,12 +180,16 @@ function CoverageCarousel({
 }) {
   const goNext = useCallback(() => setSlide(s => (s + 1) % slides), [setSlide, slides])
   const goPrev = useCallback(() => setSlide(s => (s - 1 + slides) % slides), [setSlide, slides])
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleManual = (fn: () => void) => {
     fn()
     setIsPaused(true)
-    setTimeout(() => setIsPaused(false), 8000)
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+    resumeTimerRef.current = setTimeout(() => setIsPaused(false), 8000)
   }
+
+  useEffect(() => () => { if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current) }, [])
 
   return (
     <div className="relative">
@@ -192,8 +207,6 @@ function CoverageCarousel({
         )}
       </div>
 
-      <style>{`@keyframes slideProgress { from { width: 0% } to { width: 100% } }`}</style>
-
       <div className="overflow-hidden">
         <div
           className="flex transition-transform duration-500 ease-out"
@@ -208,12 +221,12 @@ function CoverageCarousel({
               onMouseLeave={() => setIsPaused(false)}
             >
               {coverageAreas.map((area, index) =>
-                (area as { type?: string }).type === "graph" ? (
-                  <GraphSnippetCard key={index} area={area} index={index} />
-                ) : (area as { type?: string }).type === "bargraph" ? (
-                  <BarGraphSnippetCard key={index} area={area} index={index} />
+                area.type === "graph" ? (
+                  <GraphSnippetCard key={area.title} area={area} index={index} />
+                ) : area.type === "bargraph" ? (
+                  <BarGraphSnippetCard key={area.title} area={area} index={index} />
                 ) : (
-                  <CoverageCard key={index} area={area} index={index} persistHover={index === 0} />
+                  <CoverageCard key={area.title} area={area} index={index} persistHover={index === 0} />
                 ),
               )}
             </div>

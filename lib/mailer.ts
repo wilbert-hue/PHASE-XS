@@ -27,7 +27,7 @@ function getTransporter() {
     port,
     secure: port === 465,
     auth: { user, pass },
-    tls: { rejectUnauthorized: false },
+    tls: { rejectUnauthorized: process.env.NODE_ENV === "production" },
   })
 }
 
@@ -44,14 +44,14 @@ export async function sendContactNotification(data: ContactPayload) {
       </div>
       <div style="padding:20px;background:#f0f5f7;border:1px solid rgba(42,143,156,0.3);border-top:none;">
         <table style="width:100%;border-collapse:collapse;font-size:14px;">
-          <tr><td style="padding:8px 0;font-weight:bold;width:160px;">Full Name</td><td>${escape(data.fullName)}</td></tr>
-          <tr><td style="padding:8px 0;font-weight:bold;">Company</td><td>${escape(data.company)}</td></tr>
-          <tr><td style="padding:8px 0;font-weight:bold;">Job Title</td><td>${escape(data.jobTitle)}</td></tr>
-          <tr><td style="padding:8px 0;font-weight:bold;">Email</td><td><a href="mailto:${escape(data.email)}">${escape(data.email)}</a></td></tr>
-          <tr><td style="padding:8px 0;font-weight:bold;">Phone</td><td>${escape(data.countryCode)} ${escape(data.contact)}</td></tr>
-          <tr><td style="padding:8px 0;font-weight:bold;">Country</td><td>${escape(data.country)}</td></tr>
-          <tr><td style="padding:8px 0;font-weight:bold;vertical-align:top;">Precise Business Objectives</td><td style="white-space:pre-wrap;">${escape(data.requirements || "—")}</td></tr>
-          <tr><td style="padding:8px 0;font-weight:bold;color:#3d6070;">IP Address</td><td style="color:#3d6070;">${escape(data.ip || "unknown")}</td></tr>
+          <tr><td style="padding:8px 0;font-weight:bold;width:160px;">Full Name</td><td>${escapeHtml(data.fullName)}</td></tr>
+          <tr><td style="padding:8px 0;font-weight:bold;">Company</td><td>${escapeHtml(data.company)}</td></tr>
+          <tr><td style="padding:8px 0;font-weight:bold;">Job Title</td><td>${escapeHtml(data.jobTitle)}</td></tr>
+          <tr><td style="padding:8px 0;font-weight:bold;">Email</td><td><a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></td></tr>
+          <tr><td style="padding:8px 0;font-weight:bold;">Phone</td><td>${escapeHtml(data.countryCode)} ${escapeHtml(data.contact)}</td></tr>
+          <tr><td style="padding:8px 0;font-weight:bold;">Country</td><td>${escapeHtml(data.country)}</td></tr>
+          <tr><td style="padding:8px 0;font-weight:bold;vertical-align:top;">Precise Business Objectives</td><td style="white-space:pre-wrap;">${escapeHtml(data.requirements || "—")}</td></tr>
+          <tr><td style="padding:8px 0;font-weight:bold;color:#3d6070;">IP Address</td><td style="color:#3d6070;">${escapeHtml(data.ip || "unknown")}</td></tr>
         </table>
         <p style="margin-top:20px;font-size:12px;color:#3d6070;">Submitted at ${new Date().toISOString()}</p>
       </div>
@@ -84,26 +84,26 @@ export async function sendContactNotification(data: ContactPayload) {
       <!-- Body -->
       <div style="padding:36px 32px;background:#f0f5f7;border-left:1px solid rgba(42,143,156,0.25);border-right:1px solid rgba(42,143,156,0.25);">
         <p style="margin:0 0 6px;font-family:monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#2A8F9C;">Inquiry Confirmed</p>
-        <h2 style="margin:0 0 24px;font-size:22px;font-weight:700;color:#1B4965;font-family:Arial,sans-serif;">Thank You, ${escape(data.fullName.split(" ")[0])}.</h2>
+        <h2 style="margin:0 0 24px;font-size:22px;font-weight:700;color:#1B4965;font-family:Arial,sans-serif;">Thank You, ${escapeHtml(data.fullName.split(" ")[0])}.</h2>
 
         <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#1E6080;">
           Thank you for your interest in <strong>PHASE-XS</strong> — the clinical intelligence platform built to accelerate drug development decisions with precision-grade trial data.
         </p>
 
         <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#1E6080;">
-          We have received your inquiry and a member of our team will review your research requirements and reach out to you at <a href="mailto:${escape(data.email)}" style="color:#2A8F9C;font-weight:600;">${escape(data.email)}</a> within <strong>24 business hours</strong>.
+          We have received your inquiry and a member of our team will review your research requirements and reach out to you at <a href="mailto:${escapeHtml(data.email)}" style="color:#2A8F9C;font-weight:600;">${escapeHtml(data.email)}</a> within <strong>24 business hours</strong>.
         </p>
 
         <!-- Summary box -->
         <div style="margin:28px 0;padding:20px 24px;background:#ffffff;border:1px solid rgba(42,143,156,0.3);border-left:3px solid #2A8F9C;">
           <p style="margin:0 0 12px;font-family:monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#2A8F9C;">Your Submission Summary</p>
           <table style="width:100%;border-collapse:collapse;font-size:13px;color:#1B4965;">
-            <tr><td style="padding:5px 0;width:130px;color:#3d6070;">Full Name</td><td style="font-weight:600;">${escape(data.fullName)}</td></tr>
-            <tr><td style="padding:5px 0;color:#3d6070;">Email</td><td style="font-weight:600;">${escape(data.email)}</td></tr>
-            <tr><td style="padding:5px 0;color:#3d6070;">Job Title</td><td style="font-weight:600;">${escape(data.jobTitle)}</td></tr>
-            <tr><td style="padding:5px 0;color:#3d6070;">Country Code</td><td style="font-weight:600;">${escape(data.countryCode)}</td></tr>
-            <tr><td style="padding:5px 0;color:#3d6070;">Contact Number</td><td style="font-weight:600;">${escape(data.contact)}</td></tr>
-            ${data.requirements ? `<tr><td style="padding:5px 0;color:#3d6070;vertical-align:top;">Requirements</td><td style="font-weight:600;white-space:pre-wrap;">${escape(data.requirements)}</td></tr>` : ""}
+            <tr><td style="padding:5px 0;width:130px;color:#3d6070;">Full Name</td><td style="font-weight:600;">${escapeHtml(data.fullName)}</td></tr>
+            <tr><td style="padding:5px 0;color:#3d6070;">Email</td><td style="font-weight:600;">${escapeHtml(data.email)}</td></tr>
+            <tr><td style="padding:5px 0;color:#3d6070;">Job Title</td><td style="font-weight:600;">${escapeHtml(data.jobTitle)}</td></tr>
+            <tr><td style="padding:5px 0;color:#3d6070;">Country Code</td><td style="font-weight:600;">${escapeHtml(data.countryCode)}</td></tr>
+            <tr><td style="padding:5px 0;color:#3d6070;">Contact Number</td><td style="font-weight:600;">${escapeHtml(data.contact)}</td></tr>
+            ${data.requirements ? `<tr><td style="padding:5px 0;color:#3d6070;vertical-align:top;">Requirements</td><td style="font-weight:600;white-space:pre-wrap;">${escapeHtml(data.requirements)}</td></tr>` : ""}
           </table>
         </div>
 
@@ -166,6 +166,6 @@ export async function sendContactNotification(data: ContactPayload) {
   ])
 }
 
-function escape(s: string) {
+function escapeHtml(s: string) {
   return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!))
 }
