@@ -44,15 +44,11 @@ export function HeroSection({
     <section ref={sectionRef} id="hero" className="relative min-h-screen flex items-center px-4 sm:px-6 lg:px-12 xl:px-20 overflow-hidden pt-12 sm:pt-14 lg:pt-16">
       <AnimatedNoise opacity={0.03} />
 
-      {/* White vignette over the dotted bg — keeps dots visible but lifts text contrast */}
+      {/* White vignette over the dotted bg */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `
-            radial-gradient(ellipse 55% 70% at 30% 50%, rgba(255,255,255,0.72) 0%, transparent 75%),
-            radial-gradient(ellipse 80% 60% at 15% 50%, rgba(27, 73, 101, 0.08) 0%, transparent 70%),
-            radial-gradient(ellipse 60% 50% at 75% 25%, rgba(42, 143, 156, 0.05) 0%, transparent 60%)
-          `,
+          background: "radial-gradient(ellipse 70% 80% at 25% 50%, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.5) 55%, transparent 80%)",
         }}
       />
 

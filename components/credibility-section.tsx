@@ -181,7 +181,7 @@ export function CredibilitySection() {
           className="flex-1 flex flex-wrap"
           style={{ borderLeft: "1px solid rgba(27, 73, 101, 0.10)" }}
         >
-          {certifications.map((cert) => (
+          {certifications.map((cert, i) => (
             <div
               key={cert.alt}
               className="flex flex-col items-center justify-center py-5 md:py-6 px-3 transition-all duration-200 hover:bg-white/50"

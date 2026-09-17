@@ -52,7 +52,7 @@ export function TopNav() {
     <header
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={{
-        background: scrolled ? "rgba(240,245,247,0.92)" : "rgba(240,245,247,0.7)",
+        background: scrolled ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.75)",
         backdropFilter: "blur(12px)",
         borderBottom: scrolled ? "1px solid rgba(42,143,156,0.18)" : "1px solid transparent",
         boxShadow: scrolled ? "0 2px 16px rgba(27,73,101,0.06)" : "none",
@@ -88,6 +88,12 @@ export function TopNav() {
               style={{ color: "#2A8F9C" }}
             >
               Clinical Intelligence
+            </span>
+            <span
+              className="font-mono tracking-[0.12em] uppercase whitespace-nowrap text-[6px] sm:text-[7px] mt-[2px]"
+              style={{ color: "#3d6070", opacity: 0.7 }}
+            >
+              A venture of CMI
             </span>
           </div>
         </button>

@@ -248,28 +248,87 @@ function DatasetScopeDiagram({ coverage }: { coverage: DatasetCoverageStats }) {
         </span>
       </div>
 
-      {/* Hero stats row */}
-      <div
-        className="relative grid grid-cols-2 sm:grid-cols-4"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
-      >
+      {/* Hero stats — 4 separate image cards */}
+      <div className="relative grid grid-cols-2 lg:grid-cols-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         {heroStats.map((stat, i) => (
           <div
             key={stat.label}
-            className="px-6 sm:px-8 py-7 sm:py-8"
-            style={{ borderRight: i < 3 ? "1px solid rgba(255,255,255,0.06)" : "none" }}
+            className="relative overflow-hidden"
+            style={{ borderRight: i < 3 ? "1px solid rgba(255,255,255,0.06)" : "none", minHeight: 160 }}
           >
-            <div
-              className="font-[var(--font-bebas)] text-4xl sm:text-5xl leading-none tracking-wide"
-              style={{ color: "#ffffff" }}
-            >
-              {stat.value}
+            {/* Background illustration */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.13]">
+              {i === 0 && (
+                /* Clinical Trials — flask + cross */
+                <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                  <path d="M55 20 L55 80 L25 130 Q20 140 30 140 L130 140 Q140 140 135 130 L105 80 L105 20 Z" stroke="#4FBDBA" strokeWidth="3" fill="none"/>
+                  <line x1="50" y1="20" x2="110" y2="20" stroke="#4FBDBA" strokeWidth="3" strokeLinecap="round"/>
+                  <path d="M42 100 L118 100" stroke="#4FBDBA" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.6"/>
+                  <circle cx="65" cy="115" r="5" fill="#4FBDBA" opacity="0.8"/>
+                  <circle cx="90" cy="122" r="3.5" fill="#4FBDBA" opacity="0.6"/>
+                  <circle cx="105" cy="112" r="4" fill="#4FBDBA" opacity="0.7"/>
+                  <path d="M75 55 L75 75 M65 65 L85 65" stroke="#4FBDBA" strokeWidth="2.5" strokeLinecap="round" opacity="0.7"/>
+                </svg>
+              )}
+              {i === 1 && (
+                /* Drug Molecules — hexagonal lattice */
+                <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                  <polygon points="80,20 103,33 103,59 80,72 57,59 57,33" stroke="#4FBDBA" strokeWidth="2.5" fill="none"/>
+                  <polygon points="80,72 103,85 103,111 80,124 57,111 57,85" stroke="#4FBDBA" strokeWidth="2" fill="none" opacity="0.7"/>
+                  <polygon points="126,46 149,59 149,85 126,98 103,85 103,59" stroke="#4FBDBA" strokeWidth="2" fill="none" opacity="0.6"/>
+                  <polygon points="34,46 57,59 57,85 34,98 11,85 11,59" stroke="#4FBDBA" strokeWidth="2" fill="none" opacity="0.6"/>
+                  <circle cx="80" cy="46" r="5" fill="#4FBDBA"/>
+                  <circle cx="103" cy="59" r="4" fill="#4FBDBA" opacity="0.8"/>
+                  <circle cx="103" cy="85" r="4" fill="#4FBDBA" opacity="0.8"/>
+                  <circle cx="80" cy="98" r="5" fill="#4FBDBA"/>
+                  <circle cx="57" cy="59" r="4" fill="#4FBDBA" opacity="0.8"/>
+                  <circle cx="57" cy="85" r="4" fill="#4FBDBA" opacity="0.8"/>
+                </svg>
+              )}
+              {i === 2 && (
+                /* Indications — body silhouette + nodes */
+                <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                  <circle cx="80" cy="30" r="14" stroke="#4FBDBA" strokeWidth="2.5" fill="none"/>
+                  <path d="M60 55 Q50 70 52 95 L68 95 L72 140 L88 140 L92 95 L108 95 Q110 70 100 55 Q90 48 80 48 Q70 48 60 55Z" stroke="#4FBDBA" strokeWidth="2.5" fill="none"/>
+                  <path d="M52 95 L30 110" stroke="#4FBDBA" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M108 95 L130 110" stroke="#4FBDBA" strokeWidth="2" strokeLinecap="round"/>
+                  <circle cx="30" cy="112" r="4" fill="#4FBDBA" opacity="0.7"/>
+                  <circle cx="130" cy="112" r="4" fill="#4FBDBA" opacity="0.7"/>
+                  <circle cx="80" cy="72" r="3" fill="#4FBDBA" opacity="0.6"/>
+                  <line x1="80" y1="72" x2="80" y2="95" stroke="#4FBDBA" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.5"/>
+                </svg>
+              )}
+              {i === 3 && (
+                /* Countries — globe */
+                <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+                  <circle cx="80" cy="80" r="55" stroke="#4FBDBA" strokeWidth="2.5"/>
+                  <ellipse cx="80" cy="80" rx="25" ry="55" stroke="#4FBDBA" strokeWidth="1.5" opacity="0.7"/>
+                  <line x1="25" y1="80" x2="135" y2="80" stroke="#4FBDBA" strokeWidth="1.5" opacity="0.7"/>
+                  <path d="M28 55 Q80 48 132 55" stroke="#4FBDBA" strokeWidth="1" opacity="0.5"/>
+                  <path d="M28 105 Q80 112 132 105" stroke="#4FBDBA" strokeWidth="1" opacity="0.5"/>
+                  <circle cx="80" cy="80" r="3" fill="#4FBDBA"/>
+                  <circle cx="55" cy="65" r="3" fill="#4FBDBA" opacity="0.8"/>
+                  <circle cx="108" cy="72" r="3" fill="#4FBDBA" opacity="0.8"/>
+                  <circle cx="68" cy="95" r="3" fill="#4FBDBA" opacity="0.8"/>
+                  <circle cx="100" cy="90" r="3" fill="#4FBDBA" opacity="0.8"/>
+                </svg>
+              )}
             </div>
-            <div
-              className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em]"
-              style={{ color: "rgba(79,189,186,0.7)" }}
-            >
-              {stat.label}
+
+            {/* Content */}
+            <div className="relative z-10 px-6 sm:px-8 py-7 sm:py-8">
+              <div
+                className="font-[var(--font-bebas)] text-4xl sm:text-5xl leading-none tracking-wide"
+                style={{ color: "#ffffff" }}
+              >
+                {stat.value}
+              </div>
+              <div
+                className="mt-2 font-mono text-[10px] uppercase tracking-[0.2em]"
+                style={{ color: "rgba(79,189,186,0.7)" }}
+              >
+                {stat.label}
+              </div>
             </div>
           </div>
         ))}
