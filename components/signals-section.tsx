@@ -327,54 +327,6 @@ function DatasetScopeDiagram({ coverage }: { coverage: DatasetCoverageStats }) {
         })}
       </div>
 
-      {/* Bottom accent strip */}
-      <div
-        className="mt-4 px-5 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-3"
-        style={{
-          background: "linear-gradient(160deg, #0b2030 0%, #0d2840 55%, #07161f 100%)",
-          border: "1px solid rgba(79,189,186,0.18)",
-        }}
-      >
-        {/* Left: label + pulse dot */}
-        <div className="flex items-center gap-2.5 shrink-0">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#4FBDBA] shadow-[0_0_6px_#4FBDBA]" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.3em]" style={{ color: "#4FBDBA" }}>
-            Global Coverage
-          </span>
-        </div>
-
-        {/* Divider */}
-        <div className="hidden sm:block h-3 w-px" style={{ background: "rgba(79,189,186,0.3)" }} />
-
-        {/* Country tags */}
-        <div className="flex flex-wrap gap-x-1 gap-y-1">
-          {["US","UK","IN","DE","FR","JP","CN","SG","AU","BR","ES","IT","NL","SE","CA","CH","NZ"].map((c) => (
-            <span
-              key={c}
-              className="font-mono text-[9px] sm:text-[10px] px-2 py-0.5"
-              style={{
-                color: "rgba(79,189,186,0.85)",
-                background: "rgba(79,189,186,0.06)",
-                border: "1px solid rgba(79,189,186,0.15)",
-                letterSpacing: "0.1em",
-              }}
-            >
-              {c}
-            </span>
-          ))}
-        </div>
-
-        {/* Right: verified badge */}
-        <div className="hidden sm:flex items-center gap-1.5 ml-auto shrink-0">
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-            <circle cx="5" cy="5" r="4.5" stroke="#4FBDBA" strokeWidth="0.8" opacity="0.6"/>
-            <path d="M3 5l1.2 1.2L7 3.5" stroke="#4FBDBA" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: "rgba(79,189,186,0.5)" }}>
-            Verified Data
-          </span>
-        </div>
-      </div>
     </div>
   )
 }

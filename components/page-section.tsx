@@ -5,39 +5,14 @@ import { cn } from "@/lib/utils"
  * separate “chapters” instead of one continuous dotted canvas.
  */
 const landing: Record<string, string> = {
-  metrics: cn(
-    "border-t-2 border-[#1B4965]/40",
-    "bg-gradient-to-b from-[rgba(27,73,101,0.12)] via-[#e9f0f4] to-[#f0f5f7]",
-    "shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]",
-  ),
-  coverage: cn(
-    "border-t-2 border-[#1E6080]/40",
-    "bg-gradient-to-b from-[rgba(30,96,128,0.11)] via-[#e8f1f3] to-[#f0f5f7]",
-  ),
-  principles: cn(
-    "border-t-2 border-[#2A8F9C]/40",
-    "bg-gradient-to-b from-[rgba(42,143,156,0.10)] via-[#eaf3f4] to-[#f0f5f7]",
-  ),
-  credibility: cn(
-    "border-t-2 border-[#3AAFA9]/40",
-    "bg-gradient-to-b from-[rgba(58,175,169,0.10)] via-[#ecf6f5] to-[#f0f5f7]",
-  ),
-  clientele: cn(
-    "border-t-2 border-[#4FBDBA]/40",
-    "bg-gradient-to-b from-[rgba(79,189,186,0.08)] via-[#eef5f4] to-[#f0f5f7]",
-  ),
-  platform: cn(
-    "border-t-2 border-[#2563EB]/30",
-    "bg-gradient-to-b from-[rgba(37,99,235,0.07)] via-[#eaedf5] to-[#f0f5f7]",
-  ),
-  keystats: cn(
-    "border-t-2 border-[#6D28D9]/25",
-    "bg-gradient-to-b from-[rgba(109,40,217,0.08)] via-[#f0ebf5] to-[#f0f5f7]",
-  ),
-  colophon: cn(
-    "border-t-2 border-[#0E7490]/30",
-    "bg-gradient-to-b from-[rgba(14,116,144,0.08)] to-[#f0f5f7]",
-  ),
+  metrics:     "border-t border-[#1B4965]/15 bg-white",
+  coverage:    "border-t border-[#1E6080]/15 bg-white",
+  principles:  "border-t border-[#2A8F9C]/15 bg-white",
+  credibility: "border-t border-[#3AAFA9]/15 bg-white",
+  clientele:   "border-t border-[#4FBDBA]/15 bg-white",
+  platform:    "border-t border-[#2563EB]/12 bg-white",
+  keystats:    "border-t border-[#6D28D9]/12 bg-white",
+  colophon:    "border-t border-[#0E7490]/12 bg-white",
 }
 
 const dashboard: Record<string, string> = {
