@@ -224,7 +224,6 @@ export default function ContactPage() {
       </div>
     </header>
     <main className="relative min-h-screen overflow-hidden px-4 sm:px-6 lg:px-12 xl:px-20 pt-24 sm:pt-28 pb-16">
-      <AnimatedNoise opacity={0.03} />
 
 
 

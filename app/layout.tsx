@@ -52,7 +52,6 @@ export default function RootLayout({
         className={`${ibmPlexSans.variable} ${bebasNeue.variable} ${ibmPlexMono.variable} font-sans antialiased overflow-x-hidden`}
         suppressHydrationWarning
       >
-        <div className="noise-overlay" aria-hidden="true" />
         <SmoothScroll>{children}</SmoothScroll>
         <Analytics />
       </body>

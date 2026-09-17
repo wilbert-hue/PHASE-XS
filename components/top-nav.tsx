@@ -84,16 +84,16 @@ export function TopNav() {
               PHASE-XS
             </span>
             <span
-              className="font-mono tracking-[0.22em] uppercase whitespace-nowrap text-[7px] sm:text-[8px] lg:text-[9px]"
+              className="font-mono tracking-[0.22em] uppercase whitespace-nowrap text-[7px] sm:text-[8px] lg:text-[9px] mt-[1px]"
               style={{ color: "#2A8F9C" }}
             >
               Clinical Intelligence
             </span>
             <span
-              className="font-mono tracking-[0.12em] uppercase whitespace-nowrap text-[6px] sm:text-[7px] mt-[2px]"
-              style={{ color: "#3d6070", opacity: 0.7 }}
+              className="font-mono tracking-[0.08em] uppercase whitespace-nowrap text-[5px] sm:text-[6px] mt-[7px]"
+              style={{ color: "#3d6070", opacity: 0.55 }}
             >
-              A venture of CMI
+              A venture of Coherent Market Insights
             </span>
           </div>
         </button>
