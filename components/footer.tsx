@@ -361,7 +361,7 @@ export function Footer() {
       {/* Bottom bar */}
       <div className="px-6 md:px-12 lg:px-20 py-4 flex flex-col md:flex-row items-center justify-between gap-2">
         <p className="font-mono text-[10px] uppercase tracking-widest text-white/80">
-          © 2026 Coherent Market Insights. All Rights Reserved.
+          © 2026 PHASE-XS. AI Powered Clinical Intelligence Platform.
         </p>
         <p className="font-mono text-[10px]" style={{ color: "#2A8F9C" }}>
           Data-driven insights. Built with precision.

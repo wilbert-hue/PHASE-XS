@@ -226,17 +226,6 @@ export default function ContactPage() {
     <main className="relative min-h-screen overflow-hidden px-4 sm:px-6 lg:px-12 xl:px-20 pt-24 sm:pt-28 pb-16">
       <AnimatedNoise opacity={0.03} />
 
-      {/* Gradient glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `
-            radial-gradient(ellipse 80% 60% at 15% 50%, rgba(27, 73, 101, 0.10) 0%, transparent 70%),
-            radial-gradient(ellipse 60% 50% at 75% 25%, rgba(42, 143, 156, 0.07) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 40% at 50% 85%, rgba(79, 189, 186, 0.05) 0%, transparent 50%)
-          `,
-        }}
-      />
 
 
       <div className="relative z-10 max-w-6xl mx-auto">
@@ -274,7 +263,7 @@ export default function ContactPage() {
             <div
               className="relative p-8"
               style={{
-                background: "rgba(225, 235, 240, 0.85)",
+                background: "#ffffff",
                 border: "1px solid rgba(27, 73, 101, 0.2)",
                 backdropFilter: "blur(8px)",
               }}

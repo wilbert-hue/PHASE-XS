@@ -70,7 +70,7 @@ export function HeroSection({
 
         <p className="mt-12 max-w-md font-mono text-sm leading-relaxed" style={{ color: "#0c1b24" }}>
           <span style={{ color: "#2A8F9C", fontWeight: 600 }}>{moleculeCount.toLocaleString()}+ molecules</span>{" "}
-          across {trialCount.toLocaleString()}+ trials in 17 countries. The intelligence platform for pharma teams that need to move faster than the market.
+          across <span style={{ color: "#2A8F9C", fontWeight: 600 }}>40,000+ trials</span> in 17 countries. The intelligence platform for pharma teams that need to move faster than the market.
         </p>
 
         <div className="mt-16 flex flex-wrap items-center gap-6 md:gap-8">
