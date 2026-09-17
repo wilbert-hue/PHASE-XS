@@ -189,7 +189,7 @@ function NctLetterTile({ letter }: { letter: string }) {
         fontSize: TILE_FONT,
         width: "0.65em",
         height: "1.05em",
-        backgroundColor: "#d4e4e9",
+        backgroundColor: "#ffffff",
       }}
     >
       <div className="absolute inset-x-0 top-1/2 h-[1px] bg-foreground/10 pointer-events-none z-10" />
@@ -235,7 +235,7 @@ function DigitTickerTile({
         fontSize: TILE_FONT,
         width: "0.65em",
         height: "1.05em",
-        backgroundColor: "#d4e4e9",
+        backgroundColor: "#ffffff",
       }}
     >
       <div className="absolute inset-x-0 top-1/2 h-[1px] bg-foreground/10 pointer-events-none z-10" />
@@ -360,7 +360,7 @@ export function SplitFlapChar({
 
   const tileDelay = 0.15 * index
 
-  const bgColor = isSettled ? "#e8f0f3" : "#d4e4e9"
+  const bgColor = "#ffffff"
   const textColor = isSettled ? "#1B4965" : "#2A8F9C"
 
   useEffect(() => {

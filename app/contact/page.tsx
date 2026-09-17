@@ -7,6 +7,11 @@ import { AnimatedNoise } from "@/components/animated-noise"
 import { BitmapChevron } from "@/components/bitmap-chevron"
 import { ScrambleTextOnHover } from "@/components/scramble-text"
 import { Footer } from "@/components/footer"
+import { CmiVentureBanner } from "@/components/cmi-venture-banner"
+import { KeyStatsSection } from "@/components/key-stats-section"
+import { WhyCmiSection } from "@/components/why-cmi-section"
+import { ClienteleSection } from "@/components/clientele-section"
+import { CredibilitySection } from "@/components/credibility-section"
 import { PERSONAL_DOMAINS } from "@/lib/personal-domains"
 
 const recaptchaSiteKey = (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "").trim()
@@ -176,7 +181,7 @@ export default function ContactPage() {
     <header
       className="fixed top-0 left-0 right-0 z-50"
       style={{
-        background: "rgba(240,245,247,0.92)",
+        background: "rgba(255,255,255,0.95)",
         backdropFilter: "blur(12px)",
         borderBottom: "1px solid rgba(42,143,156,0.18)",
         boxShadow: "0 2px 16px rgba(27,73,101,0.06)",
@@ -197,6 +202,7 @@ export default function ContactPage() {
           <div className="flex flex-col leading-none">
             <span className="font-[var(--font-bebas)] tracking-[0.1em] text-lg sm:text-xl" style={{ color: "#1B4965" }}>PHASE-XS</span>
             <span className="font-mono tracking-[0.22em] uppercase text-[7px] sm:text-[8px]" style={{ color: "#2A8F9C" }}>Clinical Intelligence</span>
+            <span className="font-mono tracking-[0.12em] uppercase text-[6px] sm:text-[7px] mt-[2px]" style={{ color: "#3d6070", opacity: 0.7 }}>A venture of CMI</span>
           </div>
         </Link>
 
@@ -402,6 +408,12 @@ export default function ContactPage() {
       </div>
 
     </main>
+
+    <CmiVentureBanner />
+    <KeyStatsSection />
+    <ClienteleSection />
+    <CredibilitySection />
+    <WhyCmiSection />
     <Footer />
     </>
   )

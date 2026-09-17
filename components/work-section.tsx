@@ -147,7 +147,7 @@ export function WorkSection() {
             {slideHeadings[slide].title}
           </h2>
         </div>
-        <p key={`desc-${slide}`} className="hidden md:block max-w-xs font-mono text-xs text-right leading-relaxed transition-opacity duration-500" style={{ color: "#1B4965" }}>
+        <p key={`desc-${slide}`} className="hidden md:block max-w-xs font-mono text-xs text-left leading-relaxed transition-opacity duration-500" style={{ color: "#1B4965" }}>
           {slideHeadings[slide].description}
         </p>
       </div>
@@ -635,39 +635,24 @@ function CoverageCard({
         }}
       />
 
-      {/* Hover fill */}
-      <div
-        className="absolute inset-0 transition-opacity duration-500"
-        style={{
-          opacity: isActive ? 1 : 0,
-          background: area.accentLight,
-        }}
-      />
 
       {/* Eyebrow + title */}
-      <div className="relative z-10">
+      <div
+        className="relative z-10 transition-opacity duration-400"
+        style={{ opacity: isActive ? 0 : 1 }}
+      >
         <span
-          className="font-mono text-[10px] uppercase tracking-widest transition-colors duration-300"
-          style={{ color: isActive ? area.accent : "#1B4965" }}
+          className="font-mono text-[10px] uppercase tracking-widest"
+          style={{ color: "#1B4965" }}
         >
           {area.medium}
         </span>
         <h3
-          className="mt-2 font-[var(--font-bebas)] text-2xl md:text-4xl tracking-tight transition-colors duration-300"
-          style={{ color: isActive ? area.accent : "#0c1b24" }}
+          className="mt-2 font-[var(--font-bebas)] text-2xl md:text-4xl tracking-tight"
+          style={{ color: "#0c1b24" }}
         >
           {area.title}
         </h3>
-      </div>
-
-      {/* Description — directly below title, always visible */}
-      <div className="relative z-10 mt-3">
-        <p
-          className="font-mono text-xs leading-relaxed max-w-[280px]"
-          style={{ color: "#1B4965", opacity: isActive ? 1 : 0.7 }}
-        >
-          {area.description}
-        </p>
       </div>
 
       <span
@@ -686,6 +671,50 @@ function CoverageCard({
       >
         <div className="absolute top-0 right-0 w-full h-[1px]" style={{ background: area.accent }} />
         <div className="absolute top-0 right-0 w-[1px] h-full" style={{ background: area.accent }} />
+      </div>
+
+      {/* Hover overlay — fills card */}
+      <div
+        className="absolute inset-0 z-20 flex flex-col justify-between p-5 transition-all duration-400"
+        style={{
+          opacity: isActive ? 1 : 0,
+          pointerEvents: isActive ? "auto" : "none",
+          background: `linear-gradient(160deg, ${area.accent}dd 0%, ${area.accent}bb 50%, ${area.accent}ee 100%)`,
+          backdropFilter: isActive ? "blur(10px)" : "none",
+          transform: isActive ? "translateY(0)" : "translateY(100%)",
+        }}
+      >
+        {/* Top — eyebrow */}
+        <div>
+          <span
+            className="font-mono text-[10px] uppercase tracking-widest text-white"
+            style={{ opacity: 0.7 }}
+          >
+            {area.medium}
+          </span>
+        </div>
+
+        {/* Middle — decorative rule */}
+        <div
+          className="w-10 h-[1px]"
+          style={{ background: "rgba(255,255,255,0.4)" }}
+        />
+
+        {/* Bottom — title + description */}
+        <div>
+          <h3
+            className="font-[var(--font-bebas)] text-3xl md:text-4xl tracking-tight text-white mb-2"
+            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.25)" }}
+          >
+            {area.title}
+          </h3>
+          <p
+            className="font-mono text-xs leading-relaxed text-white"
+            style={{ opacity: 0.88 }}
+          >
+            {area.description}
+          </p>
+        </div>
       </div>
     </article>
   )

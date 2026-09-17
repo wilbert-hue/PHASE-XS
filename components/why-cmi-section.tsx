@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { useRef, useEffect } from "react"
 import gsap from "gsap"
@@ -179,4 +179,3 @@ export function WhyCmiSection() {
     </section>
   )
 }
-
