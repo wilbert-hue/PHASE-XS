@@ -51,21 +51,19 @@ export function CmiVentureBanner() {
               <circle cx="22" cy="22" r="2.5" fill="#4FBDBA"/>
             </svg>
             <div>
-              <div className="flex items-baseline gap-3 flex-wrap">
-                <div className="font-[var(--font-bebas)] text-2xl tracking-[0.1em] text-white leading-none">PHASE-XS</div>
-                <div className="flex items-center gap-1.5">
-                  <span className="font-mono text-[9px] uppercase tracking-wider text-white/40">A venture of</span>
-                  <a
-                    href="https://www.coherentmarketinsights.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono text-[9px] uppercase tracking-wider text-white/70 hover:text-[#4FBDBA] transition-colors duration-200"
-                  >
-                    Coherent Market Insights ↗
-                  </a>
-                </div>
+              <div className="font-[var(--font-bebas)] text-2xl tracking-[0.1em] text-white leading-none">PHASE-XS</div>
+              <div className="flex items-center gap-1.5 mt-1">
+                <span className="font-mono text-[9px] uppercase tracking-wider text-white/40">A venture of</span>
+                <a
+                  href="https://www.coherentmarketinsights.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-[9px] uppercase tracking-wider text-white/70 hover:text-[#4FBDBA] transition-colors duration-200"
+                >
+                  Coherent Market Insights ↗
+                </a>
               </div>
-              <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#4FBDBA] mt-0.5">Clinical Intelligence</div>
+              <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#4FBDBA] mt-1">Clinical Intelligence</div>
             </div>
           </div>
 

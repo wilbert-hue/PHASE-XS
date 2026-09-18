@@ -398,6 +398,7 @@ export default function ContactPage() {
     </main>
 
     <CmiVentureBanner />
+    <div className="py-6" />
     <KeyStatsSection />
     <ClienteleSection />
     <CredibilitySection />
