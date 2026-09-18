@@ -29,7 +29,7 @@ const metrics = [
   },
   {
     date: "mAb",
-    title: "Leading Tech",
+    title: "Leading\nTech",
     note: "Monoclonal antibodies represent the dominant technology platform across all phases.",
     accent: SIGNAL_ACCENT,
     accentLight: SIGNAL_ACCENT_LIGHT,
@@ -128,8 +128,8 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
   }, [])
 
   return (
-    <section id="metrics" ref={sectionRef} className="relative py-32 px-4 sm:px-6 lg:px-12 xl:px-20">
-      {/* Cursor — c3 */}
+    <section id="metrics" ref={sectionRef} className="relative py-14 sm:py-20 md:py-24 px-4 sm:px-6 lg:px-12 xl:px-20">
+      {/* Cursor */}
       <div
         ref={cursorRef}
         className={cn(
@@ -141,35 +141,32 @@ export function SignalsSection({ coverage }: { coverage: DatasetCoverageStats })
       />
 
       {/* Section header */}
-      <div ref={headerRef} className="mb-16">
-        {/* Label — c4 */}
-        <span
-          className="font-mono text-sm uppercase tracking-[0.3em]"
-          style={{ color: "#1B4965" }}
-        >
-          01 / Key Metrics
-        </span>
-        {/* Heading — c1 */}
+      <div ref={headerRef} className="mb-14">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-px w-8" style={{ background: "#4FBDBA" }} />
+          <span className="font-mono text-[11px] uppercase tracking-[0.3em]" style={{ color: "#4FBDBA" }}>
+            Key Metrics
+          </span>
+        </div>
         <h2
-          className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight"
+          className="font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight"
           style={{ color: "#1B4965" }}
         >
           AT A GLANCE
         </h2>
+        <p className="mt-3 font-mono text-xs leading-relaxed max-w-md" style={{ color: "#3d6070" }}>
+          A snapshot of what the PHASE-XS dataset covers across phases, indications, and geographies.
+        </p>
       </div>
 
-      {/* Horizontal scroll container */}
-      <div
-        ref={listRef}
-        className="flex gap-8 overflow-x-auto pb-8 pr-12 scrollbar-hide"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-      >
+      {/* Grid cards */}
+      <div ref={listRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {metrics.map((metric, index) => (
           <MetricCard key={metric.title} metric={metric} index={index} />
         ))}
       </div>
 
-      {/* Diagram-style scope block — hub + bracketed lists (see dataset breadth at a glance) */}
+      {/* Diagram-style scope block */}
       <DatasetScopeDiagram coverage={coverage} />
     </section>
   )
@@ -232,7 +229,7 @@ function DatasetScopeDiagram({ coverage }: { coverage: DatasetCoverageStats }) {
       </div>
 
       {/* 4 separate cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
         {heroStats.map((stat, i) => {
           const cat = categories[i]
           return (
@@ -339,67 +336,65 @@ function MetricCard({
   index: number
 }) {
   return (
-    <article
-      className="group relative flex-shrink-0 w-72 transition-transform duration-500 ease-out hover:-translate-y-1.5"
-    >
-      {/* Card */}
+    <article className="group relative transition-transform duration-400 ease-out hover:-translate-y-1">
       <div
-        className="relative overflow-hidden h-full"
+        className="relative overflow-hidden h-full flex flex-col"
         style={{
-          background: "rgba(240,247,250,0.85)",
-          border: "1px solid rgba(27,73,101,0.14)",
-          borderTop: `2px solid ${metric.accent}`,
+          background: "linear-gradient(155deg, #0c2236 0%, #102d44 55%, #0a1e2e 100%)",
+          border: "1px solid rgba(79,189,186,0.18)",
+          borderLeft: `2px solid ${metric.accent}`,
         }}
       >
+        {/* Corner ticks */}
+        <span className="absolute top-0 right-0 w-3 h-3 border-r-2 border-t-2" style={{ borderColor: "rgba(79,189,186,0.35)" }} />
+        <span className="absolute bottom-0 right-0 w-3 h-3 border-r-2 border-b-2" style={{ borderColor: "rgba(79,189,186,0.35)" }} />
+
         {/* Hover glow */}
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{ background: `radial-gradient(ellipse at 20% 0%, ${metric.accentLight} 0%, transparent 65%)` }}
+          style={{ background: "radial-gradient(ellipse at 0% 0%, rgba(79,189,186,0.08) 0%, transparent 60%)" }}
         />
 
-        <div className="relative p-6">
-          {/* Index + category tag row */}
-          <div className="flex items-center justify-between mb-3">
-            <span
-              className="font-mono text-[10px] uppercase tracking-[0.3em] tabular-nums"
-              style={{ color: metric.accent }}
-            >
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <span
-              className="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5"
-              style={{
-                color: metric.accent,
-                background: metric.accentLight,
-                border: `1px solid ${metric.accent}33`,
-              }}
-            >
-              {metric.date}
-            </span>
-          </div>
+        {/* Ghost index number */}
+        <div
+          className="absolute top-3 right-4 font-[var(--font-bebas)] select-none pointer-events-none"
+          style={{ fontSize: "4.5rem", lineHeight: 1, color: "rgba(79,189,186,0.06)" }}
+        >
+          {String(index + 1).padStart(2, "0")}
+        </div>
+
+        <div className="relative p-6 flex flex-col gap-4 flex-1">
+          {/* Tag */}
+          <span
+            className="self-start font-mono text-[10px] uppercase tracking-wider px-2 py-0.5"
+            style={{
+              color: metric.accent,
+              background: "rgba(79,189,186,0.1)",
+              border: "1px solid rgba(79,189,186,0.25)",
+            }}
+          >
+            {metric.date}
+          </span>
 
           {/* Title */}
           <h3
-            className="font-[var(--font-bebas)] text-3xl tracking-tight leading-none mb-3"
-            style={{ color: "#1B4965" }}
+            className="font-[var(--font-bebas)] text-3xl sm:text-4xl tracking-tight leading-none"
+            style={{ color: "#ffffff", whiteSpace: "pre-line" }}
           >
             {metric.title}
           </h3>
 
           {/* Accent rule */}
           <div
-            className="h-px mb-4 group-hover:opacity-100 transition-all duration-500"
-            style={{ background: `linear-gradient(to right, ${metric.accent}, transparent)`, opacity: 0.5 }}
+            className="h-px w-10 group-hover:w-full transition-all duration-500"
+            style={{ background: `linear-gradient(to right, ${metric.accent}, transparent)` }}
           />
 
           {/* Note */}
-          <p className="font-mono text-[11px] leading-relaxed" style={{ color: "#3d6070" }}>
+          <p className="font-mono text-[11px] leading-relaxed mt-auto" style={{ color: "rgba(255,255,255,0.65)" }}>
             {metric.note}
           </p>
         </div>
-
-        {/* Bottom-right corner tick */}
-        <span className="absolute bottom-0 right-0 w-3 h-3 border-r border-b" style={{ borderColor: metric.accent + "66" }} />
       </div>
     </article>
   )

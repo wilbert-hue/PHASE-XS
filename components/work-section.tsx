@@ -137,19 +137,19 @@ export function WorkSection() {
   }, [isPaused, SLIDES])
 
   return (
-    <section ref={sectionRef} id="coverage" className="relative py-32 px-4 sm:px-6 lg:px-12 xl:px-20">
-      <div ref={headerRef} className="mb-16 flex items-end justify-between">
-        <div>
-          <span key={`label-${slide}`} className="font-mono text-sm uppercase tracking-[0.3em] transition-opacity duration-500" style={{ color: "#1B4965" }}>
-            {slideHeadings[slide].label}
-          </span>
+    <section ref={sectionRef} id="coverage" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 lg:px-12 xl:px-20">
+      <div ref={headerRef} className="mb-10 md:mb-16">
+        <span key={`label-${slide}`} className="font-mono text-sm uppercase tracking-[0.3em] transition-opacity duration-500" style={{ color: "#1B4965" }}>
+          {slideHeadings[slide].label}
+        </span>
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-6">
           <h2 key={`title-${slide}`} className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight transition-opacity duration-500" style={{ color: "#1E6080" }}>
             {slideHeadings[slide].title}
           </h2>
+          <p key={`desc-${slide}`} className="max-w-xs font-mono text-xs text-left leading-relaxed transition-opacity duration-500 sm:pb-1" style={{ color: "#1B4965" }}>
+            {slideHeadings[slide].description}
+          </p>
         </div>
-        <p key={`desc-${slide}`} className="hidden md:block max-w-xs font-mono text-xs text-left leading-relaxed transition-opacity duration-500" style={{ color: "#1B4965" }}>
-          {slideHeadings[slide].description}
-        </p>
       </div>
       <CoverageCarousel
         gridRef={gridRef}
@@ -216,7 +216,7 @@ function CoverageCarousel({
           <div className="w-full shrink-0">
             <div
               ref={gridRef}
-              className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 auto-rows-[180px] md:auto-rows-[200px]"
+              className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 auto-rows-[160px] sm:auto-rows-[180px] md:auto-rows-[200px]"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
@@ -458,7 +458,7 @@ function TopIndicationsCard() {
       <div className="mt-4 space-y-2.5">
         {bars.map((b, i) => (
           <div key={i} className="flex items-center gap-2">
-            <span className="font-mono text-[9px] w-24 shrink-0 text-right" style={{ color: "#1B4965" }}>{b.label}</span>
+            <span className="font-mono text-[9px] w-16 sm:w-24 shrink-0 text-right" style={{ color: "#1B4965" }}>{b.label}</span>
             <div className="flex-1 h-2 rounded-sm overflow-hidden" style={{ background: "rgba(192,212,220,0.25)" }}>
               <div
                 className="h-full rounded-sm"
@@ -519,7 +519,7 @@ function TrialsByCountryDoughnutCard() {
 
       <div className="mt-4 flex items-center gap-5">
         {/* Donut */}
-        <svg viewBox="0 0 160 160" className="w-[130px] h-[130px] shrink-0 -rotate-90">
+        <svg viewBox="0 0 160 160" className="w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] shrink-0 -rotate-90">
           {/* Track */}
           <circle cx={cx} cy={cy} r={R} fill="none" stroke="rgba(192,212,220,0.2)" strokeWidth="20" />
           {segments.map((s, i) => (

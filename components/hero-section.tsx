@@ -67,12 +67,12 @@ export function HeroSection({
           AI powered clinical intelligence platform
         </h2>
 
-        <p className="mt-12 max-w-md font-mono text-sm leading-relaxed" style={{ color: "#0c1b24" }}>
+        <p className="mt-8 sm:mt-12 max-w-md font-mono text-sm leading-relaxed" style={{ color: "#0c1b24" }}>
           <span style={{ color: "#2A8F9C", fontWeight: 600 }}>{moleculeCount.toLocaleString()}+ molecules</span>{" "}
           across <span style={{ color: "#2A8F9C", fontWeight: 600 }}>40,000+ trials</span> in 17 countries. The intelligence platform for pharma teams that need to move faster than the market.
         </p>
 
-        <div className="mt-16 flex flex-wrap items-center gap-6 md:gap-8">
+        <div className="mt-10 sm:mt-16 flex flex-wrap items-center gap-4 sm:gap-6 md:gap-8">
           <a
             href={AUTH0_LOGIN_HREF}
             className="group inline-flex items-center gap-3 px-6 py-3 font-mono text-xs uppercase tracking-widest text-white transition-all duration-300 hover:shadow-lg"

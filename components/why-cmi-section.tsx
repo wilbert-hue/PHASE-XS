@@ -141,7 +141,7 @@ export function WhyCmiSection() {
           >
             {/* Icon */}
             <div
-              className="w-20 h-20 flex items-center justify-center mb-5 transition-transform duration-300 group-hover:scale-110"
+              className="w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center mb-4 sm:mb-5 transition-transform duration-300 group-hover:scale-110"
               style={{
                 border: `1px solid ${stat.color}20`,
                 background: `${stat.color}08`,
@@ -168,7 +168,7 @@ export function WhyCmiSection() {
 
             {/* Description */}
             <p
-              className="font-mono text-[11px] leading-relaxed max-w-[240px]"
+              className="font-mono text-[11px] leading-relaxed max-w-full sm:max-w-[240px]"
               style={{ color: "#1B4965" }}
             >
               {stat.description}

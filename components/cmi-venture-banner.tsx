@@ -36,9 +36,7 @@ export function CmiVentureBanner() {
       <div className="relative px-6 sm:px-10 lg:px-16 xl:px-20 py-10 md:py-12">
 
         {/* ── Row 1: Identity + CTA ── */}
-        <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6 pb-8"
-          style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}
-        >
+        <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6 pb-5">
           {/* Left — logo + parent brand */}
           <div className="flex items-center gap-4">
             <svg width="36" height="36" viewBox="0 0 44 44" fill="none" className="shrink-0">
@@ -52,17 +50,6 @@ export function CmiVentureBanner() {
             </svg>
             <div>
               <div className="font-[var(--font-bebas)] text-2xl tracking-[0.1em] text-white leading-none">PHASE-XS</div>
-              <div className="flex items-center gap-1.5 mt-1">
-                <span className="font-mono text-[9px] uppercase tracking-wider text-white/40">A venture of</span>
-                <a
-                  href="https://www.coherentmarketinsights.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-mono text-[9px] uppercase tracking-wider text-white/70 hover:text-[#4FBDBA] transition-colors duration-200"
-                >
-                  Coherent Market Insights ↗
-                </a>
-              </div>
               <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#4FBDBA] mt-1">Clinical Intelligence</div>
             </div>
           </div>
@@ -96,6 +83,21 @@ export function CmiVentureBanner() {
           </div>
         </div>
 
+        {/* ── Row 1.5: Venture line ── */}
+        <div className="flex items-center gap-3 py-5" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+          <div className="h-px flex-1" style={{ background: "rgba(79,189,186,0.2)" }} />
+          <span className="font-mono text-[9px] uppercase tracking-wider text-white/40">A venture of</span>
+          <a
+            href="https://www.coherentmarketinsights.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-[9px] uppercase tracking-wider text-white/70 hover:text-[#4FBDBA] transition-colors duration-200"
+          >
+            Coherent Market Insights ↗
+          </a>
+          <div className="h-px flex-1" style={{ background: "rgba(79,189,186,0.2)" }} />
+        </div>
+
         {/* ── Row 2: Stats ── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 mt-8 gap-y-8 sm:gap-y-0">
           {[
@@ -117,9 +119,10 @@ export function CmiVentureBanner() {
           ].map((item, i) => (
             <div
               key={item.label}
-              className="flex flex-col gap-2 sm:px-8"
+              className={`flex flex-col gap-2 sm:px-8 ${i > 0 ? "pt-6 sm:pt-0 border-t sm:border-t-0" : ""}`}
               style={{
                 borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                borderColor: "rgba(255,255,255,0.08)",
               }}
             >
               <div

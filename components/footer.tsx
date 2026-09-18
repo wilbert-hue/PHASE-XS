@@ -151,7 +151,7 @@ export function Footer() {
           </div>
 
           {/* Numbers */}
-          <div className="flex-1 grid grid-cols-2 md:grid-cols-4">
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
             {contactNumbers.map((contact) => (
               <div
                 key={contact.region}
@@ -167,7 +167,7 @@ export function Footer() {
                   <p className="font-mono text-[10px] uppercase tracking-widest font-medium text-white">
                     {contact.region}
                   </p>
-                  <p className="font-mono text-[10px] mt-0.5 text-white/80">
+                  <p className="font-mono text-[10px] mt-0.5 text-white/80 break-all">
                     {contact.number}
                   </p>
                 </div>
@@ -179,7 +179,7 @@ export function Footer() {
 
       {/* Main footer content — compact to fit single viewport */}
       <div ref={contentRef} className="px-6 md:px-12 lg:px-20 py-8 md:py-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
 
           {/* Column 1: Business Enquiry & Offices */}
           <div className="col-span-2 lg:col-span-2">
@@ -188,7 +188,7 @@ export function Footer() {
             </h5>
             <a
               href="mailto:sales@coherentmarketinsights.com"
-              className="font-mono text-xs transition-colors duration-200 inline-flex items-center gap-2"
+              className="font-mono text-xs transition-colors duration-200 inline-flex items-center gap-2 break-all"
               style={{ color: "#4FBDBA" }}
               onMouseOver={(e) => (e.currentTarget.style.color = "#fff")}
               onMouseOut={(e) => (e.currentTarget.style.color = "#4FBDBA")}

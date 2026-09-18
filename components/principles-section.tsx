@@ -92,8 +92,8 @@ export function PrinciplesSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="platform" className="relative py-32 px-4 sm:px-6 lg:px-12 xl:px-20">
-      <div ref={headerRef} className="mb-24">
+    <section ref={sectionRef} id="platform" className="relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 lg:px-12 xl:px-20">
+      <div ref={headerRef} className="mb-12 sm:mb-20 md:mb-24">
         <span className="font-mono text-sm uppercase tracking-[0.3em]" style={{ color: "#1B4965" }}>
           03 / Platform
         </span>
@@ -105,11 +105,11 @@ export function PrinciplesSection() {
         </h2>
       </div>
 
-      <div ref={principlesRef} className="space-y-24 md:space-y-32">
+      <div ref={principlesRef} className="space-y-16 sm:space-y-24 md:space-y-32">
         {principles.map((principle) => (
           <article
             key={principle.number}
-            className={`flex flex-col ${
+            className={`flex flex-col items-start text-left sm:${
               principle.align === "right" ? "items-end text-right" : "items-start text-left"
             }`}
           >
@@ -120,7 +120,7 @@ export function PrinciplesSection() {
               {principle.number} / {principle.titleParts[0].text.split(" ")[0]}
             </span>
 
-            <h3 className="font-[var(--font-bebas)] text-4xl md:text-6xl lg:text-8xl tracking-tight leading-none">
+            <h3 className="font-[var(--font-bebas)] text-3xl sm:text-4xl md:text-6xl lg:text-8xl tracking-tight leading-none">
               {principle.titleParts.map((part, i) =>
                 part.highlight ? (
                   <HighlightText key={i} parallaxSpeed={0.6}>

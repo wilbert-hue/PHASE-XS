@@ -260,7 +260,7 @@ export default function ContactPage() {
           {/* Form */}
           <div>
             <div
-              className="relative p-8"
+              className="relative p-4 sm:p-8"
               style={{
                 background: "#ffffff",
                 border: "1px solid rgba(27, 73, 101, 0.2)",
@@ -337,7 +337,7 @@ export default function ContactPage() {
                       <span className="block font-mono text-xs uppercase tracking-wider" style={{ color: "#1B4965" }}>
                         Verification
                       </span>
-                      <div style={{ transform: "scale(0.82)", transformOrigin: "left top", height: 62 }}>
+                      <div style={{ transform: "scale(0.82)", transformOrigin: "left top", height: 62, overflow: "hidden" }}>
                         <ReCAPTCHA
                           ref={recaptchaRef}
                           sitekey={recaptchaSiteKey}
@@ -361,7 +361,7 @@ export default function ContactPage() {
                     <a href="#" className="underline" style={{ color: "#2A8F9C" }}>Privacy Policy</a>
                   </label>
 
-                  <div className="flex items-center gap-8 pt-2">
+                  <div className="flex flex-wrap items-center gap-4 pt-2">
                     <button
                       type="submit"
                       disabled={submitting || (recaptchaEnabled && !recaptchaToken)}
