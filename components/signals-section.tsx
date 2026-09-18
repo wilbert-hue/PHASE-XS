@@ -256,7 +256,7 @@ function DatasetScopeDiagram({ coverage }: { coverage: DatasetCoverageStats }) {
                   alt=""
                   aria-hidden="true"
                   className="absolute inset-0 w-full h-full object-cover"
-                  style={{ opacity: 0.85, filter: "blur(3px)", transform: "scale(1.05)" }}
+                  style={{ opacity: 0.85, filter: "blur(1.5px)", transform: "scale(1.02)" }}
                 />
                 {/* Dark overlay */}
                 <div
