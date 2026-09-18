@@ -233,7 +233,11 @@ function CoverageCarousel({
           </div>
 
           {/* Slide 2 — 4 analytics charts */}
-          <div className="w-full shrink-0">
+          <div
+            className="w-full shrink-0"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               <TrialsOverTimeCard />
               <EnrollmentByPhaseCard />
@@ -290,7 +294,7 @@ function CoverageCarousel({
 }
 
 function TrialsOverTimeCard() {
-  const accent = "#1B4965"
+  const accent = "#4FBDBA"
   // Illustrative yearly counts matching reference curve shape
   const data = [
     { year: 1997, v: 4 }, { year: 1998, v: 6 }, { year: 1999, v: 10 },
@@ -321,7 +325,7 @@ function TrialsOverTimeCard() {
   return (
     <article
       className="relative border p-5 overflow-hidden"
-      style={{ borderColor: "rgba(192, 212, 220, 0.4)", background: "rgba(27, 73, 101, 0.04)", minHeight: 360 }}
+      style={{ borderColor: "rgba(192, 212, 220, 0.4)", background: "rgba(79, 189, 186, 0.04)", minHeight: 360 }}
     >
       <div className="absolute top-0 left-0 h-[2px] w-full" style={{ background: `linear-gradient(to right, ${accent}, transparent)` }} />
       <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: accent }}>
@@ -336,12 +340,12 @@ function TrialsOverTimeCard() {
         {[0, 65, 130, 195, 260].map(v => (
           <g key={v}>
             <line x1={pad.l} x2={w - pad.r} y1={y(v)} y2={y(v)} stroke="rgba(192,212,220,0.35)" strokeDasharray="2 3" />
-            <text x={pad.l - 6} y={y(v) + 3} textAnchor="end" fontSize="9" fill="#1B4965" fontFamily="monospace">{v}</text>
+            <text x={pad.l - 6} y={y(v) + 3} textAnchor="end" fontSize="9" fill="#2A8F9C" fontFamily="monospace">{v}</text>
           </g>
         ))}
         {/* x labels */}
         {[1997, 2000, 2003, 2006, 2009, 2012, 2015, 2018, 2021, 2024, 2027].map(yr => (
-          <text key={yr} x={x(yr)} y={h - 8} textAnchor="middle" fontSize="9" fill="#1B4965" fontFamily="monospace">{yr}</text>
+          <text key={yr} x={x(yr)} y={h - 8} textAnchor="middle" fontSize="9" fill="#2A8F9C" fontFamily="monospace">{yr}</text>
         ))}
         <path d={area} fill={`${accent}22`} />
         <path d={line} fill="none" stroke={accent} strokeWidth="1.8" />
@@ -349,7 +353,7 @@ function TrialsOverTimeCard() {
         <line x1={x(2009)} x2={x(2009)} y1={pad.t} y2={pad.t + ih} stroke={accent} strokeOpacity="0.3" />
       </svg>
 
-      <p className="mt-2 font-mono text-[10px]" style={{ color: "#1B4965" }}>
+      <p className="mt-2 font-mono text-[10px]" style={{ color: "#2A8F9C" }}>
         Highlight — 2009 · count: 92
       </p>
     </article>
@@ -357,7 +361,7 @@ function TrialsOverTimeCard() {
 }
 
 function EnrollmentByPhaseCard() {
-  const accent = "#2A8F9C"
+  const accent = "#4FBDBA"
   const bars = [
     { label: "Phase 3", value: 520000 },
     { label: "Phase 2", value: 75699 },
@@ -380,7 +384,7 @@ function EnrollmentByPhaseCard() {
   return (
     <article
       className="relative border p-5 overflow-hidden"
-      style={{ borderColor: "rgba(192, 212, 220, 0.4)", background: "rgba(42, 143, 156, 0.04)", minHeight: 360 }}
+      style={{ borderColor: "rgba(192, 212, 220, 0.4)", background: "rgba(79, 189, 186, 0.04)", minHeight: 360 }}
     >
       <div className="absolute top-0 left-0 h-[2px] w-full" style={{ background: `linear-gradient(to right, ${accent}, transparent)` }} />
       <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: accent }}>
@@ -394,7 +398,7 @@ function EnrollmentByPhaseCard() {
         {[0, 150000, 300000, 450000, 600000].map(v => (
           <g key={v}>
             <line x1={pad.l} x2={w - pad.r} y1={y(v)} y2={y(v)} stroke="rgba(192,212,220,0.35)" strokeDasharray="2 3" />
-            <text x={pad.l - 6} y={y(v) + 3} textAnchor="end" fontSize="9" fill="#1B4965" fontFamily="monospace">
+            <text x={pad.l - 6} y={y(v) + 3} textAnchor="end" fontSize="9" fill="#2A8F9C" fontFamily="monospace">
               {v.toLocaleString()}
             </text>
           </g>
@@ -407,13 +411,13 @@ function EnrollmentByPhaseCard() {
           const isHighlight = b.label === "Phase 2"
           return (
             <g key={b.label}>
-              <rect x={bx} y={by} width={barW} height={bh} fill={isHighlight ? "rgba(192,212,220,0.55)" : accent} />
+              <rect x={bx} y={by} width={barW} height={bh} fill={isHighlight ? "rgba(192,212,220,0.6)" : accent} />
               <text
                 x={bx + barW / 2}
                 y={h - 20}
                 textAnchor="end"
                 fontSize="8"
-                fill="#1B4965"
+                fill="#2A8F9C"
                 fontFamily="monospace"
                 transform={`rotate(-30 ${bx + barW / 2} ${h - 20})`}
               >
@@ -424,7 +428,7 @@ function EnrollmentByPhaseCard() {
         })}
       </svg>
 
-      <p className="mt-2 font-mono text-[10px]" style={{ color: "#1B4965" }}>
+      <p className="mt-2 font-mono text-[10px]" style={{ color: "#2A8F9C" }}>
         Highlight — Phase 2 · value: 75,699
       </p>
     </article>
