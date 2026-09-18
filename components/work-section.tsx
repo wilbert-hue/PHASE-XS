@@ -729,13 +729,13 @@ function GraphSnippetCard({
 }) {
   // Illustrative-only donut; values intentionally hidden and shown as "?"
   const segments = [
-    { label: "Phase 2", value: 945, color: "#1B4965" },
-    { label: "Phase 1", value: 820, color: "#1E6080" },
-    { label: "Phase 3", value: 772, color: "#2A8F9C" },
-    { label: "Phase 1 / Phase 2", value: 310, color: "#3AAFA9" },
-    { label: "Unknown", value: 145, color: "#4FBDBA" },
+    { label: "Phase 2", value: 945, color: "#2A8F9C" },
+    { label: "Phase 1", value: 820, color: "#3AAFA9" },
+    { label: "Phase 3", value: 772, color: "#4FBDBA" },
+    { label: "Phase 1 / Phase 2", value: 310, color: "#1E6080" },
+    { label: "Unknown", value: 145, color: "#5ecfcc" },
     { label: "Phase 4", value: 96, color: "#1B4965" },
-    { label: "Early Phase 1", value: 74, color: "#2A8F9C" },
+    { label: "Early Phase 1", value: 74, color: "#3AAFA9" },
     { label: "Phase 2 / Phase 3", value: 38, color: "#4FBDBA" },
   ]
   const total = segments.reduce((a, s) => a + s.value, 0)
@@ -818,11 +818,11 @@ function BarGraphSnippetCard({
 }) {
   // Illustrative-only bar chart; values intentionally hidden as "?"
   const bars = [
-    { label: "Monoclonal Ab", value: 1851, color: "#1B4965" },
-    { label: "Not Specified", value: 380, color: "#1E6080" },
-    { label: "Checkpoint Inh.", value: 178, color: "#2A8F9C" },
-    { label: "Stem Cell", value: 152, color: "#3AAFA9" },
-    { label: "Immunotherapy", value: 124, color: "#4FBDBA" },
+    { label: "Monoclonal Ab", value: 1851, color: "#2A8F9C" },
+    { label: "Not Specified", value: 380, color: "#3AAFA9" },
+    { label: "Checkpoint Inh.", value: 178, color: "#4FBDBA" },
+    { label: "Stem Cell", value: 152, color: "#1E6080" },
+    { label: "Immunotherapy", value: 124, color: "#5ecfcc" },
   ]
   const max = Math.max(...bars.map(b => b.value))
 
@@ -850,7 +850,7 @@ function BarGraphSnippetCard({
 
       <div className="relative z-10 mt-2 flex-1 flex flex-col justify-center gap-[3px]">
         {bars.map((b, i) => (
-          <div key={i} className="flex items-center gap-1 font-mono text-[8px]" style={{ color: "#1B4965" }}>
+          <div key={i} className="flex items-center gap-1 font-mono text-[8px]" style={{ color: "#2A8F9C" }}>
             <span className="w-[62px] text-right truncate shrink-0">{b.label}</span>
             <div className="flex-1 h-1.5 bg-[rgba(192,212,220,0.3)] relative">
               <div

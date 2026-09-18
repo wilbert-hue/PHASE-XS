@@ -192,7 +192,6 @@ function NctLetterTile({ letter }: { letter: string }) {
         backgroundColor: "#ffffff",
       }}
     >
-      <div className="absolute inset-x-0 top-1/2 h-[1px] bg-foreground/10 pointer-events-none z-10" />
       <div className="absolute inset-x-0 top-0 bottom-1/2 flex items-end justify-center overflow-hidden">
         <span className="block translate-y-[0.52em] leading-none" style={{ color: "#1B4965" }}>
           {display}
@@ -238,7 +237,6 @@ function DigitTickerTile({
         backgroundColor: "#ffffff",
       }}
     >
-      <div className="absolute inset-x-0 top-1/2 h-[1px] bg-foreground/10 pointer-events-none z-10" />
       <div className="absolute inset-x-0 top-0 bottom-1/2 flex items-end justify-center overflow-hidden">
         <span className="block translate-y-[0.52em] leading-none transition-colors duration-100" style={{ color: "#2A8F9C" }}>
           {d}
@@ -450,8 +448,6 @@ export function SplitFlapChar({
         transition: "background-color 0.15s ease",
       }}
     >
-      <div className="absolute inset-x-0 top-1/2 h-[1px] bg-foreground/10 pointer-events-none z-10" />
-
       <div className="absolute inset-x-0 top-0 bottom-1/2 flex items-end justify-center overflow-hidden">
         <span
           className="block translate-y-[0.52em] leading-none transition-colors duration-150"
