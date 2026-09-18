@@ -478,7 +478,7 @@ function TopIndicationsCard() {
 }
 
 function TrialsByCountryDoughnutCard() {
-  const accent = "#1E6080"
+  const accent = "#3AAFA9"
   const data = [
     { label: "US",        value: 18200, color: "#1B4965" },
     { label: "UK",        value: 4100,  color: "#1E6080" },
