@@ -86,12 +86,12 @@ export function CmiVentureBanner() {
         {/* ── Row 1.5: Venture line ── */}
         <div className="flex items-center gap-3 py-5" style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
           <div className="h-px flex-1" style={{ background: "rgba(79,189,186,0.2)" }} />
-          <span className="font-mono text-[9px] uppercase tracking-wider text-white/40">A venture of</span>
+          <span className="font-mono text-base sm:text-xl uppercase tracking-wider text-white/40">A venture of</span>
           <a
             href="https://www.coherentmarketinsights.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-[9px] uppercase tracking-wider text-white/70 hover:text-[#4FBDBA] transition-colors duration-200"
+            className="font-mono text-base sm:text-xl uppercase tracking-wider text-white/70 hover:text-[#4FBDBA] transition-colors duration-200"
           >
             Coherent Market Insights ↗
           </a>

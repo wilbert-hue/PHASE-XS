@@ -256,12 +256,12 @@ function DatasetScopeDiagram({ coverage }: { coverage: DatasetCoverageStats }) {
                   alt=""
                   aria-hidden="true"
                   className="absolute inset-0 w-full h-full object-cover"
-                  style={{ opacity: 0.75 }}
+                  style={{ opacity: 0.85, filter: "blur(3px)", transform: "scale(1.05)" }}
                 />
                 {/* Dark overlay */}
                 <div
                   className="absolute inset-0"
-                  style={{ background: "linear-gradient(to bottom, rgba(7,22,31,0.1) 0%, rgba(11,32,48,0.55) 100%)" }}
+                  style={{ background: "linear-gradient(to bottom, rgba(7,22,31,0.25) 0%, rgba(11,32,48,0.72) 100%)" }}
                 />
                 {/* Stat content */}
                 <div className="relative z-10 px-5 sm:px-6 pt-8 pb-7">
