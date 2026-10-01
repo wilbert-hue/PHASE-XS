@@ -574,6 +574,8 @@ export default function AboutPage() {
 
         <CmiVentureBanner />
 
+        <div className="py-8" />
+
         <Footer />
       </div>
     </main>
