@@ -6,6 +6,7 @@ import { ContactTab } from "@/components/contact-tab"
 import { AnimatedBackground } from "@/components/animated-background"
 import { CmiVentureBanner } from "@/components/cmi-venture-banner"
 import { CredibilitySection } from "@/components/credibility-section"
+import { AwardsSection } from "@/components/awards-section"
 import { PageSection } from "@/components/page-section"
 
 export const metadata: Metadata = {
@@ -203,8 +204,6 @@ const missionPillars = [
   },
 ]
 
-const registries = ["ClinicalTrials.gov", "CTRI", "ISRCTN", "EU CTR"]
-
 export default function AboutPage() {
   return (
     <main className="relative min-h-screen">
@@ -284,28 +283,6 @@ export default function AboutPage() {
             ))}
           </div>
 
-          {/* Registry sources */}
-          <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: "#3d6070" }}>
-              Sourced from
-            </span>
-            {registries.map((r) => (
-              <span
-                key={r}
-                className="font-mono text-[11px] px-2.5 py-1"
-                style={{
-                  color: "#1E6080",
-                  background: "rgba(79,189,186,0.08)",
-                  border: "1px solid rgba(79,189,186,0.28)",
-                }}
-              >
-                {r}
-              </span>
-            ))}
-            <span className="font-mono text-[11px]" style={{ color: "#3d6070" }}>
-              + 46 more national registries
-            </span>
-          </div>
         </section>
 
         {/* ── What the platform does ── */}
@@ -593,6 +570,7 @@ export default function AboutPage() {
           </section>
 
           <CredibilitySection />
+          <AwardsSection />
         </PageSection>
 
         <CmiVentureBanner />

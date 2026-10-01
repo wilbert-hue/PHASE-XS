@@ -8,6 +8,7 @@ import { WhyCmiSection } from "@/components/why-cmi-section"
 import { CmiVentureBanner } from "@/components/cmi-venture-banner"
 import { KeyStatsSection } from "@/components/key-stats-section"
 import { CredibilitySection } from "@/components/credibility-section"
+import { AwardsSection } from "@/components/awards-section"
 import { ClienteleSection } from "@/components/clientele-section"
 import { ColophonSection } from "@/components/colophon-section"
 import { Footer } from "@/components/footer"
@@ -54,6 +55,7 @@ export default async function Page() {
         </PageSection>
         <PageSection page="landing" variant="credibility">
           <CredibilitySection />
+          <AwardsSection />
         </PageSection>
         <PageSection page="landing" variant="platform">
           <WhyCmiSection />

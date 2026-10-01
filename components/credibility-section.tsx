@@ -111,9 +111,11 @@ function EsomarBadge() {
   )
 }
 
+const CERTIFICATIONS_URL = "https://www.coherentmarketinsights.com/credibility-certifications"
+
 export function CredibilitySection() {
   const sectionRef = useRef<HTMLElement>(null)
-  const cardRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     if (!sectionRef.current || !cardRef.current) return
@@ -141,14 +143,26 @@ export function CredibilitySection() {
 
   return (
     <section ref={sectionRef} className="relative py-16 md:py-20 px-4 sm:px-6 lg:px-12 xl:px-20">
-      <div
+      <a
         ref={cardRef}
-        className="flex flex-col lg:flex-row items-stretch overflow-hidden"
+        href={CERTIFICATIONS_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="View credibility and certifications on Coherent Market Insights"
+        className="group flex flex-col lg:flex-row items-stretch overflow-hidden transition-all duration-300"
         style={{
           border: "1px solid rgba(27, 73, 101, 0.15)",
           background: "rgba(232, 240, 243, 0.5)",
           backdropFilter: "blur(8px)",
           boxShadow: "0 4px 24px rgba(27, 73, 101, 0.06)",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.borderColor = "rgba(42, 143, 156, 0.45)"
+          e.currentTarget.style.boxShadow = "0 8px 32px rgba(27, 73, 101, 0.12)"
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.borderColor = "rgba(27, 73, 101, 0.15)"
+          e.currentTarget.style.boxShadow = "0 4px 24px rgba(27, 73, 101, 0.06)"
         }}
       >
         {/* Left text block */}
@@ -165,10 +179,24 @@ export function CredibilitySection() {
           </div>
           <div>
             <h4
-              className="font-[var(--font-bebas)] text-xl md:text-2xl tracking-wide leading-tight"
+              className="font-[var(--font-bebas)] text-xl md:text-2xl tracking-wide leading-tight flex items-center gap-2"
               style={{ color: "#1B4965" }}
             >
-              Credibility & Certifications
+              Credibility &amp; Certifications
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#2A8F9C"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              >
+                <path d="M7 17L17 7" />
+                <path d="M9 7h8v8" />
+              </svg>
             </h4>
             <p className="font-mono text-xs md:text-sm leading-relaxed mt-2 max-w-[320px]" style={{ color: "#1B4965" }}>
               Trusted Insights, Certified Excellence! Coherent Market Insights is a certified data advisory and business consulting firm recognized by global institutes.
@@ -216,7 +244,7 @@ export function CredibilitySection() {
             </div>
           ))}
         </div>
-      </div>
+      </a>
     </section>
   )
 }
