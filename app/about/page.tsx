@@ -20,7 +20,6 @@ const coverageStats = [
   { value: "1,188+", label: "Drug Molecules" },
   { value: "1,178+", label: "Indications" },
   { value: "17", label: "Countries" },
-  { value: "50+", label: "National Registries" },
 ]
 
 const capabilities = [
@@ -261,7 +260,7 @@ export default function AboutPage() {
           </div>
 
           {/* Coverage stat strip */}
-          <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 lg:border-t lg:border-[#1B4965]/15">
+          <div className="mt-12 grid grid-cols-2 lg:grid-cols-4 lg:border-t lg:border-[#1B4965]/15">
             {coverageStats.map((stat) => (
               <div
                 key={stat.label}
