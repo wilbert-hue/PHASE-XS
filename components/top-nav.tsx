@@ -9,7 +9,7 @@ const navItems = [
   { id: "metrics",  label: "Metrics" },
   { id: "coverage", label: "Coverage" },
   { id: "platform", label: "Platform" },
-  { id: "about",    label: "About" },
+  { id: "about",    label: "About", href: "/about" },
 ]
 
 export function TopNav() {
@@ -100,16 +100,29 @@ export function TopNav() {
 
         {/* Desktop nav links — hidden on small/medium, visible from lg */}
         <nav className="hidden lg:flex items-center gap-5 xl:gap-8">
-          {navItems.map(({ id, label }) => (
-            <button
-              key={id}
-              onClick={() => scrollTo(id)}
-              className="font-mono text-xs xl:text-[13px] uppercase tracking-widest transition-colors duration-200"
-              style={{ color: active === id ? "#1B4965" : "#3d6070" }}
-            >
-              {label}
-            </button>
-          ))}
+          {navItems.map(({ id, label, href }) =>
+            href ? (
+              <Link
+                key={id}
+                href={href}
+                className="font-mono text-xs xl:text-[13px] uppercase tracking-widest transition-colors duration-200"
+                style={{ color: "#3d6070" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#1B4965")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "#3d6070")}
+              >
+                {label}
+              </Link>
+            ) : (
+              <button
+                key={id}
+                onClick={() => scrollTo(id)}
+                className="font-mono text-xs xl:text-[13px] uppercase tracking-widest transition-colors duration-200"
+                style={{ color: active === id ? "#1B4965" : "#3d6070" }}
+              >
+                {label}
+              </button>
+            ),
+          )}
         </nav>
 
         {/* CTA */}
@@ -155,16 +168,28 @@ export function TopNav() {
           className="lg:hidden px-4 sm:px-6 pb-5 pt-2 flex flex-col gap-4"
           style={{ borderTop: "1px solid rgba(42,143,156,0.15)", background: "rgba(240,245,247,0.97)" }}
         >
-          {navItems.map(({ id, label }) => (
-            <button
-              key={id}
-              onClick={() => scrollTo(id)}
-              className="text-left font-mono text-[12px] uppercase tracking-widest py-1"
-              style={{ color: active === id ? "#1B4965" : "#3d6070" }}
-            >
-              {label}
-            </button>
-          ))}
+          {navItems.map(({ id, label, href }) =>
+            href ? (
+              <Link
+                key={id}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                className="text-left font-mono text-[12px] uppercase tracking-widest py-1"
+                style={{ color: "#3d6070" }}
+              >
+                {label}
+              </Link>
+            ) : (
+              <button
+                key={id}
+                onClick={() => scrollTo(id)}
+                className="text-left font-mono text-[12px] uppercase tracking-widest py-1"
+                style={{ color: active === id ? "#1B4965" : "#3d6070" }}
+              >
+                {label}
+              </button>
+            ),
+          )}
           <div className="flex gap-4 pt-2" style={{ borderTop: "1px solid rgba(42,143,156,0.12)" }}>
             <Link href={AUTH0_LOGIN_HREF} className="font-mono text-[11px] uppercase tracking-widest" style={{ color: "#3d6070" }}>
               Sign In

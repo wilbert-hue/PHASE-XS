@@ -14,10 +14,10 @@ const contactNumbers = [
 ]
 
 const menuLinks = [
-  { label: "About Us", href: "#" },
+  { label: "About Us", href: "/about" },
   { label: "Industries", href: "#" },
   { label: "Services", href: "#" },
-  { label: "Contact Us", href: "#" },
+  { label: "Contact Us", href: "/contact" },
 ]
 
 const readerClubLinks = [
